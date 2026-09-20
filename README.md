@@ -1,10 +1,10 @@
 # AYNKO Portfolio
 
-A dependency-free portfolio website for a software, ERP, AI, and automation studio.
+A dependency-free portfolio website for a software engineering and systems architecture studio. It uses semantic HTML, CSS, and small progressive-enhancement JavaScript only.
 
 ## Run locally
 
-Open `index.html` directly in a browser, or serve the folder with any static HTTP server.
+Serve the repository root with any static HTTP server and open the local address in a browser. The site does not require a build command.
 
 ## Deploy
 
@@ -12,7 +12,7 @@ The project can be deployed as-is to Vercel, Netlify, GitHub Pages, Cloudflare P
 
 ## Before publishing
 
-- Replace `hello@aynko.dev` if this is not the final contact address.
+- Confirm the contact address `aymane.chellak@outlook.fr`.
 - Confirm the studio name `AYNKO`.
-- Confirm the exact authorship/contribution wording for all three projects.
+- Confirm the exact authorship/contribution wording for every project.
 - Do not add client data, credentials, private dashboards, or unsupported metrics.
