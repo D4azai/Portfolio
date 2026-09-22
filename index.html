@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="AYNKO is a software engineering and systems architecture studio building SaaS platforms, ERP, CRM, automation, and intelligent operational tools."
+      content="AYNKO is Aymane Chellak’s independent software engineering practice. SaaS, ERP, CRM, and automation for founders and operations teams. Explore real project work."
     />
     <meta name="theme-color" content="#0a0b0c" />
     <link
@@ -28,14 +28,11 @@
     <meta property="og:url" content="https://aynko.dev/" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href="https://aynko.dev/" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="motion.css" />
+    <script src="js/navigation.js"></script>
+    <script src="js/preloader.js"></script>
     <title>AYNKO — Software Engineer & Systems Architect</title>
     <script type="application/ld+json">
       {
@@ -50,6 +47,11 @@
     </script>
   </head>
   <body>
+    <div class="preloader" aria-hidden="true">
+      <div class="preloader-identity"><span class="brand-mark">A</span><span>AYNKO</span></div>
+      <span class="preloader-caption">Software engineering / Systems architecture</span>
+      <span class="preloader-line"></span>
+    </div>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="site-noise" aria-hidden="true"></div>
     <header class="site-header" data-header>
@@ -67,7 +69,7 @@
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
         <a href="#work">Work</a><a href="#expertise">Expertise</a
-        ><a href="#method">Method</a><a href="#contact">Contact</a
+        ><a href="#method">Method</a><a href="#about">About</a
         ><a class="nav-cta" href="mailto:aymane.chellak@outlook.fr"
           >Start a project <span>↗</span></a
         >
@@ -85,17 +87,18 @@
             ><span>operations.</span>
           </h1>
           <p class="hero-intro">
-            I design and build the software behind ambitious operations: SaaS
-            products, ERP and CRM platforms, automation, and intelligent
-            workflows that make complex work feel clear.
+            I help founders and operations teams turn complex workflows into
+            dependable software. From SaaS products to connected ERP and CRM
+            systems, I bring architecture and implementation together.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#work"
-              >View selected work <span>↓</span></a
+            <a class="button button-primary" href="mailto:aymane.chellak@outlook.fr?subject=Project%20enquiry%20for%20AYNKO"
+              >Discuss your project <span>↗</span></a
             ><a
               class="button button-quiet"
-              href="mailto:aymane.chellak@outlook.fr"
-              >Work with me <span>↗</span></a
+              href="#work"
+              data-explore
+              >Explore the work <span>↓</span></a
             >
           </div>
           <dl class="hero-facts">
@@ -112,15 +115,16 @@
               <dd>Morocco · Remote</dd>
             </div>
           </dl>
+          <p class="hero-note">Independent expertise. Direct collaboration. Real project work.</p>
         </div>
         <div
           class="hero-visual"
           data-reveal
-          role="img"
-          aria-label="System architecture connecting data, workflows, AI, and edge software"
+          role="figure"
+          aria-label="System architecture connecting data, workflows, AI, and edge software, with a selected project"
         >
           <div class="visual-topline">
-            <span>SYSTEM ARCHITECTURE</span><span><i></i> 4 LAYERS</span>
+            <span>THE CONNECTED OPERATION</span><span>EXPLORE ↗</span>
           </div>
           <div class="system-field">
             <div class="system-orbit orbit-a"></div>
@@ -128,10 +132,10 @@
             <div class="system-node node-core">
               <b>A</b><small>OPERATING<br />SYSTEM</small>
             </div>
-            <div class="system-node node-data"><span>01</span> DATA</div>
-            <div class="system-node node-flow"><span>02</span> FLOW</div>
-            <div class="system-node node-ai"><span>03</span> AI</div>
-            <div class="system-node node-edge"><span>04</span> EDGE</div>
+            <a class="system-node node-data" href="#method" data-pillar="data" aria-label="Explore the Data pillar"><span>01</span> DATA</a>
+            <a class="system-node node-flow" href="#method" data-pillar="flow" aria-label="Explore the Flow pillar"><span>02</span> FLOW</a>
+            <a class="system-node node-ai" href="#method" data-pillar="ai" aria-label="Explore the AI pillar"><span>03</span> AI</a>
+            <a class="system-node node-edge" href="#method" data-pillar="edge" aria-label="Explore the Edge pillar"><span>04</span> EDGE</a>
             <svg
               class="system-lines"
               viewBox="0 0 600 440"
@@ -153,6 +157,11 @@
             <p>Build the useful version</p>
             <b>DELIVER</b>
           </div>
+          <a class="hero-project" href="#work">
+            <img src="assets/optimized/affiliate-640.webp" width="1440" height="900" alt="" decoding="async" />
+            <span><small>FROM THE SELECTED WORK / LIVE</small><strong>Maroc Affiliate</strong><span>Connected fulfillment, from order to payout.</span></span>
+            <span aria-hidden="true">↗</span>
+          </a>
         </div>
       </section>
       <section class="signal-strip" aria-label="Practice areas">
@@ -171,6 +180,7 @@
             day.
           </p>
         </header>
+        <noscript><p class="hero-intro">Project summaries and screenshots are available below. Enable JavaScript to open the detailed project notes, or email me to discuss a project.</p></noscript>
         <article class="featured-project" data-reveal>
           <div class="project-media media-affiliate">
             <div class="media-label">
@@ -182,7 +192,9 @@
               rel="noopener noreferrer"
               aria-label="Visit Maroc Affiliate"
               ><img
-                src="maroc-affiliate-01.png"
+                src="assets/optimized/affiliate-1280.webp"
+                srcset="assets/optimized/affiliate-640.webp 640w, assets/optimized/affiliate-1280.webp 1280w"
+                sizes="(max-width: 960px) 90vw, 52vw"
                 alt="Maroc Affiliate public website for cash-on-delivery fulfillment"
                 width="1440"
                 height="900"
@@ -243,7 +255,10 @@
                 <span>02</span> ERP / CONSTRUCTION
               </div>
               <img
-                src="odoo-02-chantier-form.png"
+                src="assets/optimized/erp-1280.webp"
+                srcset="assets/optimized/erp-640.webp 640w, assets/optimized/erp-1280.webp 1280w"
+                sizes="(max-width: 680px) 90vw, 45vw"
+                decoding="async"
                 alt="Construction Site ERP site lifecycle interface"
                 loading="lazy"
                 width="1418"
@@ -276,7 +291,10 @@
                 <span>03</span> CRM / SALES OPERATIONS
               </div>
               <img
-                src="assets/crm/leads.png"
+                src="assets/optimized/crm-1280.webp"
+                srcset="assets/optimized/crm-640.webp 640w, assets/optimized/crm-1280.webp 1280w"
+                sizes="(max-width: 680px) 90vw, 45vw"
+                decoding="async"
                 alt="CRM sales lead pipeline"
                 loading="lazy"
                 width="1440"
@@ -309,7 +327,10 @@
                 <span>04</span> FINANCE / PRODUCT
               </div>
               <img
-                src="Secondo project/Secondo project/demo-invoices.png"
+                src="assets/optimized/invoices-1280.webp"
+                srcset="assets/optimized/invoices-640.webp 640w, assets/optimized/invoices-1280.webp 1280w"
+                sizes="(max-width: 680px) 90vw, 45vw"
+                decoding="async"
                 alt="Studio North invoice management with outstanding balances and payment status"
                 loading="lazy"
                 width="1280"
@@ -380,7 +401,7 @@
           <header class="section-head inverted" data-reveal>
             <div>
               <p class="eyebrow">02 / What I build</p>
-              <h2>From technical detail<br />to <em>business leverage.</em></h2>
+              <h2>The right software.<br /><em>A clearer operation.</em></h2>
             </div>
             <p>
               End-to-end support for the system underneath the interface:
@@ -396,6 +417,7 @@
                 Purpose-built platforms, internal tools, and portals designed
                 around real roles, data, and outcomes.
               </p>
+              <a class="capability-link" href="#work">Explore product work <span aria-hidden="true">↗</span></a>
             </article>
             <article data-reveal>
               <span>02</span>
@@ -404,6 +426,7 @@
                 Connected sales, inventory, project, finance, and team workflows
                 that reduce manual coordination.
               </p>
+              <a class="capability-link" href="#work">Explore operational systems <span aria-hidden="true">↗</span></a>
             </article>
             <article data-reveal>
               <span>03</span>
@@ -412,6 +435,7 @@
                 Document intelligence, workflow automation, search, and
                 integrations that turn routine effort into reliable flow.
               </p>
+              <a class="capability-link" href="#contact">Discuss your workflow <span aria-hidden="true">↗</span></a>
             </article>
             <article data-reveal>
               <span>04</span>
@@ -420,6 +444,7 @@
                 Clear technical foundations, deployment, access controls, and
                 maintainable systems that can evolve.
               </p>
+              <a class="capability-link" href="#method">See the working method <span aria-hidden="true">↗</span></a>
             </article>
           </div>
         </div>
@@ -478,6 +503,33 @@
           </li>
         </ol>
       </section>
+      <section class="about shell section" id="about" aria-labelledby="about-title">
+        <div class="about-identity" data-reveal>
+          <p class="eyebrow">04 / The practice</p>
+          <span class="about-monogram" aria-hidden="true">A</span>
+          <h2 id="about-title">Aymane Chellak</h2>
+          <p>Software engineer & systems architect<br />Morocco · Working remotely</p>
+        </div>
+        <div class="about-copy" data-reveal>
+          <h3>A direct line from<br />the problem to <em>the build.</em></h3>
+          <p>AYNKO is my independent software engineering practice. I work with founders and operations teams on the systems behind their day-to-day work: products, internal tools, and connected workflows.</p>
+          <p>The selected projects show how I approach that work, from cash-on-delivery fulfillment to construction management and sales operations. Explore the interfaces, technical scope, and project notes before we talk.</p>
+          <a class="text-action" href="#work">Get to know the work <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+      <section class="faq shell section" id="faq" aria-labelledby="faq-title">
+        <header class="section-head" data-reveal>
+          <div><p class="eyebrow">05 / Before we begin</p><h2 id="faq-title">A little clarity.<br /><em>Before the first call.</em></h2></div>
+          <p>A good project starts with a shared understanding of the problem, the scope, and what useful progress looks like.</p>
+        </header>
+        <div class="faq-list">
+          <details><summary>What kinds of projects are a good fit?<span aria-hidden="true">+</span></summary><p>SaaS products, ERP and CRM workflows, internal tools, and automation where the operational problem is clear. If your team is coordinating work across disconnected tools, start by describing where context or time gets lost.</p></details>
+          <details><summary>Can we improve an existing system?<span aria-hidden="true">+</span></summary><p>Yes. Share the current tools, integrations, and the parts that already work. The first step is understanding the constraints and deciding what to preserve, connect, or improve.</p></details>
+          <details><summary>How are scope, budget, and timing defined?<span aria-hidden="true">+</span></summary><p>These depend on the workflows, integrations, and delivery requirements. Bring your target date and budget range to the conversation so we can identify a realistic first release and discuss the scope before committing to a build.</p></details>
+          <details><summary>What should I send in the first message?<span aria-hidden="true">+</span></summary><p>A short description of your business, who will use the system, the tools you use today, and the outcome you need. Include any timing or budget constraints. An initial message does not need a finished specification.</p></details>
+          <details><summary>Where can I see examples of your work?<span aria-hidden="true">+</span></summary><p>The <a href="#work">selected projects</a> include screenshots and detailed project notes. Live links are provided where available; the construction ERP is explicitly marked as being in user acceptance testing (UAT).</p></details>
+        </div>
+      </section>
       <section class="contact" id="contact">
         <div class="shell contact-grid" data-reveal>
           <div>
@@ -506,7 +558,8 @@
               href="mailto:aymane.chellak@outlook.fr?subject=Project%20enquiry%20for%20AYNKO"
               ><span class="email-address">aymane.chellak@outlook.fr</span
               ><span aria-hidden="true">↗</span></a
-            ><small>Response channel · email</small>
+            ><small>Direct contact with Aymane · No intake form</small>
+            <p class="contact-next">Start with the problem. We can shape the brief together.</p>
           </aside>
         </div>
       </section>
@@ -518,10 +571,22 @@
       <p>Software engineering for real operations.</p>
       <div>
         <a href="#work">Work</a><a href="#expertise">Expertise</a
-        ><a href="#contact">Contact</a>
+        ><a href="#about">About</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
       </div>
       <small>© 2026 AYNKO. Morocco · Remote.</small>
     </footer>
+    <!-- Optional evidence structure. Keep inert until real evidence and permission
+         are supplied; see CONTENT-NEEDED.md. Clone into the relevant project. -->
+    <template id="project-evidence-template">
+      <aside class="project-evidence" aria-label="Verified project evidence">
+        <p class="eyebrow">Verified project outcome</p>
+        <p data-evidence="outcome">[Approved outcome, measurement period, and source]</p>
+        <blockquote>
+          <p data-evidence="quote">[Exact client-approved testimonial]</p>
+          <cite data-evidence="attribution">[Approved name, role, and company]</cite>
+        </blockquote>
+      </aside>
+    </template>
     <dialog class="case-dialog" aria-labelledby="case-title">
       <div class="dialog-scroll">
         <div class="dialog-header">

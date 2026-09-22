@@ -23,7 +23,7 @@ export function initMotion() {
 
 function initHero(scope) {
   // Primary actions work throughout the entrance. Finish the last item at 1.2s.
-  if (location.hash || scrollY > 40) return;
+  if (location.hash || scrollY > 40 || document.documentElement.matches(".intro-active, .intro-complete")) return;
   scope.animate(document.querySelector(".site-header .brand"), fadeUp(4), { duration: 450 });
   scope.animate(document.querySelector(".hero .eyebrow"), fadeUp(6), { duration: 450, delay: 40 });
   document.querySelectorAll(".hero h1 > span").forEach((line, i) => {
@@ -117,12 +117,14 @@ function initSystems(scope) {
     });
     visual.querySelector(".node-core").classList.toggle("is-connected", Boolean(node));
   };
-  // Nodes remain a labelled illustration, not misleading keyboard controls.
+  // The illustration nodes also open their process views by keyboard or touch.
   nodes.forEach((node) => {
     scope.listen(node, "pointerenter", () => {
       if (finePointer.matches) highlight(node);
     });
     scope.listen(node, "pointerleave", () => highlight(null));
+    scope.listen(node, "focus", () => highlight(node));
+    scope.listen(node, "blur", () => highlight(null));
   });
   let visible = false;
   let entered = false;

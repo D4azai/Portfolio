@@ -13,6 +13,7 @@ for (const mobile of [false, true]) {
     hasTouch: mobile,
   });
   const page = await context.newPage();
+  await page.bringToFront();
   const session = await context.newCDPSession(page);
   if (mobile) {
     await session.send("Network.enable");
@@ -42,6 +43,8 @@ for (const mobile of [false, true]) {
     }).observe({ type: "longtask", buffered: true });
   });
   await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
+  await page.waitForFunction(() => document.documentElement.classList.contains("motion-enhanced"));
+  await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(1800);
   const result = await page.evaluate(() => ({
     ...window.metrics,
@@ -67,11 +70,14 @@ for (const mobile of [false, true]) {
 const codeFiles = [
   "index.html",
   "styles.css",
+  "motion.css",
   "script.js",
   "js/motion.js",
-  "js/interface.js",
-  "js/case-study.js",
-  "js/dialog.js",
+  "js/motion-utils.js",
+  "js/pointer.js",
+  "js/preloader.js",
+  "js/navigation.js",
+  "js/pillars.js",
   "js/image-manifest.js",
 ];
 const code = [];

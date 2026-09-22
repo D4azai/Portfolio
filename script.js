@@ -1,5 +1,7 @@
 import { initMotion, animateDialog } from "./js/motion.js";
 import { initPointer } from "./js/pointer.js";
+import { images } from "./js/image-manifest.js";
+import { pillars, renderPillar } from "./js/pillars.js";
 
 const cases = {
   affiliate: {
@@ -37,7 +39,7 @@ const cases = {
     ],
   },
   erp: {
-    kicker: "Case study 02 / ERP & Construction",
+    kicker: "Case study 02 / ERP & Construction / User acceptance testing",
     title: "Construction Site ERP",
     lede: "A custom Odoo 17 construction system connecting site governance, material requests, estimating, BOQ workflows, quality, and project control.",
     tags: [
@@ -177,8 +179,6 @@ const cases = {
     ],
   },
 };
-document.documentElement.classList.add("js-ready");
-
 const dialog = document.querySelector(".case-dialog");
 const dialogContent = dialog.querySelector(".dialog-content");
 const dialogScroll = dialog.querySelector(".dialog-scroll");
@@ -189,12 +189,28 @@ const closeDialog = () => {
   dialog.close();
   document.body.style.overflow = previousOverflow;
 };
-const openDialog = (item, trigger) => {
-  if (!item || dialog.open) return;
-  dialogTrigger = trigger;
-  previousOverflow = document.body.style.overflow;
+const showDialog = (content, trigger, variant = "") => {
+  if (!dialog.open) {
+    dialogTrigger = trigger;
+    previousOverflow = document.body.style.overflow;
+  }
+  dialog.classList.toggle("pillar-dialog", variant === "pillar");
+  dialogContent.innerHTML = content;
+  if (!dialog.open) dialog.showModal();
+  animateDialog(dialog);
+  document.dispatchEvent(new Event("aynko:dialog"));
+  document.body.style.overflow = "hidden";
+  dialogScroll.scrollTop = 0;
+  dialog.querySelector(".dialog-close").focus({ preventScroll: true });
+};
+const openDialog = (item, trigger, exploreKey = "") => {
+  if (!item) return;
   const gallery = item.gallery
-    ? `<div class="case-gallery">${item.gallery.map(([src, caption]) => `<figure><a href="${src}" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: ${caption} (new tab)"><img src="${src}" alt="${caption}" loading="lazy" decoding="async"><figcaption>${caption} <span aria-hidden="true">↗</span></figcaption></a></figure>`).join("")}</div>`
+    ? `<div class="case-gallery">${item.gallery.map(([src, caption]) => {
+      const image = images[src];
+      const responsive = image ? `src="${image.src}" srcset="${image.srcset}" sizes="(max-width: 680px) 88vw, 430px" width="${image.width}" height="${image.height}"` : `src="${src}"`;
+      return `<figure><a href="${src}" target="_blank" rel="noopener noreferrer" aria-label="Open full-size screenshot: ${caption} (new tab)"><img ${responsive} alt="${caption}" loading="lazy" decoding="async"><figcaption>${caption} <span aria-hidden="true">↗</span></figcaption></a></figure>`;
+    }).join("")}</div>`
     : "";
   const liveLink = item.live
     ? `<a class="button button-primary" href="${item.live}" target="_blank" rel="noopener noreferrer">Visit live project <span aria-hidden="true">↗</span></a>`
@@ -205,14 +221,45 @@ const openDialog = (item, trigger) => {
         `<section class="case-section"><h3>${heading}</h3><p>${copy}</p></section>`,
     )
     .join("");
-  dialogContent.innerHTML = `<p class="dialog-kicker">${item.kicker}</p><h2 id="case-title">${item.title}</h2><p class="dialog-lede">${item.lede}</p>${liveLink}<ul class="dialog-tags">${item.tags.map((tag) => `<li>${tag}</li>`).join("")}</ul>${gallery}<div class="case-sections">${sections}</div>`;
-  dialog.showModal();
-  animateDialog(dialog);
-  document.dispatchEvent(new Event("aynko:dialog"));
-  document.body.style.overflow = "hidden";
-  dialogScroll.scrollTop = 0;
-  dialog.querySelector(".dialog-close").focus({ preventScroll: true });
+  const enquiry = `<aside class="case-enquiry"><h3>Facing a similar operational challenge?</h3><p>Share your workflow and the outcome you need. Let’s find the useful first step.</p><a class="text-action" href="mailto:aymane.chellak@outlook.fr?subject=${encodeURIComponent(`Project enquiry — ${item.title}`)}">Discuss your project <span aria-hidden="true">↗</span></a></aside>`;
+  const back = exploreKey ? `<button class="text-action explore-back" type="button" data-explore-back="${exploreKey}">← All projects</button>` : "";
+  showDialog(`${back}<p class="dialog-kicker">${item.kicker}</p><h2 id="case-title">${item.title}</h2><p class="dialog-lede">${item.lede}</p>${liveLink}<ul class="dialog-tags">${item.tags.map((tag) => `<li>${tag}</li>`).join("")}</ul>${gallery}<div class="case-sections">${sections}</div>${enquiry}`, trigger);
 };
+
+const exploreTrigger = document.querySelector("[data-explore]");
+const openExplorer = (selectedKey = "") => {
+  const cards = Object.entries(cases).map(([key, item], index) => `<article class="explore-card"><small>0${index + 1} / ${key === "erp" ? "USER ACCEPTANCE TESTING" : "SELECTED PROJECT"}</small><h3>${item.title}</h3><p>${item.lede}</p><button class="text-action" type="button" data-explore-case="${key}" aria-label="Read the ${item.title} case study">Read the case study <span aria-hidden="true">↗</span></button></article>`).join("");
+  showDialog(`<p class="dialog-kicker">AYNKO / Selected work</p><h2 id="case-title">Explore the systems.</h2><p class="dialog-lede">A closer look at what each project does. Choose a card to explore the problem, approach, and project details.</p><div class="explore-grid">${cards}</div>`, exploreTrigger);
+  if (selectedKey) dialogContent.querySelector(`[data-explore-case="${selectedKey}"]`)?.focus();
+};
+exploreTrigger.setAttribute("aria-haspopup", "dialog");
+exploreTrigger.addEventListener("click", event => {
+  // Keep the underlying anchor usable in a new tab or without JavaScript.
+  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  openExplorer();
+});
+dialogContent.addEventListener("click", event => {
+  const pillar = event.target.closest("[data-pillar-switch]");
+  if (pillar && pillars[pillar.dataset.pillarSwitch]) {
+    showDialog(renderPillar(pillar.dataset.pillarSwitch), dialogTrigger, "pillar");
+    dialogContent.querySelector("#case-title").focus({ preventScroll: true });
+    return;
+  }
+  const card = event.target.closest("[data-explore-case]");
+  const back = event.target.closest("[data-explore-back]");
+  if (card) openDialog(cases[card.dataset.exploreCase], exploreTrigger, card.dataset.exploreCase);
+  if (back) openExplorer(back.dataset.exploreBack);
+});
+
+document.querySelectorAll("[data-pillar]").forEach(trigger => {
+  trigger.setAttribute("aria-haspopup", "dialog");
+  trigger.addEventListener("click", event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    showDialog(renderPillar(trigger.dataset.pillar), trigger, "pillar");
+  });
+});
 document
   .querySelectorAll("[data-case]")
   .forEach((button) =>
@@ -247,40 +294,6 @@ dialog.addEventListener("close", () => {
   document.body.style.overflow = previousOverflow;
   dialogTrigger?.focus({ preventScroll: true });
 });
-
-const header = document.querySelector("[data-header]");
-const menu = document.querySelector(".menu-toggle");
-const mobileNavigation = window.matchMedia("(max-width: 960px)");
-const setMenuOpen = (open) => {
-  header.classList.toggle("is-open", open);
-  menu.setAttribute("aria-expanded", String(open));
-  menu.setAttribute(
-    "aria-label",
-    open ? "Close navigation" : "Open navigation",
-  );
-};
-
-menu.addEventListener("click", () => {
-  setMenuOpen(!header.classList.contains("is-open"));
-});
-document.querySelectorAll(".site-nav a").forEach((link) =>
-  link.addEventListener("click", () => {
-    setMenuOpen(false);
-  }),
-);
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && header.classList.contains("is-open")) {
-    setMenuOpen(false);
-    menu.focus();
-  }
-});
-document.addEventListener("click", (event) => {
-  if (!header.contains(event.target)) setMenuOpen(false);
-});
-header.addEventListener("focusout", (event) => {
-  if (!header.contains(event.relatedTarget)) setMenuOpen(false);
-});
-mobileNavigation.addEventListener("change", () => setMenuOpen(false));
 
 // All enhancements return cleanup functions; BFCache restores keep their listeners.
 const cleanupMotion = initMotion();

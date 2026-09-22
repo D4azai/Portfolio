@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "node tools/serve.mjs",
-    "test": "node tools/verify.mjs",
+    "test": "node tools/verify-premium.mjs",
     "images": "node tools/optimize-images.mjs",
     "check:performance": "node tools/performance.mjs"
   },
