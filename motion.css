@@ -1,0 +1,329 @@
+/* Motion only. Layout, typography, colors and breakpoints live in styles.css. */
+:root {
+  --motion-ease: cubic-bezier(.22, 1, .36, 1);
+  --motion-fast: 180ms;
+  --motion-control: 350ms;
+  --motion-reveal: 650ms;
+  --reveal-distance: 16px;
+}
+
+/* Content is visible unless an observer has successfully opted it into motion. */
+.motion-enhanced .reveal-pending {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+  transition: opacity var(--motion-reveal) var(--motion-ease),
+    transform var(--motion-reveal) var(--motion-ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.motion-enhanced .reveal-pending.is-visible,
+.motion-enhanced .reveal-pending:focus-within {
+  opacity: 1;
+  transform: none;
+}
+.motion-enhanced .reveal-pending:focus-within {
+  transition: none;
+}
+.motion-enhanced .section-head.reveal-pending {
+  transform: none;
+}
+.motion-enhanced .motion-divider {
+  position: relative;
+  border-top-color: transparent;
+}
+.motion-divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 1px;
+  background: var(--line);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--motion-reveal) var(--motion-ease);
+  transition-delay: var(--reveal-delay, 0ms);
+  pointer-events: none;
+}
+.motion-divider.is-visible::before {
+  transform: scaleX(1);
+}
+.motion-enhanced .reveal-pending .project-media img {
+  clip-path: inset(0 0 12% 0 round var(--radius-sm));
+  transition: clip-path var(--motion-reveal) var(--motion-ease),
+    transform var(--motion-control) var(--motion-ease);
+}
+.motion-enhanced .reveal-pending.is-visible .project-media img {
+  clip-path: inset(0 round var(--radius-sm));
+}
+.motion-enhanced .reveal-pending.is-visible .media-crm > img {
+  clip-path: inset(0 0 .4% 0 round var(--radius-sm));
+}
+
+/* Small feedback cues reuse the site's existing arrows and accent color. */
+.site-nav a,
+.text-action,
+.site-footer div a {
+  position: relative;
+  transition: color var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease),
+    background var(--motion-fast) var(--motion-ease),
+    translate var(--motion-control) var(--motion-ease);
+}
+.site-nav a:not(.nav-cta)::after,
+.text-action::after,
+.site-footer div a::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: var(--lime);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--motion-control) var(--motion-ease);
+  pointer-events: none;
+}
+.site-nav a[aria-current="location"] {
+  color: var(--paper);
+}
+.site-nav a[aria-current="location"]::after,
+.site-nav a:is(:hover, :focus-visible)::after,
+.text-action:is(:hover, :focus-visible)::after,
+.site-footer div a:is(:hover, :focus-visible)::after {
+  transform: scaleX(1);
+}
+.button {
+  transition: transform var(--motion-fast) var(--motion-ease),
+    translate var(--motion-control) var(--motion-ease),
+    background var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease);
+}
+.button-primary:is(:hover, :focus-visible) {
+  background: #d7fb73;
+  border-color: #d7fb73;
+}
+.button-quiet:is(:hover, :focus-visible),
+.nav-cta:is(:hover, :focus-visible) {
+  border-color: var(--lime);
+  background: rgba(205, 250, 74, .04);
+}
+.button > span:last-child,
+.text-action > span,
+.nav-cta > span,
+.button .email-address {
+  display: inline-block;
+  transition: transform var(--motion-fast) var(--motion-ease);
+}
+.button:is(:hover, :focus-visible) > span:last-child,
+.text-action:is(:hover, :focus-visible) > span,
+.nav-cta:is(:hover, :focus-visible) > span {
+  transform: translate(2px, -2px);
+}
+.hero-actions .button-primary:is(:hover, :focus-visible) > span:last-child {
+  transform: translateY(2px);
+}
+.button:is(:hover, :focus-visible) .email-address {
+  transform: translateX(1px);
+}
+.tags li,
+.dialog-tags li,
+.capability-grid article {
+  transition: background var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease),
+    color var(--motion-fast) var(--motion-ease);
+}
+.tags li:hover {
+  color: var(--paper);
+  border-color: rgba(205, 250, 74, .45);
+  background: rgba(205, 250, 74, .035);
+}
+.dialog-tags li:hover {
+  background: #e8e9e2;
+}
+.menu-toggle span:not(.sr-only),
+.dialog-close {
+  transition: transform var(--motion-fast) var(--motion-ease),
+    background var(--motion-fast) var(--motion-ease);
+}
+
+/* The existing system drawing: one sparse packet, paused outside the viewport. */
+.system-lines .line-pulse {
+  animation: none;
+}
+.motion-enhanced .system-lines .line-pulse {
+  opacity: 0;
+  stroke-dasharray: 5 220;
+  stroke-linecap: round;
+}
+.system-node,
+.system-connector {
+  transition: border-color var(--motion-control) var(--motion-ease),
+    stroke var(--motion-control) var(--motion-ease),
+    background var(--motion-control) var(--motion-ease);
+}
+.system-node.is-connected {
+  border-color: rgba(205, 250, 74, .7);
+}
+.system-lines .system-connector.is-connected {
+  stroke: rgba(205, 250, 74, .8);
+}
+@keyframes system-packet {
+  0%, 12% { opacity: 0; stroke-dashoffset: 8; }
+  16% { opacity: .7; }
+  40% { opacity: .7; }
+  44%, 100% { opacity: 0; stroke-dashoffset: -220; }
+}
+
+/* Progress occupies the existing number gutter without changing the row layout. */
+.motion-enhanced .method-list {
+  position: relative;
+}
+.motion-enhanced .method-list::before,
+.motion-enhanced .method-list::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 40px;
+  bottom: 36px;
+  width: 1px;
+  background: var(--line);
+  pointer-events: none;
+}
+.motion-enhanced .method-list::after {
+  background: var(--lime);
+  transform: scaleY(var(--method-progress, 0));
+  transform-origin: top;
+  transition: transform var(--motion-fast) linear;
+}
+.motion-enhanced .method-list li > span {
+  position: relative;
+  z-index: 1;
+  align-self: start;
+  width: max-content;
+  background: var(--bg);
+}
+.motion-enhanced .method-list h3 {
+  transition: opacity var(--motion-control) var(--motion-ease);
+}
+.motion-enhanced .method-list li:not(.is-active):not(.is-complete) h3 {
+  opacity: .78;
+}
+
+/* Native pointer is hidden only when an enabled, positioned cursor is visible. */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  z-index: 10000;
+  transition: opacity var(--motion-fast) var(--motion-ease);
+}
+.cursor-dot { z-index: 10001; }
+.cursor-visible .cursor-dot,
+.cursor-visible .cursor-ring { opacity: 1; }
+.cursor-dot::before {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--lime);
+  transform: translate(-50%, -50%);
+}
+.cursor-ring::before {
+  content: "";
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  border: 1.5px solid rgba(205, 250, 74, .65);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(.34);
+  transition: transform var(--motion-control) var(--motion-ease),
+    background var(--motion-fast) var(--motion-ease),
+    border-color var(--motion-fast) var(--motion-ease);
+}
+.cursor-ring[data-state="action"]::before {
+  transform: translate(-50%, -50%) scale(.5);
+}
+.cursor-ring.has-label::before {
+  transform: translate(-50%, -50%) scale(1);
+  background: rgba(10, 11, 12, .88);
+}
+.cursor-ring > span {
+  position: absolute;
+  left: 0;
+  top: 9px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: var(--lime);
+  font: 9px/1.5 var(--mono);
+  letter-spacing: .04em;
+}
+.cursor-on-paper .cursor-dot::before { background: #475a1b; }
+.cursor-on-paper .cursor-ring::before { border-color: #475a1b; }
+.cursor-on-paper .cursor-ring.has-label::before { background: var(--paper); }
+.cursor-on-paper .cursor-ring > span { color: #475a1b; }
+
+@media (hover: hover) and (pointer: fine) and (min-width: 961px) and (prefers-reduced-motion: no-preference) {
+  .cursor-visible,
+  .cursor-visible a,
+  .cursor-visible button { cursor: none; }
+  .cursor-visible :is(input, textarea, select, label, [contenteditable], iframe, video, audio),
+  .cursor-visible dialog,
+  .cursor-visible dialog * { cursor: auto; }
+  .cursor-enabled :is(.site-nav a, .hero-actions .button, .contact-card .button, .project-actions .text-action, .card-body > .text-action) {
+    translate: var(--magnet-x, 0px) var(--magnet-y, 0px);
+  }
+  .project-media img,
+  .northstar-art {
+    transition: transform var(--motion-control) var(--motion-ease);
+  }
+  .project-media:hover img,
+  .project-media:hover .northstar-art {
+    transform: translate(var(--image-x, 0px), var(--image-y, 0px)) scale(1.018);
+  }
+  .project-kicker {
+    transition: translate var(--motion-control) var(--motion-ease);
+  }
+  .project-card:hover .project-kicker,
+  .featured-project:hover .project-kicker { translate: 0 -2px; }
+  .motion-enhanced .system-lines .line-pulse {
+    animation: system-packet 8s linear infinite;
+    animation-play-state: paused;
+  }
+  .motion-enhanced .system-running .line-pulse { animation-play-state: running; }
+}
+@media (max-width: 960px) {
+  :root { --reveal-distance: 8px; --motion-reveal: 500ms; }
+}
+@media (max-width: 680px) {
+  .motion-enhanced .reveal-pending { transition-delay: 0ms; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .motion-enhanced .reveal-pending {
+    opacity: 1;
+    transform: none;
+  }
+  .motion-enhanced .reveal-pending .project-media img { clip-path: none; }
+  .motion-divider::before { transform: scaleX(1); }
+  .motion-enhanced .method-list h3 { opacity: 1 !important; }
+  .button:hover,
+  .button > span,
+  .text-action > span,
+  .nav-cta > span { transform: none !important; }
+  .cursor-dot, .cursor-ring { display: none; }
+}
+@media (forced-colors: active) {
+  .cursor-dot, .cursor-ring { display: none; }
+  .cursor-visible, .cursor-visible a, .cursor-visible button { cursor: auto; }
+  .site-nav a[aria-current="location"] { text-decoration: underline; }
+}

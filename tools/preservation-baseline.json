@@ -1,0 +1,1014 @@
+{
+  "source": "Published aynko.vercel.app, matching ffabfda on 2026-09-22",
+  "htmlHash": "04d3a303e565f3512b3910ebc3e4dbb2f605d91e11838431ee1037ef51990dfd",
+  "cssHash": "da11c0f460d89f86e9c8e336f9aa44578f80402bd0e5719912935021d01b3df9",
+  "cases": {
+    "affiliate": {
+      "kicker": "Case study 01 / Operational SaaS",
+      "title": "Maroc Affiliate",
+      "lede": "A unified cash-on-delivery platform that connects inventory, routing, delivery, customer communication, and seller payouts.",
+      "tags": [
+        "Custom SaaS",
+        "Inventory",
+        "Logistics",
+        "WhatsApp automation",
+        "Wallet & payouts",
+        "Role-based access",
+        "FR / AR / EN"
+      ],
+      "live": "https://marocaffiliate.com/fr",
+      "gallery": [
+        [
+          "maroc-affiliate-01.png",
+          "Public product website"
+        ]
+      ],
+      "sections": [
+        [
+          "Problem",
+          "Cash-on-delivery operations can fragment across spreadsheets, courier conversations, WhatsApp, and informal financial records. Stock, delivery tariffs, and seller margins become difficult to coordinate as volume grows."
+        ],
+        [
+          "Solution",
+          "One operational platform built around the seller workflow. It exposes live stock, applies destination tariffs, selects a carrier, reserves inventory, follows the parcel, automates customer messages, and records seller wallet movement after delivery."
+        ],
+        [
+          "Architecture",
+          "Localized public site and seller, warehouse, delivery, and administration workspaces connected to inventory, routing, carrier integrations, messaging automation, and a financial ledger."
+        ],
+        [
+          "Result",
+          "A clearer operating model for the people managing fulfillment, delivery rules, customer communication, and financial reconciliation."
+        ]
+      ]
+    },
+    "erp": {
+      "kicker": "Case study 02 / ERP & Construction",
+      "title": "Construction Site ERP",
+      "lede": "A custom Odoo 17 construction system connecting site governance, material requests, estimating, BOQ workflows, quality, and project control.",
+      "tags": [
+        "Odoo 17",
+        "Python",
+        "PostgreSQL",
+        "Inventory",
+        "Analytic accounting",
+        "RBAC",
+        "Docker"
+      ],
+      "gallery": [
+        [
+          "odoo-02-chantier-form.png",
+          "Controlled site lifecycle"
+        ],
+        [
+          "odoo-03-material-request.png",
+          "Material request workflow"
+        ],
+        [
+          "odoo-04-estimation.png",
+          "Construction estimating"
+        ],
+        [
+          "odoo-05-boq.png",
+          "BOQ review workflow"
+        ]
+      ],
+      "sections": [
+        [
+          "Problem",
+          "Construction sites need more than task lists. Their lifecycle, stock location, cost structure, managers, and closure conditions must stay connected."
+        ],
+        [
+          "Solution",
+          "A custom Odoo addon that gives every chantier a unique reference and controlled lifecycle. Manager initialization creates its analytic account and dedicated stock location beneath the selected warehouse."
+        ],
+        [
+          "Technical scope",
+          "Chantier numbering; lifecycle control; analytic accounting; site stock locations; material requests; estimates; BOQ revisions; quality inspections; RFIs; submittals; variations; and progress certificates."
+        ],
+        [
+          "Architecture",
+          "Odoo Project provides the foundation. The custom module connects it to native Inventory, Analytic Accounting, company security, PostgreSQL, and a repeatable Docker environment."
+        ]
+      ]
+    },
+    "crm": {
+      "kicker": "Case study 03 / CRM & Sales Operations",
+      "title": "CRM",
+      "lede": "A unified CRM workspace designed to give sales teams a practical view of pipeline health, customer relationships, and daily follow-up.",
+      "tags": [
+        "Sales pipeline",
+        "Dashboard",
+        "Contacts",
+        "Email templates",
+        "Workflow automation",
+        "Users & roles"
+      ],
+      "gallery": [
+        [
+          "assets/crm/leads.png",
+          "Pipeline board"
+        ],
+        [
+          "assets/crm/contacts.png",
+          "Contact workspace"
+        ],
+        [
+          "assets/crm/workflows.png",
+          "Workflow configuration"
+        ]
+      ],
+      "sections": [
+        [
+          "Problem",
+          "Sales teams lose context when pipeline, customer records, communications, permissions, and follow-up processes live in different tools."
+        ],
+        [
+          "Solution",
+          "A connected workspace that keeps performance, pipeline stages, contacts, communications, and configuration within one operating surface."
+        ],
+        [
+          "Product surfaces",
+          "Dashboard reporting; lead management; contacts and organizations; activities; quotations; mail; user and role management; types, sources, attributes, and workflow configuration."
+        ],
+        [
+          "Operational value",
+          "Teams can move from a high-level sales view into the records and workflow settings that drive follow-up without unnecessary tool switching."
+        ]
+      ]
+    },
+    "studioNorth": {
+      "kicker": "Case study 04 / Finance Product Experience",
+      "title": "Studio North",
+      "lede": "A polished finance workspace that turns balances, cash flow, invoices, and transactions into an approachable daily overview.",
+      "tags": [
+        "Financial overview",
+        "Cash flow",
+        "Invoices",
+        "Transactions",
+        "Insights",
+        "Responsive UI"
+      ],
+      "gallery": [
+        [
+          "Secondo project/Secondo project/demo-dashboard.png",
+          "Financial overview"
+        ],
+        [
+          "Secondo project/Secondo project/demo-invoices.png",
+          "Invoice management"
+        ],
+        [
+          "Secondo project/Secondo project/demo-transactions.png",
+          "Transaction history"
+        ],
+        [
+          "Secondo project/Secondo project/demo-phone-overview.png",
+          "Mobile overview"
+        ]
+      ],
+      "sections": [
+        [
+          "Focus",
+          "A calm, legible product interface for people who need to understand their financial position quickly."
+        ],
+        [
+          "Product surfaces",
+          "Available balance, income and expense summaries, cash-flow charts, upcoming invoices, recent activity, transaction history, invoice status, and mobile views."
+        ],
+        [
+          "Experience",
+          "The information hierarchy keeps urgent numbers and next actions visible while supporting detail remains easy to scan."
+        ]
+      ]
+    },
+    "northstar": {
+      "kicker": "Case study 05 / Digital Experience",
+      "title": "Northstar",
+      "live": "https://demo-beta-seven-31.vercel.app/",
+      "lede": "A cinematic, motion-led website that gives a business-advisory brand a focused and confident digital presence.",
+      "tags": [
+        "React",
+        "Vite",
+        "GSAP",
+        "ScrollTrigger",
+        "Motion design",
+        "Vercel"
+      ],
+      "sections": [
+        [
+          "Problem",
+          "Professional-service websites often feel interchangeable. Generic layouts and weak hierarchy can make a considered offer appear ordinary before a conversation begins."
+        ],
+        [
+          "Solution",
+          "A single-page brand experience built around a clear hero, service pillars, the firm approach, and a direct call to action. Video, typography, and scroll motion control pace and attention."
+        ],
+        [
+          "Technical approach",
+          "A React single-page application built with Vite, with GSAP and ScrollTrigger providing the animation layer, static media providing the visual narrative, and Vercel handling deployment."
+        ]
+      ]
+    }
+  },
+  "layouts": {
+    "320": {
+      "text": "Skip to content A AYNKO Toggle navigation SOFTWARE ENGINEER & SYSTEMS ARCHITECT Software systems for real-world operations. I design and build the software behind ambitious operations: SaaS products, ERP and CRM platforms, automation, and intelligent workflows that make complex work feel clear. View selected work ↓ Work with me ↗ FOCUS SaaS · ERP · AI APPROACH Architecture first BASED IN Morocco · Remote SYSTEM ARCHITECTURE 4 LAYERS A OPERATING SYSTEM 01 DATA 02 FLOW 03 AI 04 EDGE 01 Map the operational bottleneck DISCOVER 02 Design the connected system CONNECT 03 Build the useful version DELIVER PRODUCT ENGINEERING SYSTEMS ARCHITECTURE OPERATIONAL SOFTWARE 01 / SELECTED SYSTEMS Products that hold up when work gets complex. I work from the business constraint inward: clarify the workflow, shape the system, then build an interface people can trust every day. 01 OPERATIONAL SAAS · LIVE LIVE PRODUCT FLAGSHIP CASE STUDY 2026 Maroc Affiliate A cash-on-delivery operations platform that unifies inventory, routing, delivery, customer follow-up, and seller payouts. PROBLEM Order fulfillment was distributed across messages, courier conversations, and disconnected records. SYSTEM One operating layer for seller, warehouse, delivery, and finance workflows. Custom SaaS Logistics Automation RBAC FR / AR / EN Open case study ↗ Visit live product ↗ 02 ERP / CONSTRUCTION ODOO 17 · UAT 2026 Construction Site ERP An Odoo foundation that makes each construction site a controlled operational unit: lifecycle, inventory, costing, and approvals in one system. Odoo 17 Python Inventory Open case study ↗ 03 CRM / SALES OPERATIONS CRM · OPERATIONS 2026 CRM A sales workspace for pipeline health, relationships, email, activities, roles, and workflow configuration without tool sprawl. Pipeline Workflows RBAC Open case study ↗ 04 FINANCE / PRODUCT FINANCE PRODUCT 2026 Studio North A finance interface that turns balance, cash flow, invoicing, transactions, and insights into an approachable daily overview. Finance UI Invoices Responsive Open case study ↗ 05 BRAND / WEB EXPERIENCE STRATEGY · GROWTH · DIGITAL NORTH STAR DIGITAL EXPERIENCE 2026 Northstar A motion-led web presence that gives a business-advisory brand a precise, differentiated path from first impression to enquiry. React GSAP Vercel Open case study ↗ Visit live ↗ 02 / WHAT I BUILD From technical detail to business leverage. End-to-end support for the system underneath the interface: discovery, architecture, implementation, and the operational work around launch. 01 SaaS & product systems Purpose-built platforms, internal tools, and portals designed around real roles, data, and outcomes. 02 ERP & CRM operations Connected sales, inventory, project, finance, and team workflows that reduce manual coordination. 03 AI & automation Document intelligence, workflow automation, search, and integrations that turn routine effort into reliable flow. 04 Architecture & delivery Clear technical foundations, deployment, access controls, and maintainable systems that can evolve. 03 / WORKING METHOD Make the system fit the operation. Good software is a practical decision. The process keeps discovery close to implementation so each stage earns its complexity. 01 Find the constraint Map the actual work, decisions, data, and handoffs. Name the bottleneck before selecting a tool. 02 Shape the system Define the roles, data model, integrations, and useful first release before the build gets expensive. 03 Build in useful slices Deliver operational capability early, validate it with real use, and make the next decision from evidence. 04 Operate & improve Deploy with care, observe the system in context, and evolve it as the operation grows. OPEN TO THE RIGHT COLLABORATION Have an operation that deserves a better system? Share the bottleneck, the people involved, and what a better outcome would look like. I’ll help you determine the right next move. PROJECT INTAKE / 01 Start with a concise brief. Email the context, current tools, and the outcome you need. A short conversation is usually enough to find the useful first step. aymane.chellak@outlook.fr ↗ Response channel · email A AYNKO Software engineering for real operations. Work Expertise Contact © 2026 AYNKO. Morocco · Remote.",
+      "sections": [
+        "home",
+        "signal-strip",
+        "work",
+        "expertise",
+        "method",
+        "contact"
+      ],
+      "boxes": {
+        ".site-header": {
+          "x": 0,
+          "y": 0,
+          "width": 305,
+          "height": 68
+        },
+        ".hero": {
+          "x": 20,
+          "y": 68,
+          "width": 265,
+          "height": 1065.109375
+        },
+        ".hero-copy": {
+          "x": 20,
+          "y": 116,
+          "width": 265,
+          "height": 613.75
+        },
+        ".hero h1": {
+          "x": 20,
+          "y": 175.375,
+          "width": 265,
+          "height": 154.0625
+        },
+        ".hero-visual": {
+          "x": 20,
+          "y": 761.75,
+          "width": 265,
+          "height": 323.359375
+        },
+        ".signal-strip": {
+          "x": 0,
+          "y": 1133.109375,
+          "width": 305,
+          "height": 68
+        },
+        "#work": {
+          "x": 20,
+          "y": 1201.109375,
+          "width": 265,
+          "height": 3927.375
+        },
+        ".featured-project": {
+          "x": 20,
+          "y": 1642.421875,
+          "width": 265,
+          "height": 904.9375
+        },
+        ".project-grid": {
+          "x": 20,
+          "y": 2619.359375,
+          "width": 265,
+          "height": 2437.125
+        },
+        ".project-card": {
+          "x": 20,
+          "y": 2619.359375,
+          "width": 265,
+          "height": 597.28125
+        },
+        "#expertise": {
+          "x": 0,
+          "y": 5128.484375,
+          "width": 305,
+          "height": 1578.546875
+        },
+        ".capability-grid": {
+          "x": 20,
+          "y": 5571.796875,
+          "width": 265,
+          "height": 1063.234375
+        },
+        "#method": {
+          "x": 20,
+          "y": 6707.03125,
+          "width": 265,
+          "height": 1219
+        },
+        ".method-list": {
+          "x": 20,
+          "y": 7073.03125,
+          "width": 265,
+          "height": 781
+        },
+        "#contact": {
+          "x": 0,
+          "y": 7926.03125,
+          "width": 305,
+          "height": 958.078125
+        },
+        ".site-footer": {
+          "x": 20,
+          "y": 8884.109375,
+          "width": 265,
+          "height": 223
+        }
+      },
+      "colors": [
+        "#0a0b0c",
+        "#f4f3ee",
+        "#cdfa4a"
+      ]
+    },
+    "375": {
+      "text": "Skip to content A AYNKO Toggle navigation SOFTWARE ENGINEER & SYSTEMS ARCHITECT Software systems for real-world operations. I design and build the software behind ambitious operations: SaaS products, ERP and CRM platforms, automation, and intelligent workflows that make complex work feel clear. View selected work ↓ Work with me ↗ FOCUS SaaS · ERP · AI APPROACH Architecture first BASED IN Morocco · Remote SYSTEM ARCHITECTURE 4 LAYERS A OPERATING SYSTEM 01 DATA 02 FLOW 03 AI 04 EDGE 01 Map the operational bottleneck DISCOVER 02 Design the connected system CONNECT 03 Build the useful version DELIVER PRODUCT ENGINEERING SYSTEMS ARCHITECTURE OPERATIONAL SOFTWARE 01 / SELECTED SYSTEMS Products that hold up when work gets complex. I work from the business constraint inward: clarify the workflow, shape the system, then build an interface people can trust every day. 01 OPERATIONAL SAAS · LIVE LIVE PRODUCT FLAGSHIP CASE STUDY 2026 Maroc Affiliate A cash-on-delivery operations platform that unifies inventory, routing, delivery, customer follow-up, and seller payouts. PROBLEM Order fulfillment was distributed across messages, courier conversations, and disconnected records. SYSTEM One operating layer for seller, warehouse, delivery, and finance workflows. Custom SaaS Logistics Automation RBAC FR / AR / EN Open case study ↗ Visit live product ↗ 02 ERP / CONSTRUCTION ODOO 17 · UAT 2026 Construction Site ERP An Odoo foundation that makes each construction site a controlled operational unit: lifecycle, inventory, costing, and approvals in one system. Odoo 17 Python Inventory Open case study ↗ 03 CRM / SALES OPERATIONS CRM · OPERATIONS 2026 CRM A sales workspace for pipeline health, relationships, email, activities, roles, and workflow configuration without tool sprawl. Pipeline Workflows RBAC Open case study ↗ 04 FINANCE / PRODUCT FINANCE PRODUCT 2026 Studio North A finance interface that turns balance, cash flow, invoicing, transactions, and insights into an approachable daily overview. Finance UI Invoices Responsive Open case study ↗ 05 BRAND / WEB EXPERIENCE STRATEGY · GROWTH · DIGITAL NORTH STAR DIGITAL EXPERIENCE 2026 Northstar A motion-led web presence that gives a business-advisory brand a precise, differentiated path from first impression to enquiry. React GSAP Vercel Open case study ↗ Visit live ↗ 02 / WHAT I BUILD From technical detail to business leverage. End-to-end support for the system underneath the interface: discovery, architecture, implementation, and the operational work around launch. 01 SaaS & product systems Purpose-built platforms, internal tools, and portals designed around real roles, data, and outcomes. 02 ERP & CRM operations Connected sales, inventory, project, finance, and team workflows that reduce manual coordination. 03 AI & automation Document intelligence, workflow automation, search, and integrations that turn routine effort into reliable flow. 04 Architecture & delivery Clear technical foundations, deployment, access controls, and maintainable systems that can evolve. 03 / WORKING METHOD Make the system fit the operation. Good software is a practical decision. The process keeps discovery close to implementation so each stage earns its complexity. 01 Find the constraint Map the actual work, decisions, data, and handoffs. Name the bottleneck before selecting a tool. 02 Shape the system Define the roles, data model, integrations, and useful first release before the build gets expensive. 03 Build in useful slices Deliver operational capability early, validate it with real use, and make the next decision from evidence. 04 Operate & improve Deploy with care, observe the system in context, and evolve it as the operation grows. OPEN TO THE RIGHT COLLABORATION Have an operation that deserves a better system? Share the bottleneck, the people involved, and what a better outcome would look like. I’ll help you determine the right next move. PROJECT INTAKE / 01 Start with a concise brief. Email the context, current tools, and the outcome you need. A short conversation is usually enough to find the useful first step. aymane.chellak@outlook.fr ↗ Response channel · email A AYNKO Software engineering for real operations. Work Expertise Contact © 2026 AYNKO. Morocco · Remote.",
+      "sections": [
+        "home",
+        "signal-strip",
+        "work",
+        "expertise",
+        "method",
+        "contact"
+      ],
+      "boxes": {
+        ".site-header": {
+          "x": 0,
+          "y": 0,
+          "width": 360,
+          "height": 68
+        },
+        ".hero": {
+          "x": 20,
+          "y": 68,
+          "width": 320,
+          "height": 1012.71875
+        },
+        ".hero-copy": {
+          "x": 20,
+          "y": 116,
+          "width": 320,
+          "height": 521.03125
+        },
+        ".hero h1": {
+          "x": 20,
+          "y": 156.6875,
+          "width": 320,
+          "height": 124.8125
+        },
+        ".hero-visual": {
+          "x": 20,
+          "y": 669.03125,
+          "width": 320,
+          "height": 363.6875
+        },
+        ".signal-strip": {
+          "x": 0,
+          "y": 1080.71875,
+          "width": 360,
+          "height": 68
+        },
+        "#work": {
+          "x": 20,
+          "y": 1148.71875,
+          "width": 320,
+          "height": 3937.4375
+        },
+        ".featured-project": {
+          "x": 20,
+          "y": 1564.59375,
+          "width": 320,
+          "height": 872.1875
+        },
+        ".project-grid": {
+          "x": 20,
+          "y": 2508.78125,
+          "width": 320,
+          "height": 2505.375
+        },
+        ".project-card": {
+          "x": 20,
+          "y": 2508.78125,
+          "width": 320,
+          "height": 603.09375
+        },
+        "#expertise": {
+          "x": 0,
+          "y": 5086.15625,
+          "width": 360,
+          "height": 1442.953125
+        },
+        ".capability-grid": {
+          "x": 20,
+          "y": 5490.171875,
+          "width": 320,
+          "height": 966.9375
+        },
+        "#method": {
+          "x": 20,
+          "y": 6529.109375,
+          "width": 320,
+          "height": 1116.90625
+        },
+        ".method-list": {
+          "x": 20,
+          "y": 6895.015625,
+          "width": 320,
+          "height": 679
+        },
+        "#contact": {
+          "x": 0,
+          "y": 7646.015625,
+          "width": 360,
+          "height": 868.984375
+        },
+        ".site-footer": {
+          "x": 20,
+          "y": 8515,
+          "width": 320,
+          "height": 223
+        }
+      },
+      "colors": [
+        "#0a0b0c",
+        "#f4f3ee",
+        "#cdfa4a"
+      ]
+    },
+    "430": {
+      "text": "Skip to content A AYNKO Toggle navigation SOFTWARE ENGINEER & SYSTEMS ARCHITECT Software systems for real-world operations. I design and build the software behind ambitious operations: SaaS products, ERP and CRM platforms, automation, and intelligent workflows that make complex work feel clear. View selected work ↓ Work with me ↗ FOCUS SaaS · ERP · AI APPROACH Architecture first BASED IN Morocco · Remote SYSTEM ARCHITECTURE 4 LAYERS A OPERATING SYSTEM 01 DATA 02 FLOW 03 AI 04 EDGE 01 Map the operational bottleneck DISCOVER 02 Design the connected system CONNECT 03 Build the useful version DELIVER PRODUCT ENGINEERING SYSTEMS ARCHITECTURE OPERATIONAL SOFTWARE 01 / SELECTED SYSTEMS Products that hold up when work gets complex. I work from the business constraint inward: clarify the workflow, shape the system, then build an interface people can trust every day. 01 OPERATIONAL SAAS · LIVE LIVE PRODUCT FLAGSHIP CASE STUDY 2026 Maroc Affiliate A cash-on-delivery operations platform that unifies inventory, routing, delivery, customer follow-up, and seller payouts. PROBLEM Order fulfillment was distributed across messages, courier conversations, and disconnected records. SYSTEM One operating layer for seller, warehouse, delivery, and finance workflows. Custom SaaS Logistics Automation RBAC FR / AR / EN Open case study ↗ Visit live product ↗ 02 ERP / CONSTRUCTION ODOO 17 · UAT 2026 Construction Site ERP An Odoo foundation that makes each construction site a controlled operational unit: lifecycle, inventory, costing, and approvals in one system. Odoo 17 Python Inventory Open case study ↗ 03 CRM / SALES OPERATIONS CRM · OPERATIONS 2026 CRM A sales workspace for pipeline health, relationships, email, activities, roles, and workflow configuration without tool sprawl. Pipeline Workflows RBAC Open case study ↗ 04 FINANCE / PRODUCT FINANCE PRODUCT 2026 Studio North A finance interface that turns balance, cash flow, invoicing, transactions, and insights into an approachable daily overview. Finance UI Invoices Responsive Open case study ↗ 05 BRAND / WEB EXPERIENCE STRATEGY · GROWTH · DIGITAL NORTH STAR DIGITAL EXPERIENCE 2026 Northstar A motion-led web presence that gives a business-advisory brand a precise, differentiated path from first impression to enquiry. React GSAP Vercel Open case study ↗ Visit live ↗ 02 / WHAT I BUILD From technical detail to business leverage. End-to-end support for the system underneath the interface: discovery, architecture, implementation, and the operational work around launch. 01 SaaS & product systems Purpose-built platforms, internal tools, and portals designed around real roles, data, and outcomes. 02 ERP & CRM operations Connected sales, inventory, project, finance, and team workflows that reduce manual coordination. 03 AI & automation Document intelligence, workflow automation, search, and integrations that turn routine effort into reliable flow. 04 Architecture & delivery Clear technical foundations, deployment, access controls, and maintainable systems that can evolve. 03 / WORKING METHOD Make the system fit the operation. Good software is a practical decision. The process keeps discovery close to implementation so each stage earns its complexity. 01 Find the constraint Map the actual work, decisions, data, and handoffs. Name the bottleneck before selecting a tool. 02 Shape the system Define the roles, data model, integrations, and useful first release before the build gets expensive. 03 Build in useful slices Deliver operational capability early, validate it with real use, and make the next decision from evidence. 04 Operate & improve Deploy with care, observe the system in context, and evolve it as the operation grows. OPEN TO THE RIGHT COLLABORATION Have an operation that deserves a better system? Share the bottleneck, the people involved, and what a better outcome would look like. I’ll help you determine the right next move. PROJECT INTAKE / 01 Start with a concise brief. Email the context, current tools, and the outcome you need. A short conversation is usually enough to find the useful first step. aymane.chellak@outlook.fr ↗ Response channel · email A AYNKO Software engineering for real operations. Work Expertise Contact © 2026 AYNKO. Morocco · Remote.",
+      "sections": [
+        "home",
+        "signal-strip",
+        "work",
+        "expertise",
+        "method",
+        "contact"
+      ],
+      "boxes": {
+        ".site-header": {
+          "x": 0,
+          "y": 0,
+          "width": 415,
+          "height": 68
+        },
+        ".hero": {
+          "x": 20,
+          "y": 68,
+          "width": 375,
+          "height": 1031.921875
+        },
+        ".hero-copy": {
+          "x": 20,
+          "y": 116,
+          "width": 375,
+          "height": 499.890625
+        },
+        ".hero h1": {
+          "x": 20,
+          "y": 156.6875,
+          "width": 375,
+          "height": 142.859375
+        },
+        ".hero-visual": {
+          "x": 20,
+          "y": 647.890625,
+          "width": 375,
+          "height": 404.03125
+        },
+        ".signal-strip": {
+          "x": 0,
+          "y": 1099.921875,
+          "width": 415,
+          "height": 68
+        },
+        "#work": {
+          "x": 20,
+          "y": 1167.921875,
+          "width": 375,
+          "height": 4077.125
+        },
+        ".featured-project": {
+          "x": 20,
+          "y": 1607.109375,
+          "width": 375,
+          "height": 888.3125
+        },
+        ".project-grid": {
+          "x": 20,
+          "y": 2567.421875,
+          "width": 375,
+          "height": 2605.625
+        },
+        ".project-card": {
+          "x": 20,
+          "y": 2567.421875,
+          "width": 375,
+          "height": 615.40625
+        },
+        "#expertise": {
+          "x": 0,
+          "y": 5245.046875,
+          "width": 415,
+          "height": 1366
+        },
+        ".capability-grid": {
+          "x": 20,
+          "y": 5596.859375,
+          "width": 375,
+          "height": 942.1875
+        },
+        "#method": {
+          "x": 20,
+          "y": 6611.046875,
+          "width": 375,
+          "height": 1077.3125
+        },
+        ".method-list": {
+          "x": 20,
+          "y": 6962.859375,
+          "width": 375,
+          "height": 653.5
+        },
+        "#contact": {
+          "x": 0,
+          "y": 7688.359375,
+          "width": 415,
+          "height": 837.71875
+        },
+        ".site-footer": {
+          "x": 20,
+          "y": 8526.078125,
+          "width": 375,
+          "height": 223
+        }
+      },
+      "colors": [
+        "#0a0b0c",
+        "#f4f3ee",
+        "#cdfa4a"
+      ]
+    },
+    "768": {
+      "text": "Skip to content A AYNKO Toggle navigation SOFTWARE ENGINEER & SYSTEMS ARCHITECT Software systems for real-world operations. I design and build the software behind ambitious operations: SaaS products, ERP and CRM platforms, automation, and intelligent workflows that make complex work feel clear. View selected work ↓ Work with me ↗ FOCUS SaaS · ERP · AI APPROACH Architecture first BASED IN Morocco · Remote SYSTEM ARCHITECTURE 4 LAYERS A OPERATING SYSTEM 01 DATA 02 FLOW 03 AI 04 EDGE 01 Map the operational bottleneck DISCOVER 02 Design the connected system CONNECT 03 Build the useful version DELIVER PRODUCT ENGINEERING SYSTEMS ARCHITECTURE OPERATIONAL SOFTWARE 01 / SELECTED SYSTEMS Products that hold up when work gets complex. I work from the business constraint inward: clarify the workflow, shape the system, then build an interface people can trust every day. 01 OPERATIONAL SAAS · LIVE LIVE PRODUCT FLAGSHIP CASE STUDY 2026 Maroc Affiliate A cash-on-delivery operations platform that unifies inventory, routing, delivery, customer follow-up, and seller payouts. PROBLEM Order fulfillment was distributed across messages, courier conversations, and disconnected records. SYSTEM One operating layer for seller, warehouse, delivery, and finance workflows. Custom SaaS Logistics Automation RBAC FR / AR / EN Open case study ↗ Visit live product ↗ 02 ERP / CONSTRUCTION ODOO 17 · UAT 2026 Construction Site ERP An Odoo foundation that makes each construction site a controlled operational unit: lifecycle, inventory, costing, and approvals in one system. Odoo 17 Python Inventory Open case study ↗ 03 CRM / SALES OPERATIONS CRM · OPERATIONS 2026 CRM A sales workspace for pipeline health, relationships, email, activities, roles, and workflow configuration without tool sprawl. Pipeline Workflows RBAC Open case study ↗ 04 FINANCE / PRODUCT FINANCE PRODUCT 2026 Studio North A finance interface that turns balance, cash flow, invoicing, transactions, and insights into an approachable daily overview. Finance UI Invoices Responsive Open case study ↗ 05 BRAND / WEB EXPERIENCE STRATEGY · GROWTH · DIGITAL NORTH STAR Designed to create a focused first impression. DIGITAL EXPERIENCE 2026 Northstar A motion-led web presence that gives a business-advisory brand a precise, differentiated path from first impression to enquiry. React GSAP Vercel Open case study ↗ Visit live ↗ 02 / WHAT I BUILD From technical detail to business leverage. End-to-end support for the system underneath the interface: discovery, architecture, implementation, and the operational work around launch. 01 SaaS & product systems Purpose-built platforms, internal tools, and portals designed around real roles, data, and outcomes. 02 ERP & CRM operations Connected sales, inventory, project, finance, and team workflows that reduce manual coordination. 03 AI & automation Document intelligence, workflow automation, search, and integrations that turn routine effort into reliable flow. 04 Architecture & delivery Clear technical foundations, deployment, access controls, and maintainable systems that can evolve. 03 / WORKING METHOD Make the system fit the operation. Good software is a practical decision. The process keeps discovery close to implementation so each stage earns its complexity. 01 Find the constraint Map the actual work, decisions, data, and handoffs. Name the bottleneck before selecting a tool. 02 Shape the system Define the roles, data model, integrations, and useful first release before the build gets expensive. 03 Build in useful slices Deliver operational capability early, validate it with real use, and make the next decision from evidence. 04 Operate & improve Deploy with care, observe the system in context, and evolve it as the operation grows. OPEN TO THE RIGHT COLLABORATION Have an operation that deserves a better system? Share the bottleneck, the people involved, and what a better outcome would look like. I’ll help you determine the right next move. PROJECT INTAKE / 01 Start with a concise brief. Email the context, current tools, and the outcome you need. A short conversation is usually enough to find the useful first step. aymane.chellak@outlook.fr ↗ Response channel · email A AYNKO Software engineering for real operations. Work Expertise Contact © 2026 AYNKO. Morocco · Remote.",
+      "sections": [
+        "home",
+        "signal-strip",
+        "work",
+        "expertise",
+        "method",
+        "contact"
+      ],
+      "boxes": {
+        ".site-header": {
+          "x": 0,
+          "y": 0,
+          "width": 753,
+          "height": 68
+        },
+        ".hero": {
+          "x": 23.046875,
+          "y": 68,
+          "width": 706.90625,
+          "height": 1251.34375
+        },
+        ".hero-copy": {
+          "x": 23.046875,
+          "y": 132,
+          "width": 706.90625,
+          "height": 499.15625
+        },
+        ".hero h1": {
+          "x": 23.046875,
+          "y": 172.6875,
+          "width": 706.90625,
+          "height": 151.71875
+        },
+        ".hero-visual": {
+          "x": 23.046875,
+          "y": 663.15625,
+          "width": 620,
+          "height": 600.1875
+        },
+        ".signal-strip": {
+          "x": 0,
+          "y": 1319.34375,
+          "width": 753,
+          "height": 54.5
+        },
+        "#work": {
+          "x": 23.046875,
+          "y": 1373.84375,
+          "width": 706.90625,
+          "height": 2773.84375
+        },
+        ".featured-project": {
+          "x": 23.046875,
+          "y": 1728.625,
+          "width": 706.90625,
+          "height": 1021.5
+        },
+        ".project-grid": {
+          "x": 23.046875,
+          "y": 2822.125,
+          "width": 706.90625,
+          "height": 1253.5625
+        },
+        ".project-card": {
+          "x": 23.046875,
+          "y": 2822.125,
+          "width": 338.09375,
+          "height": 615.53125
+        },
+        "#expertise": {
+          "x": 0,
+          "y": 4147.6875,
+          "width": 753,
+          "height": 940.375
+        },
+        ".capability-grid": {
+          "x": 23.046875,
+          "y": 4502.46875,
+          "width": 706.90625,
+          "height": 513.59375
+        },
+        "#method": {
+          "x": 23.046875,
+          "y": 5088.0625,
+          "width": 706.90625,
+          "height": 878.03125
+        },
+        ".method-list": {
+          "x": 23.046875,
+          "y": 5416.59375,
+          "width": 706.90625,
+          "height": 477.5
+        },
+        "#contact": {
+          "x": 0,
+          "y": 5966.09375,
+          "width": 753,
+          "height": 766.890625
+        },
+        ".site-footer": {
+          "x": 23.046875,
+          "y": 6732.984375,
+          "width": 706.90625,
+          "height": 108
+        }
+      },
+      "colors": [
+        "#0a0b0c",
+        "#f4f3ee",
+        "#cdfa4a"
+      ]
+    },
+    "1024": {
+      "text": "Skip to content A AYNKO SYS/01 Work Expertise Method Contact Start a project ↗ SOFTWARE ENGINEER & SYSTEMS ARCHITECT Software systems for real-world operations. I design and build the software behind ambitious operations: SaaS products, ERP and CRM platforms, automation, and intelligent workflows that make complex work feel clear. View selected work ↓ Work with me ↗ FOCUS SaaS · ERP · AI APPROACH Architecture first BASED IN Morocco · Remote SYSTEM ARCHITECTURE 4 LAYERS A OPERATING SYSTEM 01 DATA 02 FLOW 03 AI 04 EDGE 01 Map the operational bottleneck DISCOVER 02 Design the connected system CONNECT 03 Build the useful version DELIVER PRODUCT ENGINEERING SYSTEMS ARCHITECTURE OPERATIONAL SOFTWARE 01 / SELECTED SYSTEMS Products that hold up when work gets complex. I work from the business constraint inward: clarify the workflow, shape the system, then build an interface people can trust every day. 01 OPERATIONAL SAAS · LIVE LIVE PRODUCT FLAGSHIP CASE STUDY 2026 Maroc Affiliate A cash-on-delivery operations platform that unifies inventory, routing, delivery, customer follow-up, and seller payouts. PROBLEM Order fulfillment was distributed across messages, courier conversations, and disconnected records. SYSTEM One operating layer for seller, warehouse, delivery, and finance workflows. Custom SaaS Logistics Automation RBAC FR / AR / EN Open case study ↗ Visit live product ↗ 02 ERP / CONSTRUCTION ODOO 17 · UAT 2026 Construction Site ERP An Odoo foundation that makes each construction site a controlled operational unit: lifecycle, inventory, costing, and approvals in one system. Odoo 17 Python Inventory Open case study ↗ 03 CRM / SALES OPERATIONS CRM · OPERATIONS 2026 CRM A sales workspace for pipeline health, relationships, email, activities, roles, and workflow configuration without tool sprawl. Pipeline Workflows RBAC Open case study ↗ 04 FINANCE / PRODUCT FINANCE PRODUCT 2026 Studio North A finance interface that turns balance, cash flow, invoicing, transactions, and insights into an approachable daily overview. Finance UI Invoices Responsive Open case study ↗ 05 BRAND / WEB EXPERIENCE STRATEGY · GROWTH · DIGITAL NORTH STAR Designed to create a focused first impression. DIGITAL EXPERIENCE 2026 Northstar A motion-led web presence that gives a business-advisory brand a precise, differentiated path from first impression to enquiry. React GSAP Vercel Open case study ↗ Visit live ↗ 02 / WHAT I BUILD From technical detail to business leverage. End-to-end support for the system underneath the interface: discovery, architecture, implementation, and the operational work around launch. 01 SaaS & product systems Purpose-built platforms, internal tools, and portals designed around real roles, data, and outcomes. 02 ERP & CRM operations Connected sales, inventory, project, finance, and team workflows that reduce manual coordination. 03 AI & automation Document intelligence, workflow automation, search, and integrations that turn routine effort into reliable flow. 04 Architecture & delivery Clear technical foundations, deployment, access controls, and maintainable systems that can evolve. 03 / WORKING METHOD Make the system fit the operation. Good software is a practical decision. The process keeps discovery close to implementation so each stage earns its complexity. 01 Find the constraint Map the actual work, decisions, data, and handoffs. Name the bottleneck before selecting a tool. 02 Shape the system Define the roles, data model, integrations, and useful first release before the build gets expensive. 03 Build in useful slices Deliver operational capability early, validate it with real use, and make the next decision from evidence. 04 Operate & improve Deploy with care, observe the system in context, and evolve it as the operation grows. OPEN TO THE RIGHT COLLABORATION Have an operation that deserves a better system? Share the bottleneck, the people involved, and what a better outcome would look like. I’ll help you determine the right next move. PROJECT INTAKE / 01 Start with a concise brief. Email the context, current tools, and the outcome you need. A short conversation is usually enough to find the useful first step. aymane.chellak@outlook.fr ↗ Response channel · email A AYNKO SYS/01 Software engineering for real operations. Work Expertise Contact © 2026 AYNKO. Morocco · Remote.",
+      "sections": [
+        "home",
+        "signal-strip",
+        "work",
+        "expertise",
+        "method",
+        "contact"
+      ],
+      "boxes": {
+        ".site-header": {
+          "x": 0,
+          "y": 0,
+          "width": 1009,
+          "height": 80
+        },
+        ".hero": {
+          "x": 30.71875,
+          "y": 80,
+          "width": 947.546875,
+          "height": 820
+        },
+        ".hero-copy": {
+          "x": 30.71875,
+          "y": 227.9375,
+          "width": 489.546875,
+          "height": 524.125
+        },
+        ".hero h1": {
+          "x": 30.71875,
+          "y": 268.625,
+          "width": 489.546875,
+          "height": 176.6875
+        },
+        ".hero-visual": {
+          "x": 561.21875,
+          "y": 264.3125,
+          "width": 417.046875,
+          "height": 451.359375
+        },
+        ".signal-strip": {
+          "x": 0,
+          "y": 900,
+          "width": 1009,
+          "height": 54.5
+        },
+        "#work": {
+          "x": 30.71875,
+          "y": 954.5,
+          "width": 947.546875,
+          "height": 2435.71875
+        },
+        ".featured-project": {
+          "x": 30.71875,
+          "y": 1254.953125,
+          "width": 947.546875,
+          "height": 586.796875
+        },
+        ".project-grid": {
+          "x": 30.71875,
+          "y": 1933.90625,
+          "width": 947.546875,
+          "height": 1374.40625
+        },
+        ".project-card": {
+          "x": 30.71875,
+          "y": 1933.90625,
+          "width": 453.296875,
+          "height": 669.234375
+        },
+        "#expertise": {
+          "x": 0,
+          "y": 3390.21875,
+          "width": 1009,
+          "height": 711.203125
+        },
+        ".capability-grid": {
+          "x": 30.71875,
+          "y": 3690.671875,
+          "width": 947.546875,
+          "height": 328.84375
+        },
+        "#method": {
+          "x": 30.71875,
+          "y": 4101.421875,
+          "width": 947.546875,
+          "height": 783.359375
+        },
+        ".method-list": {
+          "x": 30.71875,
+          "y": 4401.875,
+          "width": 947.546875,
+          "height": 401
+        },
+        "#contact": {
+          "x": 0,
+          "y": 4884.78125,
+          "width": 1009,
+          "height": 561.75
+        },
+        ".site-footer": {
+          "x": 30.71875,
+          "y": 5446.53125,
+          "width": 947.546875,
+          "height": 108
+        }
+      },
+      "colors": [
+        "#0a0b0c",
+        "#f4f3ee",
+        "#cdfa4a"
+      ]
+    },
+    "1440": {
+      "text": "Skip to content A AYNKO SYS/01 Work Expertise Method Contact Start a project ↗ SOFTWARE ENGINEER & SYSTEMS ARCHITECT Software systems for real-world operations. I design and build the software behind ambitious operations: SaaS products, ERP and CRM platforms, automation, and intelligent workflows that make complex work feel clear. View selected work ↓ Work with me ↗ FOCUS SaaS · ERP · AI APPROACH Architecture first BASED IN Morocco · Remote SYSTEM ARCHITECTURE 4 LAYERS A OPERATING SYSTEM 01 DATA 02 FLOW 03 AI 04 EDGE 01 Map the operational bottleneck DISCOVER 02 Design the connected system CONNECT 03 Build the useful version DELIVER PRODUCT ENGINEERING SYSTEMS ARCHITECTURE OPERATIONAL SOFTWARE 01 / SELECTED SYSTEMS Products that hold up when work gets complex. I work from the business constraint inward: clarify the workflow, shape the system, then build an interface people can trust every day. 01 OPERATIONAL SAAS · LIVE LIVE PRODUCT FLAGSHIP CASE STUDY 2026 Maroc Affiliate A cash-on-delivery operations platform that unifies inventory, routing, delivery, customer follow-up, and seller payouts. PROBLEM Order fulfillment was distributed across messages, courier conversations, and disconnected records. SYSTEM One operating layer for seller, warehouse, delivery, and finance workflows. Custom SaaS Logistics Automation RBAC FR / AR / EN Open case study ↗ Visit live product ↗ 02 ERP / CONSTRUCTION ODOO 17 · UAT 2026 Construction Site ERP An Odoo foundation that makes each construction site a controlled operational unit: lifecycle, inventory, costing, and approvals in one system. Odoo 17 Python Inventory Open case study ↗ 03 CRM / SALES OPERATIONS CRM · OPERATIONS 2026 CRM A sales workspace for pipeline health, relationships, email, activities, roles, and workflow configuration without tool sprawl. Pipeline Workflows RBAC Open case study ↗ 04 FINANCE / PRODUCT FINANCE PRODUCT 2026 Studio North A finance interface that turns balance, cash flow, invoicing, transactions, and insights into an approachable daily overview. Finance UI Invoices Responsive Open case study ↗ 05 BRAND / WEB EXPERIENCE STRATEGY · GROWTH · DIGITAL NORTH STAR Designed to create a focused first impression. DIGITAL EXPERIENCE 2026 Northstar A motion-led web presence that gives a business-advisory brand a precise, differentiated path from first impression to enquiry. React GSAP Vercel Open case study ↗ Visit live ↗ 02 / WHAT I BUILD From technical detail to business leverage. End-to-end support for the system underneath the interface: discovery, architecture, implementation, and the operational work around launch. 01 SaaS & product systems Purpose-built platforms, internal tools, and portals designed around real roles, data, and outcomes. 02 ERP & CRM operations Connected sales, inventory, project, finance, and team workflows that reduce manual coordination. 03 AI & automation Document intelligence, workflow automation, search, and integrations that turn routine effort into reliable flow. 04 Architecture & delivery Clear technical foundations, deployment, access controls, and maintainable systems that can evolve. 03 / WORKING METHOD Make the system fit the operation. Good software is a practical decision. The process keeps discovery close to implementation so each stage earns its complexity. 01 Find the constraint Map the actual work, decisions, data, and handoffs. Name the bottleneck before selecting a tool. 02 Shape the system Define the roles, data model, integrations, and useful first release before the build gets expensive. 03 Build in useful slices Deliver operational capability early, validate it with real use, and make the next decision from evidence. 04 Operate & improve Deploy with care, observe the system in context, and evolve it as the operation grows. OPEN TO THE RIGHT COLLABORATION Have an operation that deserves a better system? Share the bottleneck, the people involved, and what a better outcome would look like. I’ll help you determine the right next move. PROJECT INTAKE / 01 Start with a concise brief. Email the context, current tools, and the outcome you need. A short conversation is usually enough to find the useful first step. aymane.chellak@outlook.fr ↗ Response channel · email A AYNKO SYS/01 Software engineering for real operations. Work Expertise Contact © 2026 AYNKO. Morocco · Remote.",
+      "sections": [
+        "home",
+        "signal-strip",
+        "work",
+        "expertise",
+        "method",
+        "contact"
+      ],
+      "boxes": {
+        ".site-header": {
+          "x": 0,
+          "y": 0,
+          "width": 1425,
+          "height": 80
+        },
+        ".hero": {
+          "x": 52.5,
+          "y": 80,
+          "width": 1320,
+          "height": 820
+        },
+        ".hero-copy": {
+          "x": 52.5,
+          "y": 186.625,
+          "width": 681.6875,
+          "height": 606.734375
+        },
+        ".hero h1": {
+          "x": 52.5,
+          "y": 227.3125,
+          "width": 681.6875,
+          "height": 249.078125
+        },
+        ".hero-visual": {
+          "x": 791.78125,
+          "y": 204.296875,
+          "width": 580.71875,
+          "height": 571.390625
+        },
+        ".signal-strip": {
+          "x": 0,
+          "y": 900,
+          "width": 1425,
+          "height": 54.5
+        },
+        "#work": {
+          "x": 52.5,
+          "y": 954.5,
+          "width": 1320,
+          "height": 2838.78125
+        },
+        ".featured-project": {
+          "x": 52.5,
+          "y": 1357.28125,
+          "width": 1320,
+          "height": 550.359375
+        },
+        ".project-grid": {
+          "x": 52.5,
+          "y": 2037.234375,
+          "width": 1320,
+          "height": 1640.859375
+        },
+        ".project-card": {
+          "x": 52.5,
+          "y": 2037.234375,
+          "width": 631.203125,
+          "height": 777.234375
+        },
+        "#expertise": {
+          "x": 0,
+          "y": 3793.28125,
+          "width": 1425,
+          "height": 775.265625
+        },
+        ".capability-grid": {
+          "x": 52.5,
+          "y": 4196.0625,
+          "width": 1320,
+          "height": 257.296875
+        },
+        "#method": {
+          "x": 52.5,
+          "y": 4568.546875,
+          "width": 1320,
+          "height": 911.96875
+        },
+        ".method-list": {
+          "x": 52.5,
+          "y": 4971.328125,
+          "width": 1320,
+          "height": 394
+        },
+        "#contact": {
+          "x": 0,
+          "y": 5480.515625,
+          "width": 1425,
+          "height": 642.546875
+        },
+        ".site-footer": {
+          "x": 52.5,
+          "y": 6123.0625,
+          "width": 1320,
+          "height": 108
+        }
+      },
+      "colors": [
+        "#0a0b0c",
+        "#f4f3ee",
+        "#cdfa4a"
+      ]
+    },
+    "1920": {
+      "text": "Skip to content A AYNKO SYS/01 Work Expertise Method Contact Start a project ↗ SOFTWARE ENGINEER & SYSTEMS ARCHITECT Software systems for real-world operations. I design and build the software behind ambitious operations: SaaS products, ERP and CRM platforms, automation, and intelligent workflows that make complex work feel clear. View selected work ↓ Work with me ↗ FOCUS SaaS · ERP · AI APPROACH Architecture first BASED IN Morocco · Remote SYSTEM ARCHITECTURE 4 LAYERS A OPERATING SYSTEM 01 DATA 02 FLOW 03 AI 04 EDGE 01 Map the operational bottleneck DISCOVER 02 Design the connected system CONNECT 03 Build the useful version DELIVER PRODUCT ENGINEERING SYSTEMS ARCHITECTURE OPERATIONAL SOFTWARE 01 / SELECTED SYSTEMS Products that hold up when work gets complex. I work from the business constraint inward: clarify the workflow, shape the system, then build an interface people can trust every day. 01 OPERATIONAL SAAS · LIVE LIVE PRODUCT FLAGSHIP CASE STUDY 2026 Maroc Affiliate A cash-on-delivery operations platform that unifies inventory, routing, delivery, customer follow-up, and seller payouts. PROBLEM Order fulfillment was distributed across messages, courier conversations, and disconnected records. SYSTEM One operating layer for seller, warehouse, delivery, and finance workflows. Custom SaaS Logistics Automation RBAC FR / AR / EN Open case study ↗ Visit live product ↗ 02 ERP / CONSTRUCTION ODOO 17 · UAT 2026 Construction Site ERP An Odoo foundation that makes each construction site a controlled operational unit: lifecycle, inventory, costing, and approvals in one system. Odoo 17 Python Inventory Open case study ↗ 03 CRM / SALES OPERATIONS CRM · OPERATIONS 2026 CRM A sales workspace for pipeline health, relationships, email, activities, roles, and workflow configuration without tool sprawl. Pipeline Workflows RBAC Open case study ↗ 04 FINANCE / PRODUCT FINANCE PRODUCT 2026 Studio North A finance interface that turns balance, cash flow, invoicing, transactions, and insights into an approachable daily overview. Finance UI Invoices Responsive Open case study ↗ 05 BRAND / WEB EXPERIENCE STRATEGY · GROWTH · DIGITAL NORTH STAR Designed to create a focused first impression. DIGITAL EXPERIENCE 2026 Northstar A motion-led web presence that gives a business-advisory brand a precise, differentiated path from first impression to enquiry. React GSAP Vercel Open case study ↗ Visit live ↗ 02 / WHAT I BUILD From technical detail to business leverage. End-to-end support for the system underneath the interface: discovery, architecture, implementation, and the operational work around launch. 01 SaaS & product systems Purpose-built platforms, internal tools, and portals designed around real roles, data, and outcomes. 02 ERP & CRM operations Connected sales, inventory, project, finance, and team workflows that reduce manual coordination. 03 AI & automation Document intelligence, workflow automation, search, and integrations that turn routine effort into reliable flow. 04 Architecture & delivery Clear technical foundations, deployment, access controls, and maintainable systems that can evolve. 03 / WORKING METHOD Make the system fit the operation. Good software is a practical decision. The process keeps discovery close to implementation so each stage earns its complexity. 01 Find the constraint Map the actual work, decisions, data, and handoffs. Name the bottleneck before selecting a tool. 02 Shape the system Define the roles, data model, integrations, and useful first release before the build gets expensive. 03 Build in useful slices Deliver operational capability early, validate it with real use, and make the next decision from evidence. 04 Operate & improve Deploy with care, observe the system in context, and evolve it as the operation grows. OPEN TO THE RIGHT COLLABORATION Have an operation that deserves a better system? Share the bottleneck, the people involved, and what a better outcome would look like. I’ll help you determine the right next move. PROJECT INTAKE / 01 Start with a concise brief. Email the context, current tools, and the outcome you need. A short conversation is usually enough to find the useful first step. aymane.chellak@outlook.fr ↗ Response channel · email A AYNKO SYS/01 Software engineering for real operations. Work Expertise Contact © 2026 AYNKO. Morocco · Remote.",
+      "sections": [
+        "home",
+        "signal-strip",
+        "work",
+        "expertise",
+        "method",
+        "contact"
+      ],
+      "boxes": {
+        ".site-header": {
+          "x": 0,
+          "y": 0,
+          "width": 1905,
+          "height": 80
+        },
+        ".hero": {
+          "x": 292.5,
+          "y": 80,
+          "width": 1320,
+          "height": 822.234375
+        },
+        ".hero-copy": {
+          "x": 292.5,
+          "y": 176,
+          "width": 678.234375,
+          "height": 630.234375
+        },
+        ".hero h1": {
+          "x": 292.5,
+          "y": 216.6875,
+          "width": 678.234375,
+          "height": 272.578125
+        },
+        ".hero-visual": {
+          "x": 1034.734375,
+          "y": 206.5,
+          "width": 577.765625,
+          "height": 569.21875
+        },
+        ".signal-strip": {
+          "x": 0,
+          "y": 902.234375,
+          "width": 1905,
+          "height": 54.5
+        },
+        "#work": {
+          "x": 292.5,
+          "y": 956.734375,
+          "width": 1320,
+          "height": 2922.65625
+        },
+        ".featured-project": {
+          "x": 292.5,
+          "y": 1378.484375,
+          "width": 1320,
+          "height": 549.21875
+        },
+        ".project-grid": {
+          "x": 292.5,
+          "y": 2071.703125,
+          "width": 1320,
+          "height": 1679.6875
+        },
+        ".project-card": {
+          "x": 292.5,
+          "y": 2071.703125,
+          "width": 628,
+          "height": 783.84375
+        },
+        "#expertise": {
+          "x": 0,
+          "y": 3879.390625,
+          "width": 1905,
+          "height": 807.046875
+        },
+        ".capability-grid": {
+          "x": 292.5,
+          "y": 4301.140625,
+          "width": 1320,
+          "height": 257.296875
+        },
+        "#method": {
+          "x": 292.5,
+          "y": 4686.4375,
+          "width": 1320,
+          "height": 943.75
+        },
+        ".method-list": {
+          "x": 292.5,
+          "y": 5108.1875,
+          "width": 1320,
+          "height": 394
+        },
+        "#contact": {
+          "x": 0,
+          "y": 5630.1875,
+          "width": 1905,
+          "height": 683.78125
+        },
+        ".site-footer": {
+          "x": 292.5,
+          "y": 6313.96875,
+          "width": 1320,
+          "height": 108
+        }
+      },
+      "colors": [
+        "#0a0b0c",
+        "#f4f3ee",
+        "#cdfa4a"
+      ]
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "aynko-portfolio",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node tools/serve.mjs",
+    "test": "node tools/verify.mjs",
+    "images": "node tools/optimize-images.mjs",
+    "check:performance": "node tools/performance.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.0",
+    "@axe-core/playwright": "^4.11.0",
+    "sharp": "^0.35.4"
+  }
+}

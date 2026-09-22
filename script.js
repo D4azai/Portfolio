@@ -1,3 +1,6 @@
+import { initMotion, animateDialog } from "./js/motion.js";
+import { initPointer } from "./js/pointer.js";
+
 const cases = {
   affiliate: {
     kicker: "Case study 01 / Operational SaaS",
@@ -204,6 +207,8 @@ const openDialog = (item, trigger) => {
     .join("");
   dialogContent.innerHTML = `<p class="dialog-kicker">${item.kicker}</p><h2 id="case-title">${item.title}</h2><p class="dialog-lede">${item.lede}</p>${liveLink}<ul class="dialog-tags">${item.tags.map((tag) => `<li>${tag}</li>`).join("")}</ul>${gallery}<div class="case-sections">${sections}</div>`;
   dialog.showModal();
+  animateDialog(dialog);
+  document.dispatchEvent(new Event("aynko:dialog"));
   document.body.style.overflow = "hidden";
   dialogScroll.scrollTop = 0;
   dialog.querySelector(".dialog-close").focus({ preventScroll: true });
@@ -277,21 +282,12 @@ header.addEventListener("focusout", (event) => {
 });
 mobileNavigation.addEventListener("change", () => setMenuOpen(false));
 
-// Content remains visible without JavaScript or IntersectionObserver.
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-if (!reduceMotion.matches && "IntersectionObserver" in window) {
-  const observer = new IntersectionObserver(
-    (entries) =>
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      }),
-    { threshold: 0.05 },
-  );
-  document.querySelectorAll("[data-reveal]").forEach((element) => {
-    element.classList.add("reveal-pending");
-    observer.observe(element);
-  });
-}
+// All enhancements return cleanup functions; BFCache restores keep their listeners.
+const cleanupMotion = initMotion();
+const cleanupPointer = initPointer();
+addEventListener("pagehide", (event) => {
+  if (!event.persisted) {
+    cleanupPointer();
+    cleanupMotion();
+  }
+});

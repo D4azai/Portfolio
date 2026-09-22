@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aynko.dev/sitemap.xml
+Sitemap: https://aynko.vercel.app/sitemap.xml
