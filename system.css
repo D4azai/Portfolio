@@ -1,0 +1,48 @@
+/* The existing architecture drawing gains physical layers, not a second scene. */
+.system-plane { position: absolute; inset: 0; }
+.system-lines, .system-orbit, .core-layer { pointer-events: none; }
+.core-layer { display: none; }
+.system-caption {
+  position: absolute; bottom: 12px; left: 16px; right: 16px; margin: 0;
+  color: var(--soft); font: 8px/1.6 var(--mono); letter-spacing: .07em;
+  pointer-events: none;
+}
+.system-field[data-active] .system-node:not(.node-core):not(.is-connected) { opacity: .6; }
+.system-node { transition: opacity 250ms ease, background 250ms ease, border-color 250ms ease; }
+.has-depth { perspective: 1000px; }
+.has-depth .system-plane {
+  transform-style: preserve-3d;
+  transform: rotateX(calc(18deg + var(--core-x, 0deg))) rotateY(calc(-15deg + var(--core-y, 0deg)));
+}
+.has-depth .system-orbit {
+  border-radius: 4px; border-style: solid;
+  transform: translate(-50%, -50%) translateZ(-24px);
+}
+.has-depth .orbit-a { width: 50%; aspect-ratio: 1.5; }
+.has-depth .orbit-b { width: 83%; aspect-ratio: 1.5; border-style: dashed; }
+.has-depth .node-core { transform: translate(-50%, -50%) translateZ(62px); border-color: #8da64c; }
+.has-depth .core-layer {
+  display: flex; align-items: end; gap: 4px; position: absolute; left: 50%; top: 50%;
+  width: 140px; height: 140px; padding: 9px; border: 1px solid #535e40;
+  background: #171e1a; border-radius: 3px;
+  transform: translate(-50%, -50%) translateZ(calc(40px - var(--layer) * 22px));
+}
+.core-layer span { flex: 1; color: #a7b397; font: 6px var(--mono); letter-spacing: .04em; }
+.core-layer i { width: 3px; height: 3px; background: #90a356; }
+.has-depth .system-node[data-pillar] { box-shadow: 0 5px 0 #0d100f, 0 6px 0 #384032; }
+.has-depth .system-lines { transform: translateZ(1px); }
+.project-card h3, .featured-project h3 { transition: translate var(--motion-control) var(--motion-ease); }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .project-card:hover h3, .featured-project:hover h3 { translate: 3px 0; }
+}
+.site-header::after {
+  content: ""; position: absolute; inset: auto 0 -1px; height: 1px;
+  background: var(--lime); transform: scaleX(var(--page-progress, 0)); transform-origin: left;
+  pointer-events: none;
+}
+@media (max-width: 960px) { .system-caption { font-size: 7px; bottom: 8px; } }
+@media (prefers-reduced-motion: reduce) {
+  .system-plane { transform: none !important; }
+  .project-card h3, .featured-project h3 { translate: none !important; }
+}
+@media (forced-colors: active) { .system-caption { color: CanvasText; } }

@@ -42,7 +42,7 @@ for (const mobile of [false, true]) {
       );
     }).observe({ type: "longtask", buffered: true });
   });
-  await page.goto("http://127.0.0.1:4173", { waitUntil: "networkidle" });
+  await page.goto(process.env.AYNKO_TEST_URL || "http://127.0.0.1:4173", { waitUntil: "networkidle" });
   await page.waitForFunction(() => document.documentElement.classList.contains("motion-enhanced"));
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(1800);
@@ -75,10 +75,15 @@ const codeFiles = [
   "js/motion.js",
   "js/motion-utils.js",
   "js/pointer.js",
-  "js/preloader.js",
+  "system.css",
+  "js/system-core.js",
   "js/navigation.js",
   "js/pillars.js",
   "js/image-manifest.js",
+  "experience.css",
+  "js/entry.js",
+  "js/contact.js",
+  "js/analytics.js",
 ];
 const code = [];
 for (const path of codeFiles) {

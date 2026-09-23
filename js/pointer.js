@@ -68,7 +68,7 @@ export function initPointer() {
     }
     const state = action?.matches('[href^="mailto:"]') ? "mail"
       : action?.matches('[target="_blank"], [href^="https://"], [href^="http://"]') ? "open"
-      : action?.hasAttribute("data-case") || nextMedia ? "view"
+      : action?.hasAttribute("data-case") || action?.hasAttribute("data-explore-case") || nextMedia ? "view"
       : target.closest('[draggable="true"], [data-cursor="drag"]') ? "drag"
       : target.closest(".system-field, [data-cursor=explore]") ? "explore"
       : action ? "action" : "default";

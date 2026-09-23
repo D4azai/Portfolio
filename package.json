@@ -9,11 +9,16 @@
     "dev": "node tools/serve.mjs",
     "test": "node tools/verify-premium.mjs",
     "images": "node tools/optimize-images.mjs",
-    "check:performance": "node tools/performance.mjs"
+    "check:performance": "node tools/performance.mjs",
+    "build": "node tools/build.mjs",
+    "test:interactions": "node tools/verify-interactions.mjs",
+    "test:security": "node --test tests/security.test.mjs",
+    "test:product": "node tools/verify-product.mjs"
   },
   "devDependencies": {
-    "playwright": "^1.58.0",
     "@axe-core/playwright": "^4.11.0",
+    "@electric-sql/pglite": "^0.5.8",
+    "playwright": "^1.58.0",
     "sharp": "^0.35.4"
   }
 }

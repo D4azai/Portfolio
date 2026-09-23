@@ -1,3 +1,7 @@
 node_modules/
 artifacts/
+dist/
 .idea/
+.env
+.env.*
+!.env.example

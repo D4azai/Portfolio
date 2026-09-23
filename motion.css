@@ -237,8 +237,8 @@
 .cursor-ring::before {
   content: "";
   position: absolute;
-  width: 84px;
-  height: 84px;
+  width: 68px;
+  height: 68px;
   border: 1.5px solid rgba(205, 250, 74, .65);
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(.34);
@@ -284,7 +284,7 @@
   }
   .project-media:hover img,
   .project-media:hover .northstar-art {
-    transform: translate(var(--image-x, 0px), var(--image-y, 0px)) scale(1.018);
+    transform: translate(var(--image-x, 0px), var(--image-y, 0px)) scale(1.035);
   }
   .project-kicker {
     transition: translate var(--motion-control) var(--motion-ease);

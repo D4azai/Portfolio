@@ -205,6 +205,7 @@ const showDialog = (content, trigger, variant = "") => {
 };
 const openDialog = (item, trigger, exploreKey = "") => {
   if (!item) return;
+  dialog.dataset.project = Object.keys(cases).find(key => cases[key] === item) || "";
   const gallery = item.gallery
     ? `<div class="case-gallery">${item.gallery.map(([src, caption]) => {
       const image = images[src];
@@ -291,8 +292,12 @@ dialog.addEventListener("click", (event) => {
   if (event.target === dialog) closeDialog();
 });
 dialog.addEventListener("close", () => {
+  // A queued close from a previous view must not steal focus from a reopened one.
+  if (dialog.open) return;
   document.body.style.overflow = previousOverflow;
-  dialogTrigger?.focus({ preventScroll: true });
+  // Native dialog.close() already restores focus synchronously. Only repair it
+  // if the browser left focus on the body, never override a user's next target.
+  if (document.activeElement === document.body) dialogTrigger?.focus({ preventScroll: true });
 });
 
 // All enhancements return cleanup functions; BFCache restores keep their listeners.

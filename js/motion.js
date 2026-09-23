@@ -18,6 +18,20 @@ export function initMotion() {
   initReveals(scope);
   initSystems(scope);
   initScrollTracking(scope);
+  // Depth is an optional enhancement; the original diagram remains usable.
+  let disposed = false;
+  let destroyCore;
+  const field = document.querySelector(".system-field");
+  const coreObserver = new IntersectionObserver(async ([entry]) => {
+    if (!entry.isIntersecting) return;
+    coreObserver.disconnect();
+    try {
+      const { initSystemCore } = await import("./system-core.js");
+      if (!disposed) destroyCore = initSystemCore(field);
+    } catch { /* Network failure leaves the semantic SVG diagram intact. */ }
+  }, { rootMargin: "120px" });
+  if (field) coreObserver.observe(field);
+  scope.cleanup(() => { disposed = true; coreObserver.disconnect(); destroyCore?.(); });
   return () => scope.destroy();
 }
 
@@ -172,9 +186,11 @@ function initScrollTracking(scope) {
     const sectionRects = sections.map((section) => section.getBoundingClientRect());
     const stepRects = steps.map((step) => step.getBoundingClientRect());
     const rect = method.getBoundingClientRect();
+    const pageProgress = clamp(scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight), 0, 1);
     const nextSection = sectionRects.reduce((active, item, i) => item.top <= innerHeight * 0.35 ? i : active, 0);
     const nextStep = stepRects.reduce((active, item, i) => item.top <= innerHeight * 0.55 ? i : active, 0);
     const nextProgress = clamp((innerHeight * 0.55 - rect.top - 40) / Math.max(1, rect.height - 76), 0, 1);
+    document.querySelector(".site-header").style.setProperty("--page-progress", pageProgress.toFixed(4));
     if (sectionId !== sections[nextSection].id) {
       sectionId = sections[nextSection].id;
       links.forEach((link) => {
@@ -212,16 +228,23 @@ function initScrollTracking(scope) {
       step.classList.remove("is-active", "is-complete");
     });
     method.style.removeProperty("--method-progress");
+    document.querySelector(".site-header").style.removeProperty("--page-progress");
   });
 }
 
 // Retain the original dialog's synchronous open/close and focus behavior.
 // This animation is cosmetic, so interrupted/unsupported animation never blocks it.
+const dialogScopes = new WeakMap();
 export function animateDialog(dialog) {
+  dialogScopes.get(dialog)?.destroy();
   const scope = createScope();
+  dialogScopes.set(dialog, scope);
   scope.animate(dialog, [
-    { opacity: 0, transform: "translateY(12px) scale(.992)" },
-    { opacity: 1, transform: "none" },
+    { transform: "translateY(12px) scale(.992)" },
+    { transform: "none" },
   ], { duration: timing.control });
+  dialog.querySelectorAll(".pillar-step, .explore-card, .case-section").forEach((card, index) => {
+    scope.animate(card, [{ translate: "0 10px" }, { translate: "0 0" }], { duration: 450, delay: Math.min(index, 3) * 45 });
+  });
   scope.listen(dialog, "close", () => scope.destroy(), { once: true });
 }

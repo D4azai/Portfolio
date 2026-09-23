@@ -31,8 +31,9 @@
     <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="motion.css" />
+    <link rel="stylesheet" href="system.css" />
+    <link rel="stylesheet" href="experience.css" />
     <script src="js/navigation.js"></script>
-    <script src="js/preloader.js"></script>
     <title>AYNKO — Software Engineer & Systems Architect</title>
     <script type="application/ld+json">
       {
@@ -116,6 +117,7 @@
             </div>
           </dl>
           <p class="hero-note">Independent expertise. Direct collaboration. Real project work.</p>
+          <button class="entry-replay text-action" type="button" data-replay-entry>Meet the systems operator <span aria-hidden="true">↗</span></button>
         </div>
         <div
           class="hero-visual"
@@ -126,7 +128,7 @@
           <div class="visual-topline">
             <span>THE CONNECTED OPERATION</span><span>EXPLORE ↗</span>
           </div>
-          <div class="system-field">
+          <div class="system-field" data-cursor="explore">
             <div class="system-orbit orbit-a"></div>
             <div class="system-orbit orbit-b"></div>
             <div class="system-node node-core">
@@ -558,7 +560,8 @@
               href="mailto:aymane.chellak@outlook.fr?subject=Project%20enquiry%20for%20AYNKO"
               ><span class="email-address">aymane.chellak@outlook.fr</span
               ><span aria-hidden="true">↗</span></a
-            ><small>Direct contact with Aymane · No intake form</small>
+            ><small>Direct contact with Aymane</small>
+            <button class="button button-quiet contact-form-trigger" type="button" data-contact aria-haspopup="dialog">Start a conversation <span aria-hidden="true">↗</span></button>
             <p class="contact-next">Start with the problem. We can shape the brief together.</p>
           </aside>
         </div>
@@ -574,6 +577,7 @@
         ><a href="#about">About</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
       </div>
       <small>© 2026 AYNKO. Morocco · Remote.</small>
+      <div class="privacy-controls"><a href="privacy.html">Privacy</a><button type="button" data-analytics-toggle aria-pressed="false">Anonymous analytics: off</button><span id="analytics-note" role="status">Optional measurement. No tracking until you opt in.</span></div>
     </footer>
     <!-- Optional evidence structure. Keep inert until real evidence and permission
          are supplied; see CONTENT-NEEDED.md. Clone into the relevant project. -->
@@ -602,6 +606,25 @@
         <div class="dialog-content"></div>
       </div>
     </dialog>
+    <dialog id="entry-dialog" class="entry-dialog" aria-labelledby="entry-title" aria-describedby="entry-description">
+      <div class="entry-top"><span>AYNKO / SYSTEMS OPERATOR</span><button type="button" data-skip-entry>Skip intro ↗</button></div>
+      <div class="entry-layout"><div class="entry-copy"><p class="eyebrow">SYSTEM INITIALIZING</p><h2 id="entry-title">Intelligence.<br />With <em>intention.</em></h2><p id="entry-description">Software Engineer &amp; Systems Architect</p><div class="entry-modules" aria-label="Connected capabilities"><span>01 DATA</span><span>02 FLOW</span><span>03 AI</span><span>04 EDGE</span></div><button class="button button-primary" data-enter type="button">Enter system <span aria-hidden="true">↗</span></button><small>Ready immediately. First visit continues automatically.</small></div>
+      <div class="operator-scene" aria-hidden="true"><div class="operator-grid"></div><span class="operator-coordinate">OP / 01<br />PRECISION ENGINEERING</span><div class="operator-model"><div class="operator-volume operator-head"></div><div class="operator-volume operator-torso"></div><div class="operator-volume operator-arm arm-left"></div><div class="operator-volume operator-arm arm-right"></div><div class="operator-volume operator-leg leg-left"></div><div class="operator-volume operator-leg leg-right"></div><div class="operator-volume operator-base"></div></div><svg class="operator-fallback" viewBox="0 0 240 280" fill="none"><path d="M30 252H210M50 262H190" stroke="#535e40"/><path d="M94 40h52v46H94zM79 103h82v82H79zM49 107h20v79H49zM171 107h20v79h-20zM84 195h27v49H84zM129 195h27v49h-27z" fill="#1e2821" stroke="#758768"/><path d="M104 58h32v10h-32zM91 121h58M91 159h58" stroke="#cdfa4a"/><text x="120" y="151" fill="#cdfa4a" font-family="Georgia" font-size="25" font-style="italic" text-anchor="middle">A</text></svg><span class="operator-caption">ARCHITECTURE / CONNECTED / HUMAN-LED</span></div></div>
+    </dialog>
+    <dialog id="contact-dialog" class="contact-dialog" aria-labelledby="contact-form-title">
+      <div class="signal-dialog-header"><span>AYNKO / START A CONVERSATION</span><button type="button" data-close-contact aria-label="Close contact form">×</button></div>
+      <div class="signal-dialog-body"><p class="eyebrow">A USEFUL FIRST STEP</p><h2 id="contact-form-title">Send a signal.</h2><p class="signal-lede">Tell me who you are and what you have in mind. Only your name, email, and request type are required.</p>
+      <ol class="signal-steps" aria-label="Form progress"><li data-step aria-current="step">01 <span>Identity</span></li><li data-step>02 <span>Context</span></li><li data-step>03 <span>Message</span></li></ol>
+      <form id="signal-form"><fieldset><legend class="sr-only">Your identity</legend><label>Name <span>Required</span><input name="name" autocomplete="name" maxlength="100" required></label><label>Email <span>Required</span><input name="email" type="email" autocomplete="email" maxlength="254" required></label><label>Company / organization <span>Optional</span><input name="company" autocomplete="organization" maxlength="160"></label></fieldset>
+      <fieldset hidden disabled><legend class="sr-only">Conversation context</legend><label>Type of request <span>Required</span><select name="contact_type" required><option value="">Choose a request type</option><option>Job opportunity</option><option>Freelance project</option><option>Collaboration</option><option>Research</option><option>Robotics</option><option>Embedded Systems</option><option>Software Architecture</option><option>Other</option></select></label><label>Budget range <span>Optional — include currency</span><input name="budget" maxlength="100" placeholder="e.g. EUR 5,000–10,000"></label><label>Timeline <span>Optional</span><input name="timeline" maxlength="100" placeholder="e.g. Exploring / next quarter"></label></fieldset>
+      <fieldset hidden disabled><legend class="sr-only">Your message</legend><label>Project / message <span>Optional</span><textarea name="message" rows="5" maxlength="5000" placeholder="The problem, the constraints, the useful outcome."></textarea></label><label class="privacy-check"><input type="checkbox" name="privacy" required><span>I understand these details will be used to respond to my enquiry, as described in the <a href="privacy.html" target="_blank" rel="noopener">privacy notice</a>.</span></label></fieldset>
+      <div class="form-honeypot" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="signal-form-actions"><button class="button button-quiet" data-back type="button" hidden>← Back</button><button class="button button-primary" data-next type="button">Continue <span aria-hidden="true">→</span></button><button class="button button-primary" data-send type="submit" hidden>Send message <span aria-hidden="true">↗</span></button></div></form>
+      <div class="signal-success" hidden><span aria-hidden="true">✓</span><h3 tabindex="-1">Signal received.</h3><p>Your message has been saved securely. Thank you for starting the conversation.</p></div><p class="signal-form-status" data-form-status role="status" aria-live="polite"></p><p class="signal-direct">Prefer email? <a href="mailto:aymane.chellak@outlook.fr">aymane.chellak@outlook.fr ↗</a></p></div>
+    </dialog>
+    <script type="module" src="js/entry.js"></script>
     <script type="module" src="script.js"></script>
+    <script type="module" src="js/contact.js"></script>
+    <script type="module" src="js/analytics.js"></script>
   </body>
 </html>

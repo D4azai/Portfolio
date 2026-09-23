@@ -23,18 +23,17 @@ async function check(name, run) {
   catch (error) { failures.push({ name, error: error.stack }); console.error("FAIL", name, error.message); }
 }
 async function audit(target, name) {
+  // Audit settled colors rather than an intermediate menu/reveal opacity.
+  await target.waitForTimeout(750);
   const { violations } = await new AxeBuilder({ page: target }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
   await writeFile(`artifacts/axe-${name}.json`, JSON.stringify(violations, null, 2));
   assert.deepEqual(violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })), []);
 }
 await page.goto(base, { waitUntil: "networkidle" });
-await check("First visit completes; repeat visit skips intro", async () => {
-  await page.waitForFunction(() => !document.documentElement.classList.contains("intro-active"));
-  const duration = await page.evaluate(() => window.introFinished - window.introStarted);
-  assert.ok(duration >= 2600 && duration < 3500, `Intro duration before fade: ${duration}ms`);
-  assert.ok(await page.evaluate(() => localStorage.getItem("aynko:last-intro")));
-  await page.reload({ waitUntil: "networkidle" });
-  assert.equal(await page.locator("html").evaluate(el => el.classList.contains("intro-complete")), false);
+await check("Hero is immediately accessible without an intro overlay", async () => {
+  assert.equal(await page.locator(".preloader").isVisible(), false);
+  assert.ok(await page.locator("h1").isVisible());
+  assert.equal(await page.locator("html").evaluate(el => el.classList.contains("intro-active")), false);
 });
 await check("Preserved identity, projects, local fonts and assets", async () => {
   assert.match(await page.locator("h1").innerText(), /Software systems/);
@@ -44,7 +43,7 @@ await check("Preserved identity, projects, local fonts and assets", async () => 
   assert.deepEqual(await page.evaluate(() => performance.getEntriesByType("resource").filter(r => !r.name.startsWith(location.origin)).map(r => r.name)), []);
 });
 await check("Responsive layout, images, sticky navigation and WCAG", async () => {
-  for (const width of [320, 375, 430, 768, 1024, 1440, 1920]) {
+  for (const width of [320, 375, 390, 430, 768, 1024, 1280, 1440, 1920]) {
     await page.setViewportSize({ width, height: 1000 });
     for (const id of ["home", "work", "expertise", "method", "about", "faq", "contact"]) {
       await page.locator(`#${id}`).evaluate(el => el.scrollIntoView({ behavior: "instant" }));
@@ -175,7 +174,7 @@ await check("Slow assets, storage denied and live motion changes cannot trap vis
   });
   await p.route("**/*.woff2", async route => { await new Promise(resolve => setTimeout(resolve, 1600)); await route.abort(); });
   await p.goto(base, { waitUntil: "domcontentloaded" });
-  assert.ok(await p.evaluate(() => window.introObserved));
+  assert.equal(await p.evaluate(() => window.introObserved), false);
   await p.waitForFunction(() => !document.documentElement.classList.contains("intro-active"), null, { timeout: 3300 });
   await p.reload({ waitUntil: "domcontentloaded" });
   await p.emulateMedia({ reducedMotion: "reduce" });

@@ -1,3 +1,11 @@
+# Public system + private control
+
+See [CONTROL-REPORT.md](CONTROL-REPORT.md) for the latest product implementation and verification. All previous visual refinement is retained; the entry now uses a short CSS 3D operator scene. Notes below record earlier stages.
+
+# Current interaction refinement
+
+The newer implementation and verification are documented in [MOTION-REPORT.md](MOTION-REPORT.md). The original three-second introduction described below has been disabled in favor of an immediate hero entrance. The following notes record the previous refinement.
+
 ﻿# AYNKO / Premium refinement
 
 ## Audit of the supplied implementation
