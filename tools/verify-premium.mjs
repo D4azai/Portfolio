@@ -54,6 +54,11 @@ await check("Responsive layout, images, sticky navigation and WCAG", async () =>
     await page.waitForTimeout(650);
     if ([375, 1440].includes(width)) await audit(page, `page-${width}`);
   }
+  // Each project is now a full visual chapter, so explicitly visit lazy images
+  // before asserting that every responsive source resolves successfully.
+  for (const image of await page.locator(".project-media img").all()) {
+    await image.scrollIntoViewIfNeeded();
+  }
   await page.waitForFunction(() => [...document.querySelectorAll(".project-media img")].every(img => img.complete && img.naturalWidth > 0));
 });
 await check("Every case study opens, keeps focus, closes and offers enquiry", async () => {

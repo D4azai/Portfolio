@@ -6,19 +6,29 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "node tools/serve.mjs",
-    "test": "node tools/verify-premium.mjs",
+    "dev": "node tools/dev.mjs",
+    "test": "node tools/verify-react.mjs",
+    "pretest": "npm run build",
+    "build:react": "node tools/build-react.mjs",
     "images": "node tools/optimize-images.mjs",
     "check:performance": "node tools/performance.mjs",
     "build": "node tools/build.mjs",
-    "test:interactions": "node tools/verify-interactions.mjs",
+    "test:interactions": "node tools/verify-react.mjs",
     "test:security": "node --test tests/security.test.mjs",
     "test:product": "node tools/verify-product.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
     "@electric-sql/pglite": "^0.5.8",
+    "@tailwindcss/cli": "^4.3.3",
+    "esbuild": "^0.28.2",
     "playwright": "^1.58.0",
-    "sharp": "^0.35.4"
+    "sharp": "^0.35.4",
+    "tailwindcss": "^4.3.3"
+  },
+  "dependencies": {
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "three": "^0.186.1"
   }
 }

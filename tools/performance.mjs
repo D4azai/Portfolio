@@ -1,5 +1,5 @@
 import { chromium } from "playwright";
-import { writeFile, readFile } from "node:fs/promises";
+import { writeFile, readFile, readdir } from "node:fs/promises";
 import { gzipSync } from "node:zlib";
 
 const browser = await chromium.launch({ channel: "msedge", headless: true });
@@ -43,7 +43,7 @@ for (const mobile of [false, true]) {
     }).observe({ type: "longtask", buffered: true });
   });
   await page.goto(process.env.AYNKO_TEST_URL || "http://127.0.0.1:4173", { waitUntil: "networkidle" });
-  await page.waitForFunction(() => document.documentElement.classList.contains("motion-enhanced"));
+  await page.waitForFunction(() => document.documentElement.classList.contains("react-ready"));
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(1800);
   const result = await page.evaluate(() => ({
@@ -69,21 +69,10 @@ for (const mobile of [false, true]) {
 }
 const codeFiles = [
   "index.html",
-  "styles.css",
-  "motion.css",
-  "script.js",
-  "js/motion.js",
-  "js/motion-utils.js",
-  "js/pointer.js",
-  "system.css",
-  "js/system-core.js",
-  "js/navigation.js",
-  "js/pillars.js",
-  "js/image-manifest.js",
+  "assets/app.js",
+  "assets/app.css",
+  ...(await readdir('assets')).filter(file => /^react-.*\.js$/.test(file)).map(file => `assets/${file}`),
   "experience.css",
-  "js/entry.js",
-  "js/contact.js",
-  "js/analytics.js",
 ];
 const code = [];
 for (const path of codeFiles) {

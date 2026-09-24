@@ -3,7 +3,7 @@ import { readFile, stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
 import { createApp } from "./app.js";
 const types = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png", ".webp": "image/webp", ".woff2": "font/woff2", ".xml": "application/xml", ".txt": "text/plain; charset=utf-8" };
-const publicFiles = new Set(["index.html", "privacy.html", "styles.css", "motion.css", "system.css", "experience.css", "script.js", "robots.txt", "sitemap.xml", "maroc-affiliate-01.png", "odoo-01-chantiers.png", "odoo-02-chantier-form.png", "odoo-03-material-request.png", "odoo-04-estimation.png", "odoo-05-boq.png"]);
+const publicFiles = new Set(["index.html", "privacy.html", "styles.css", "motion.css", "system.css", "experience.css", "upgrade.css", "script.js", "robots.txt", "sitemap.xml", "maroc-affiliate-01.png", "odoo-01-chantiers.png", "odoo-02-chantier-form.png", "odoo-03-material-request.png", "odoo-04-estimation.png", "odoo-05-boq.png"]);
 export function previewServer({ root = resolve(import.meta.dirname, ".."), app = createApp() } = {}) {
   return createServer(async (req, res) => {
     try {

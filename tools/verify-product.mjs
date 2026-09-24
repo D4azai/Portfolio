@@ -26,18 +26,14 @@ async function axe(label) {
   assert.deepEqual(result.violations.map(item => ({ id: item.id, targets: item.nodes.map(node => node.target) })), []);
 }
 try {
-  await check("First entry is skippable; session repeat skips; replay has interactive character", async () => {
+  await check("React hero is immediate and system layers remain interactive", async () => {
     await page.goto("https://portfolio.test/");
-    await page.waitForSelector("#entry-dialog[open]");
-    assert.equal(await page.locator(".operator-face").count(), 42);
-    await page.locator("[data-skip-entry]").click();
-    assert.equal(await page.locator("#entry-dialog").evaluate(el => el.open), false);
-    await page.reload({ waitUntil: "networkidle" });
-    assert.equal(await page.locator("#entry-dialog").evaluate(el => el.open), false);
-    await page.locator("[data-replay-entry]").click();
-    await page.locator(".operator-scene").hover({ position: { x: 50, y: 60 } });
-    await page.waitForTimeout(250);
-    assert.notEqual(await page.locator(".operator-model").evaluate(el => el.style.getPropertyValue("--look-y")), "");
+    await page.waitForSelector('html.react-ready');
+    assert.ok(await page.locator('h1').isVisible());
+    assert.equal(await page.locator('dialog[open]').count(), 0);
+    await page.locator('.layer-button').filter({ hasText: 'Flow' }).click();
+    await page.locator('[data-pillar="flow"]').click();
+    assert.ok(await page.locator('.pillar-dialog').isVisible());
     await axe("entry"); await page.screenshot({ path: "artifacts/product-entry.png" });
     await page.keyboard.press("Escape");
   });
@@ -117,12 +113,13 @@ try {
     await page.locator("#logout").click(); await page.waitForURL("**/owner/login");
     assert.equal((await page.goto("https://portfolio.test/admin")).status(), 401);
   });
-  await check("Mobile character fallback and reduced-motion behavior", async () => {
-    await page.goto("https://portfolio.test/"); await page.locator("[data-replay-entry]").click();
-    assert.equal(await page.locator(".operator-model").isVisible(), false); assert.equal(await page.locator(".operator-fallback").isVisible(), true);
+  await check("Mobile React hero and reduced-motion behavior", async () => {
+    await page.goto("https://portfolio.test/");
+    assert.ok(await page.locator('.core-sculpture').isVisible());
     await axe("entry-mobile"); await page.screenshot({ path: "artifacts/product-entry-mobile.png" });
-    await page.emulateMedia({ reducedMotion: "reduce" }); await page.waitForFunction(() => !document.querySelector("#entry-dialog").open);
-    await page.reload(); assert.equal(await page.locator("#entry-dialog").evaluate(el => el.open), false);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.reload({ waitUntil: 'networkidle' });
+    assert.equal(await page.evaluate(() => document.getAnimations().filter(a => a.playState === 'running').length), 0);
     await page.locator("[data-contact]").click(); await axe("form-mobile"); await page.keyboard.press("Escape");
     await page.emulateMedia({ reducedMotion: "no-preference" });
   });

@@ -1,10 +1,15 @@
 # AYNKO / Interactive portfolio + private control
 
-The current product implementation, environment variables, Supabase migrations, security model, and deployment steps are documented in [CONTROL-REPORT.md](CONTROL-REPORT.md). The portfolio remains native HTML/CSS/JavaScript; Vercel server endpoints add Supabase Auth/PostgreSQL for the private owner dashboard, inbox, and opt-in analytics. No runtime library was added.
+The public portfolio now uses **React 19 and Tailwind CSS 4**, with pre-rendered HTML and client hydration. The design includes an interactive architectural sculpture, filterable project cards, case-study galleries, keyboard-operated process tabs, native FAQ, and the existing secure enquiry form. Server configuration, Supabase migrations, private owner dashboard, inbox, and consent-based analytics remain documented in [CONTROL-REPORT.md](CONTROL-REPORT.md).
+
+Edit `src/App.jsx`, `src/components/`, `src/data/`, and `src/app.css`. `src/document.html` owns metadata and the enquiry dialog shell. **`index.html` is generated** by `npm run build:react`; do not edit it directly. Tailwind and React bundles are generated into `assets/` and ignored by Git. `npm run dev` builds once, serves the site, and rebuilds on changes in `src/`; refresh the browser after a rebuild.
+
+`npm run build` compiles the public UI and stages the deployment in `dist/`. `npm test` builds and tests the production output in an isolated local server. `npm run test:product` verifies real form persistence and the private dashboard using an ephemeral test database. The older visual notes below are historical; their framework and loader descriptions no longer describe the current public page.
 
 ```sh
 npm ci
 npm run dev
+npm run build
 npm run test:security
 npm run test:product
 npm test
@@ -18,7 +23,7 @@ Deploy the repository through Vercel using `vercel.json`; `dist/` alone does not
 
 ## Previous visual refinement notes
 
-The following documents the preceding motion upgrade. Its immediate-entry description is superseded by the new 1.9-second, immediately skippable systems-operator scene.
+The following documents the preceding native-JavaScript implementation. The current React page opens immediately without an introductory overlay.
 
 ﻿# AYNKO / Systems practice
 

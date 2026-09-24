@@ -21,10 +21,11 @@ try {
   page.on("pageerror", error => errors.push(error.message));
   page.on("response", response => { if (response.status() === 404) missing.push(response.url()); });
   await page.goto(base, { waitUntil: "networkidle" });
-  await page.waitForFunction(() => !document.querySelector("#entry-dialog").open);
+  await page.waitForSelector('html.react-ready');
   for (const key of ["affiliate", "erp", "crm", "studioNorth", "northstar"]) {
     await page.locator(`[data-case="${key}"]`).click(); assert.ok(await page.locator(".case-dialog").evaluate(el => el.open)); await page.keyboard.press("Escape");
   }
+  await page.locator('.layer-button').filter({ hasText: 'Edge' }).click();
   await page.locator('[data-pillar="edge"]').click(); assert.ok(await page.locator(".pillar-dialog").isVisible()); await page.keyboard.press("Escape");
   await page.goto(`${base}/privacy.html`); assert.ok(await page.locator("h1").isVisible());
   assert.equal((await page.goto(`${base}/admin`)).status(), 401);
