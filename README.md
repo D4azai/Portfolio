@@ -1,93 +1,84 @@
-# AYNKO / Interactive portfolio + private control
+# AYNKO — independent engineering portfolio
 
-The public portfolio now uses **React 19 and Tailwind CSS 4**, with pre-rendered HTML and client hydration. The design includes an interactive architectural sculpture, filterable project cards, case-study galleries, keyboard-operated process tabs, native FAQ, and the existing secure enquiry form. Server configuration, Supabase migrations, private owner dashboard, inbox, and consent-based analytics remain documented in [CONTROL-REPORT.md](CONTROL-REPORT.md).
+Aymane Chellak’s portfolio, built with React 19, Tailwind CSS 4, pre-rendered HTML, and an original Three.js robot. The visual experience uses charcoal, warm ivory, pale lime, locally hosted typography, and real project screenshots.
 
-Edit `src/App.jsx`, `src/components/`, `src/data/`, and `src/app.css`. `src/document.html` owns metadata and the enquiry dialog shell. **`index.html` is generated** by `npm run build:react`; do not edit it directly. Tailwind and React bundles are generated into `assets/` and ignored by Git. `npm run dev` builds once, serves the site, and rebuilds on changes in `src/`; refresh the browser after a rebuild.
+## Run locally
 
-`npm run build` compiles the public UI and stages the deployment in `dist/`. `npm test` builds and tests the production output in an isolated local server. `npm run test:product` verifies real form persistence and the private dashboard using an ephemeral test database. The older visual notes below are historical; their framework and loader descriptions no longer describe the current public page.
+Requires Node.js 22 or newer.
 
 ```sh
 npm ci
 npm run dev
-npm run build
-npm run test:security
-npm run test:product
-npm test
-npm run test:interactions
-npm run build
 ```
 
-Public preview: http://127.0.0.1:4173. Owner login: `/owner/login`; private dashboard: `/admin`. Copy `.env.example` to ignored `.env.local` and configure the server values to use live Supabase locally. Without configuration, public content works, submissions show an honest email fallback, and owner endpoints deny access. `test:security` and `test:product` use ephemeral PostgreSQL and a test identity provider; they do not need cloud credentials.
+Open http://127.0.0.1:4173. On Windows with PowerShell script restrictions, use `npm.cmd`. The development server rebuilds when files in `src/` change; refresh the browser after a rebuild. Use HTTP rather than opening `index.html` directly.
 
-Deploy the repository through Vercel using `vercel.json`; `dist/` alone does not contain the server APIs. Complete the hosted authentication/database smoke test described in CONTROL-REPORT.md before enabling production collection.
+## The experience
 
-## Previous visual refinement notes
+- **Visitor-controlled introduction.** The fullscreen loading intro appears on each page load and stays open after preparation completes. Enter portfolio, Skip intro, or Escape dismisses it. A footer action replays it. It does not dismiss itself or depend on browser storage.
+- **Real preparation state.** The progress indicator tracks fonts, the first project preview, and the robot renderer or its static fallback. Slow or failed optional assets cannot lock the visitor out: Enter and Skip are always available.
+- **Original robot.** Reflective armor, a luminous visor, articulated hands, a rotating orbital core, and a subtle floating motion. The head follows a mouse pointer; Data, Flow, AI, and Edge change the light color. Pause/Resume controls the animation.
+- **Considered motion.** Typography enters after dismissal. Sections reveal on scroll, and project changes animate with a short stagger. Reduced motion disables continuous motion and transitions. The renderer stops while offscreen, while the document is hidden, or while the hero is behind the intro.
+- **Contextual cursor.** A precise dot and softly following ring respond to links, with a “View project” label over previews. Main actions gently follow the pointer. Keyboard input, touch, text fields, dialogs, and reduced motion use native controls. The cursor loop stops when it settles.
+- **Project-specific visual effects.** Each preview combines pointer-driven perspective, a moving light, a glass reflection, and an original decorative motif: delivery routes, financial curves, construction plans, relationship diagrams, or celestial orbits. Directional transitions reveal the next project and stagger its copy. Fast selection changes cancel unfinished transitions.
+- **Effects shaped around each section.** Headings reveal through a mask; expertise rows have local lighting and responsive icons; process connections draw in sequence; the About monogram has depth; and the contact section uses soft lighting and concentric rings. A slim reading-progress line follows native scrolling. Decorative motifs are hidden from assistive technology and do not represent product data.
+- **Five project stories, revealed on request.** The entire project showcase starts hidden. “Show me selection” reveals the previews, project tabs, and navigation; “Hide selection” collapses them again. This disclosure also works without JavaScript. Once revealed, the selector supports previous/next buttons, pointer selection, and Arrow/Home/End keyboard navigation. Each project opens its own case study with original screenshots and live links where available.
+- **Accessible fallbacks.** Native modal focus containment, Escape dismissal, restored focus, touch layouts, and a robot illustration when WebGL is unavailable. Without JavaScript, the intro stays closed and all five project summaries remain available.
 
-The following documents the preceding native-JavaScript implementation. The current React page opens immediately without an introductory overlay.
-
-﻿# AYNKO / Systems practice
-
-An independent software engineering portfolio built with HTML, CSS, SVG, and native JavaScript. The upgrade preserves the charcoal/lime identity, original five project stories, architecture illustration, working method, and contact destination. There are no runtime dependencies. `npm run build` validates JavaScript and stages a deployable static site in `dist/`.
-
-## Preview
-
-Use Node.js 22 or newer:
-
-```sh
-npm run dev
-```
-
-Open http://127.0.0.1:4173. On Windows with PowerShell script restrictions, use `npm.cmd` instead of `npm`. Serve over HTTP because the controllers use ES modules.
-
-## Implementation
+## Where to edit
 
 | File | Responsibility |
 | --- | --- |
-| `index.html` | Content, architecture illustration, project cards, About, native FAQ, case dialog, inert evidence template |
-| `styles.css` | Local fonts, visual tokens, layout, responsive navigation, preloader, component styles |
-| `motion.css` | Shared animation and reduced-motion rules |
-| `script.js` | Original case-study content, optimized gallery rendering, dialog focus handling |
-| `js/navigation.js` | Early, dependency-free mobile navigation initialization without layout shifts |
-| `js/system-core.js` / `system.css` | Lazy CSS 3D architecture layers, pointer depth, semantic highlighting, mobile fallback |
-| `js/motion.js` | Reveal observers, architecture illustration motion, active navigation, method progress |
-| `js/motion-utils.js` | Shared animation lifecycle and accessibility preferences |
-| `js/pointer.js` | Existing fine-pointer enhancement with native input and reduced-motion fallbacks |
-| `js/image-manifest.js` | Responsive image metadata used by the case galleries |
-| `js/pillars.js` | Data, Flow, AI, and Edge process content and card rendering |
-| `assets/fonts/` | Locally hosted Manrope and DM Mono, with their licenses |
-| `assets/optimized/` | Existing WebP derivatives; original screenshots remain available at full size |
-| `DESIGN.md` | Audit, design decisions, and verification scope |
-| `CONTENT-NEEDED.md` | Real evidence and company information needed for future trust sections |
+| `src/App.jsx` | Page sections, navigation, intro replay, and dialog state |
+| `src/components/Intro.jsx` | Persistent loading introduction and explicit entry |
+| `src/components/Hero.jsx` | Hero copy and system layer selector |
+| `src/components/Hologram.jsx` | Renderer lifecycle, pause control, and fallback |
+| `src/graphics/hologram.js` | Procedural robot geometry, materials, lighting, and motion |
+| `assets/operator.svg` | Static robot fallback |
+| `src/components/Projects.jsx` | Project selector and transitions |
+| `src/components/ProjectAtmosphere.jsx` | Original project-specific decorative artwork |
+| `src/components/ExperienceEffects.jsx` | Decorative cursor and reading-progress elements |
+| `src/effects/experience.js` | Pointer, lighting, magnetism, scroll effects, and lifecycle |
+| `src/effects.css` | Section choreography, project effects, and input fallbacks |
+| `src/components/DetailDialog.jsx` | Case studies and system layer details |
+| `src/data/` | Portfolio copy and original project stories |
+| `src/app.css` | Tailwind entry, tokens, and shared base styles |
+| `src/experience-design.css` | Current responsive design, robot, showcase, and intro |
+| `src/document.html` | Metadata and secure enquiry form shell |
+| `tools/verify-react.mjs` | Browser interaction, accessibility, and fallback checks |
 
-The unused `js/interface.js`, `js/case-study.js`, and `js/dialog.js` are retained from an earlier variant; the current page does not load them. The older `tools/verify.mjs`, `tools/capture.mjs`, and `tools/verify-edge-cases.mjs` target that earlier variant. Use the current commands below.
+`index.html` is generated by `npm run build:react`; do not edit it directly. Compiled React bundles and CSS under `assets/` are ignored by Git. Fonts, project screenshots, and the fallback SVG are local assets.
 
-## Behavior
-
-- The original hero enters immediately through a masked, staggered reveal completed in about 1.2 seconds. The old preloader is no longer loaded.
-- The compact sticky header has active navigation and an accessible mobile menu with Escape dismissal, focus handling, outside-click closure, and viewport reset.
-- The hero Explore the work action opens five explanatory project cards in a native dialog. Each card opens its case study, with an All projects button to return. Closing restores focus to the hero action. Without JavaScript, the action scrolls to the project section.
-- The architecture nodes open Data, Flow, AI, and Edge process views. Each has three numbered process cards, working outputs, an intended outcome, and navigation between pillars. The dark dialog supports keyboard/touch access, restores focus on close, and adapts to mobile. Without JavaScript, nodes link to the working method. These describe an approach, not measured performance or guaranteed deliverables.
-- Five project buttons open native case dialogs. Escape closes them; focus returns to the originating button. Each dialog has a project-specific email enquiry link. Original screenshots open separately at full resolution.
-- FAQ uses native details/summary and works without JavaScript. The rest of the page and email links remain available without JavaScript; expanded project notes require it.
-- Scroll remains native. Motion responds to live reduced-motion changes. The system core uses CSS perspective and actual DOM layers, dynamically loaded near the viewport. Desktop pointer motion settles to idle; touch, narrow screens, forced colors, and reduced motion use the original flat diagram. No framework, WebGL, animation dependency, or remote font request.
-
-## Verification
-
-Start the preview server, then:
+## Build and verify
 
 ```sh
-npm ci
+npm run build
 npm test
-node tools/capture-premium.mjs review
-npm run check:performance
 ```
 
-These tools use installed Microsoft Edge via Playwright. Reports and screenshots are written to ignored `artifacts/`. Verification covers nine widths from 320 to 1920px; case dialogs and focus; mobile navigation; FAQ keyboard operation; first/return visits; slow fonts; storage denial; reduced motion; no JavaScript; image failure; missing assets; and automated WCAG checks. Performance results are local lab measurements, not field Core Web Vitals or a substitute for device testing.
+The build compiles the public UI, validates the existing server modules, and stages production files in `dist/`. Tests use installed Microsoft Edge through Playwright against an isolated production preview. Screenshots, accessibility reports, and the test summary are saved under ignored `artifacts/`.
 
-Optional asset maintenance: `npm run images` and `node tools/prepare-fonts.mjs`. Assets already exist and are committed.
+Coverage includes persistent intro behavior, replay and focus, real robot frames and pause/resume, offscreen suspension, system layers, every project, galleries, process tabs, eight widths from 320 to 1920px, mobile navigation, enquiry fallback, reduced motion, unavailable WebGL, no JavaScript, and protected routes. Automated WCAG checks complement visual review; they are not a substitute for device and assistive-technology testing.
+
+Effects checks also cover cursor movement and keyboard fallback, button attraction, project lighting and depth, rapid selection changes, live reduced-motion cancellation, and a real touch-emulated project selector with automatic horizontal tab positioning.
+
+## Enquiries and owner dashboard
+
+Public content works without backend configuration. Submissions then provide an honest email fallback, and owner endpoints deny access.
+
+Copy `.env.example` to ignored `.env.local` and configure the documented server values for live Supabase. Owner login is `/owner/login`; the dashboard is `/admin`. See [CONTROL-REPORT.md](CONTROL-REPORT.md) for server configuration, migrations, inbox, consent-based analytics, and deployment checks.
+
+```sh
+npm run test:security
+npm run test:product
+```
+
+These backend checks use ephemeral PostgreSQL and a test identity provider; cloud credentials are not required.
 
 ## Publishing
 
-Deploy `dist/` after `npm run build`, or serve the repository root directly as a static site. Review `CONTENT-NEEDED.md` before publishing. Canonical, Open Graph, structured data, sitemap, and robots URLs use `https://aynko.dev/`; change them together if the domain differs. Contact remains `aymane.chellak@outlook.fr`. The construction ERP remains UAT. No invented business results or endorsements are displayed.
+Deploy the repository through Vercel using `vercel.json`; `dist/` alone does not include the server APIs. Complete the hosted authentication/database smoke test documented in CONTROL-REPORT.md before enabling production collection.
 
-See [MOTION-REPORT.md](MOTION-REPORT.md) for the interaction implementation, validation, and remaining device checks.
+Canonical, Open Graph, structured data, sitemap, and robots URLs use `https://aynko.dev/`. Contact remains `aymane.chellak@outlook.fr`. The construction ERP remains in user acceptance testing; the site makes no invented outcome or endorsement claims. See [CONTENT-NEEDED.md](CONTENT-NEEDED.md) for outstanding project evidence.
+
+The older DESIGN.md, MOTION-REPORT.md, and non-React visual scripts document previous versions. The current public-page verification is `npm test`.

@@ -1,5 +1,11 @@
 import { cases } from './cases.js';
 export const email = 'aymane.chellak@outlook.fr';
+export const team = [
+  { name: 'Aymane Chellak', role: 'Co-founder · Software engineer', email: 'aymane.chellak@outlook.fr' },
+  { name: 'Zakaria Bak', role: 'Co-founder', email: 'Zakariasurface@outlook.com' },
+];
+// Profile links. Leave a value empty to hide that link everywhere it is rendered.
+export const links = { linkedin: 'https://www.linkedin.com/in/your-favorite-engineer', github: '' };
 export const projects = [
   { id: 'affiliate', category: 'Platforms', label: 'COMMERCE & LOGISTICS', status: 'Live product', cover: 'affiliate', tone: 'sage', headline: 'An entire operation.\nOne connected platform.', summary: 'From the first order to the final payout. A connected workspace for cash-on-delivery commerce.', ...cases.affiliate },
   { id: 'studioNorth', category: 'Interfaces', label: 'FINANCE & PRODUCT DESIGN', status: 'Product interface', cover: 'invoices', tone: 'lavender', summary: 'Making financial complexity feel remarkably simple.', ...cases.studioNorth },
@@ -22,5 +28,5 @@ export const questions = [
   ['What kinds of projects are a good fit?', 'SaaS products, ERP and CRM workflows, internal tools, and automation where the operational problem is clear. If your team is coordinating work across disconnected tools, start by describing where context or time gets lost.'],
   ['Can you improve an existing system?', 'Yes. Share the current tools, integrations, and the parts that already work. We start by understanding the constraints and deciding what to preserve, connect, or improve.'],
   ['How do we define scope, budget, and timing?', 'These depend on your workflows, integrations, and delivery requirements. Bring your target date and budget range so we can identify a realistic first release and agree the scope before a build.'],
-  ['What should I send in the first message?', 'Tell me about your business, who will use the system, your current tools, and the outcome you need. Include timing or budget constraints. You do not need a finished specification to start.'],
+  ['What should I send in the first message?', 'Tell us about your business, who will use the system, your current tools, and the outcome you need. Include timing or budget constraints. You do not need a finished specification to start.'],
 ];

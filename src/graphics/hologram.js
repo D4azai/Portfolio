@@ -1,146 +1,164 @@
 import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-// A procedural character: every surface, curl, joint, and orbit is real geometry.
-// Loaded separately so the document and navigation never wait for WebGL.
+// Original procedural sculpture. No remote models, textures, or tracking requests.
 export function createHologram(host, onReady, onLost) {
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
   renderer.setClearColor(0x000000, 0);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = .92;
   renderer.domElement.setAttribute('aria-hidden', 'true');
-  host.append(renderer.domElement);
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(34, 1, .1, 40);
-  camera.position.set(.2, 3.5, 11.6); camera.lookAt(-.23, 2.67, 0);
-  const surface = new THREE.ShaderMaterial({
-    uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color('#79f6d3') } },
-    vertexShader: `varying vec3 vNormal; varying vec3 vWorld; varying vec3 vView;
-      void main(){vec4 world=modelMatrix*vec4(position,1.0);vWorld=world.xyz;vNormal=normalize(mat3(modelMatrix)*normal);vView=cameraPosition-world.xyz;gl_Position=projectionMatrix*viewMatrix*world;}`,
-    fragmentShader: `uniform float uTime;uniform vec3 uColor;varying vec3 vNormal;varying vec3 vWorld;varying vec3 vView;
-      void main(){vec3 n=normalize(vNormal);float rim=pow(1.0-abs(dot(n,normalize(vView))),2.4);float light=max(0.0,dot(n,normalize(vec3(-.7,1.0,1.0))));float scan=pow(.5+.5*sin(vWorld.y*180.0-uTime*1.8),5.0);float sweep=pow(.5+.5*sin(vWorld.y*2.0-uTime*.65),24.0);gl_FragColor=vec4(uColor*(.13+light*.24+rim*.9+scan*.035+sweep*.12),.98);}`,
-    transparent: true,
-  });
-  const edges = new THREE.LineBasicMaterial({ color: '#8ffff0', transparent: true, opacity: .15, blending: THREE.AdditiveBlending, depthWrite: false });
-  const bright = new THREE.MeshBasicMaterial({ color: '#9affdd', transparent: true, opacity: .78 });
-  const dark = new THREE.MeshBasicMaterial({ color: '#123d34', transparent: true, opacity: .9 });
-  const glass = new THREE.MeshBasicMaterial({ color: '#63ecc3', transparent: true, opacity: .15, depthWrite: false });
-  const sphere = new THREE.SphereGeometry(1, 24, 16), faceted = new THREE.IcosahedronGeometry(1, 1);
-  function mesh(geometry, parent, position, scale = [1, 1, 1], material = surface, wire = false) {
-    const item = new THREE.Mesh(geometry, material); item.position.set(...position); item.scale.set(...scale); parent.add(item);
-    if (wire) item.add(new THREE.LineSegments(new THREE.WireframeGeometry(geometry), edges));
-    return item;
+  const camera = new THREE.PerspectiveCamera(33, 1, .1, 50);
+  camera.position.set(0, 2.6, 9.2); camera.lookAt(0, 2.15, 0);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const room = new RoomEnvironment();
+  const environment = pmrem.fromScene(room, .04);
+  scene.environment = environment.texture;
+  room.dispose(); pmrem.dispose();
+  scene.add(new THREE.HemisphereLight(0xe5f4ef, 0x273036, 2.2));
+  const key = new THREE.DirectionalLight(0xffffff, 4); key.position.set(-3, 6, 5); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xd3ffad, 3); rim.position.set(4, 3, -3); scene.add(rim);
+  const fill = new THREE.DirectionalLight(0x8fb6dc, 2); fill.position.set(-4, 1, -2); scene.add(fill);
+  const silver = new THREE.MeshStandardMaterial({ color: '#819692', metalness: .92, roughness: .25 });
+  const porcelain = new THREE.MeshStandardMaterial({ color: '#b9c8c2', metalness: .84, roughness: .28 });
+  const graphite = new THREE.MeshStandardMaterial({ color: '#202b30', metalness: .78, roughness: .34 });
+  const black = new THREE.MeshStandardMaterial({ color: '#040b0d', metalness: .5, roughness: .17 });
+  const neon = new THREE.MeshStandardMaterial({ color: '#d2f78a', emissive: '#baf57b', emissiveIntensity: .9, metalness: .2, roughness: .24 });
+  const line = new THREE.LineBasicMaterial({ color: '#bdebb2', transparent: true, opacity: .24 });
+  const sphere = new THREE.SphereGeometry(1, 24, 16);
+  function mesh(geometry, parent, xyz, material = silver, scale = [1, 1, 1]) {
+    const object = new THREE.Mesh(geometry, material); object.position.set(...xyz); object.scale.set(...scale); parent.add(object); return object;
   }
-  function ring(radius, tube, parent, position, material = bright, arc = Math.PI * 2) {
-    return mesh(new THREE.TorusGeometry(radius, tube, 8, 48, arc), parent, position, [1, 1, 1], material);
+  function box(parent, xyz, size, material = silver, radius = .08) {
+    return mesh(new RoundedBoxGeometry(...size, 3, radius), parent, xyz, material);
   }
-  function bone(parent, start, end, radius, radiusEnd = radius, material = surface) {
-    const a = new THREE.Vector3(...start), b = new THREE.Vector3(...end), direction = b.clone().sub(a);
-    const item = mesh(new THREE.CylinderGeometry(radiusEnd, radius, direction.length(), 12), parent, a.add(b).multiplyScalar(.5).toArray(), [1, 1, 1], material);
-    item.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize()); return item;
+  function ring(parent, xyz, radius, tube, material = silver) {
+    return mesh(new THREE.TorusGeometry(radius, tube, 8, 64), parent, xyz, material);
   }
-  const character = new THREE.Group(); scene.add(character);
-  mesh(new THREE.CylinderGeometry(.49, .36, 1.22, 12), character, [0, 2.58, 0], [1, 1, .68], surface, true);
-  mesh(faceted, character, [0, 1.85, 0], [.39, .37, .27]);
-  mesh(new THREE.CylinderGeometry(.23, .23, .25, 16), character, [0, 3.27, 0]);
-  ring(.28, .035, character, [0, 3.2, 0]).rotation.x = Math.PI / 2;
-  ring(.15, .012, character, [0, 2.7, .345]);
-  const triangle = new THREE.Shape(); triangle.moveTo(-.04, -.055); triangle.lineTo(.06, 0); triangle.lineTo(-.04, .055); triangle.closePath();
-  mesh(new THREE.ShapeGeometry(triangle), character, [0, 2.7, .36], [1, 1, 1], bright);
-  for (const sign of [-1, 1]) {
-    bone(character, [sign * .21, 1.77, 0], [sign * .27, 1.07, .02], .145, .18);
-    mesh(faceted, character, [sign * .27, 1.02, .045], [.2, .21, .19], surface, true);
-    bone(character, [sign * .27, .98, .02], [sign * .3, .31, .04], .1, .15);
-    mesh(new THREE.BoxGeometry(.29, .16, .48), character, [sign * .3, .23, .14]);
-    ring(.13, .012, character, [sign * .3, .33, .04]).rotation.x = Math.PI / 2;
-    mesh(faceted, character, [sign * .54, 3.02, 0], [.25, .28, .25]);
+  function rod(parent, a, b, radius, material = silver) {
+    const start = new THREE.Vector3(...a), end = new THREE.Vector3(...b), delta = end.clone().sub(start);
+    const object = mesh(new THREE.CylinderGeometry(radius, radius, delta.length(), 12), parent, start.add(end).multiplyScalar(.5).toArray(), material);
+    object.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), delta.normalize()); return object;
   }
-  const leftArm = new THREE.Group(); character.add(leftArm);
-  bone(leftArm, [-.57, 2.92, 0], [-.85, 2.49, .06], .15, .18);
-  mesh(sphere, leftArm, [-.85, 2.49, .06], [.16, .16, .16]);
-  bone(leftArm, [-.85, 2.49, .06], [-1.35, 2.7, .12], .12, .14);
-  bone(leftArm, [-1.28, 2.67, .12], [-1.39, 2.71, .12], .16, .16, bright);
-  mesh(sphere, leftArm, [-1.5, 2.72, .14], [.23, .09, .16]);
-  for (let i = 0; i < 4; i++) bone(leftArm, [-1.6, 2.73, .02 + i * .075], [-1.78, 2.84, .02 + i * .075], .032);
-  bone(leftArm, [-1.4, 2.74, .25], [-1.43, 2.9, .3], .045);
-  bone(character, [.57, 2.92, 0], [.72, 2.47, 0], .15, .18);
-  mesh(sphere, character, [.72, 2.47, 0], [.15, .15, .15]);
-  bone(character, [.72, 2.47, 0], [.92, 2.04, .05], .11, .14);
-  bone(character, [.89, 2.08, .05], [.94, 1.99, .05], .16, .16, bright);
-  mesh(sphere, character, [.96, 1.86, .05], [.11, .19, .08]);
-  for (let i = 0; i < 4; i++) bone(character, [.9 + i * .045, 1.75, .08], [.91 + i * .055, 1.57 + Math.abs(i - 1.5) * .04, .13], .027);
-  bone(character, [.85, 1.94, .05], [.8, 1.78, .12], .037);
-  const head = new THREE.Group(); head.position.set(0, 3.92, 0); character.add(head);
-  mesh(sphere, head, [0, 0, 0], [.64, .65, .53], surface, true);
-  for (const sign of [-1, 1]) {
-    mesh(sphere, head, [sign * .63, -.03, 0], [.14, .2, .13]);
-    ring(.23, .028, head, [sign * .27, .02, .54], surface);
-    mesh(new THREE.CircleGeometry(.206, 32), head, [sign * .27, .02, .544], [1, 1, 1], dark);
-    mesh(new THREE.CircleGeometry(.202, 32), head, [sign * .27, .02, .55], [1, 1, 1], glass);
-    ring(.216, .007, head, [sign * .27, .02, .565], bright);
-    mesh(sphere, head, [sign * .27 - .07, .095, .57], [.035, .04, .007], bright);
+  const robot = new THREE.Group(); scene.add(robot); robot.rotation.y = -.2;
+  // Floating, layered torso with a recessed mechanical spine.
+  box(robot, [0, 1.83, 0], [.82, .93, .58], graphite);
+  for (let i = 0; i < 5; i++) {
+    box(robot, [0, 1.25 + i * .16, .31], [.61 + i * .045, .09, .16], i % 2 ? silver : graphite, .025);
   }
-  bone(head, [-.04, .025, .57], [.04, .025, .57], .02);
-  mesh(faceted, head, [0, -.15, .53], [.065, .11, .09]);
-  const smile = ring(.135, .014, head, [0, -.23, .485], bright, Math.PI * .65); smile.rotation.z = Math.PI * 1.175;
-  const curls = [[-.49,.46,.04,.31],[-.27,.71,.05,.32],[.05,.82,0,.34],[.38,.67,.03,.32],[.59,.41,.02,.28],[-.64,.21,-.04,.24],[.65,.13,-.06,.23],[-.38,.39,.4,.3],[-.07,.48,.46,.34],[.25,.43,.43,.3],[.49,.33,.3,.25],[-.4,.6,-.3,.3],[0,.68,-.37,.32],[.4,.5,-.29,.29]];
-  curls.forEach(([x, y, z, s], i) => { const curl = mesh(faceted, head, [x, y, z], [s, s * .9, s], surface, true); curl.rotation.set(i * .31, i * .51, i * .23); });
-  bone(head, [.45, .69, 0], [.66, .94, 0], .07, .045);
-  mesh(faceted, head, [.75, 1.02, 0], [.13, .11, .12], surface, true);
-  const globe = new THREE.Group(); globe.position.set(-1.55, 3.52, .15); character.add(globe);
-  mesh(new THREE.IcosahedronGeometry(.47, 2), globe, [0, 0, 0], [1, 1, 1], surface, true);
-  for (let i = 0; i < 3; i++) { const orbit = ring(.505, .006, globe, [0, 0, 0]); orbit.rotation.set(i * Math.PI / 3, Math.PI / 2, i * .5); }
-  const nut = ring(.125, .049, character, [1.2, 3.13, .1], surface); nut.add(new THREE.LineSegments(new THREE.WireframeGeometry(nut.geometry), edges));
-  const platform = mesh(new THREE.CylinderGeometry(1.36, 1.3, .12, 6), scene, [0, .08, 0], [1, 1, .72], surface, true);
-  for (const radius of [1.04, 1.24, 1.39]) { const light = ring(radius, .013, scene, [0, .155, 0]); light.rotation.x = Math.PI / 2; light.scale.y = .72; }
-  const grid = new THREE.GridHelper(5.5, 22, '#438c72', '#264e40'); grid.material.transparent = true; grid.material.opacity = .18; scene.add(grid);
-  const positions = [];
-  for (let i = 0; i < 140; i++) { const a = i * 2.39996, radius = 1.3 + (i % 13) * .065; positions.push(Math.cos(a) * radius, .15 + ((i * 37) % 101) / 20, Math.sin(a) * radius * .6); }
-  const dustGeometry = new THREE.BufferGeometry(); dustGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-  const dust = new THREE.Points(dustGeometry, new THREE.PointsMaterial({ color: '#a7ffe0', size: .018, transparent: true, opacity: .45, depthWrite: false })); scene.add(dust);
-  const colors = Object.fromEntries(Object.entries({ data: '#79f6d3', flow: '#8cefe3', ai: '#b5e997', edge: '#a2d7fa' }).map(([k, v]) => [k, new THREE.Color(v)]));
-  let disposed = false, paused = false, visible = true, lost = false, time = 0, last = 0, pointerX = 0, pointerY = 0, layer = 'data';
-  const motion = matchMedia('(prefers-reduced-motion: reduce)'), pointer = matchMedia('(hover: hover) and (pointer: fine)');
-  function draw(now = 0) {
-    if (disposed || lost) return;
-    if (now && !paused && !motion.matches) { if (last) time += Math.min((now - last) / 1000, .05); last = now; }
-    const responsive = !paused && !motion.matches;
-    character.position.y = Math.sin(time * 1.15) * .045;
-    character.rotation.y = Math.sin(time * .35) * .08 + (responsive ? pointerX * .18 : 0);
-    head.rotation.y = responsive ? pointerX * .1 : 0; head.rotation.x = responsive ? pointerY * .04 : 0;
-    globe.rotation.set(time * .15, time * .27, .14); globe.position.y = 3.52 + Math.sin(time * 1.4) * .07;
-    nut.rotation.set(time * .27, time * .44, .3); nut.position.y = 3.13 + Math.sin(time + 2) * .13;
-    dust.rotation.y = time * .035; surface.uniforms.uTime.value = time;
-    surface.uniforms.uColor.value.lerp(colors[layer], responsive ? .07 : 1);
-    renderer.render(scene, camera);
+  for (const s of [-1, 1]) {
+    const chest = box(robot, [s * .38, 2.22, .08], [.7, .82, .79], porcelain, .17); chest.rotation.z = s * -.16;
+    box(robot, [s * .32, 2.47, .48], [.43, .045, .035], graphite, .01);
+    box(robot, [s * .39, 2.35, .49], [.3, .025, .025], neon, .008);
+    for (let j = 0; j < 3; j++) box(robot, [s * .43, 1.98 + j * .085, .49], [.2, .028, .025], graphite, .008);
+    mesh(sphere, robot, [s * .94, 2.32, 0], graphite, [.29, .29, .29]);
+    const shoulder = box(robot, [s * 1.02, 2.43, 0], [.53, .49, .62], silver, .13); shoulder.rotation.z = s * .2;
+    ring(robot, [s * 1.02, 2.42, .33], .13, .025, black);
+    ring(robot, [s * 1.02, 2.42, .36], .085, .016, neon);
+    rod(robot, [s * 1.01, 2.25, 0], [s * 1.2, 1.61, .05], .15, graphite);
+    const arm = box(robot, [s * 1.12, 1.98, .04], [.34, .52, .4], porcelain, .09); arm.rotation.z = s * .25;
+    mesh(sphere, robot, [s * 1.2, 1.57, .08], silver, [.19, .19, .19]);
+    ring(robot, [s * 1.2, 1.57, .255], .115, .018, graphite);
+    const wrist = s === -1 ? [-1.55, 1.85, .4] : [1.18, .95, .22];
+    rod(robot, [s * 1.2, 1.56, .1], wrist, .12, graphite);
+    const forearm = box(robot, [(s * 1.2 + wrist[0]) / 2, (1.56 + wrist[1]) / 2, .24], [.3, .49, .38], silver, .08);
+    forearm.rotation.z = s === -1 ? -.9 : -.06;
+    const palm = box(robot, wrist, [.28, .16, .29], graphite, .05);
+    if (s === 1) palm.rotation.z = Math.PI / 2;
+    for (let j = 0; j < 4; j++) {
+      const x = wrist[0] - .09 + j * .062;
+      const y = wrist[1] + (s === -1 ? .04 : -.16);
+      rod(robot, [x, y, wrist[2] + .09], [x - .03, y + (s === -1 ? .11 : -.16), wrist[2] + .22], .028, silver);
+      mesh(sphere, robot, [x - .03, y + (s === -1 ? .11 : -.16), wrist[2] + .22], graphite, [.033,.033,.033]);
+    }
+    for (const y of [2.06, 2.58]) mesh(new THREE.CylinderGeometry(.035,.035,.02,6), robot,[s * .61,y,.475],graphite).rotation.x=Math.PI/2;
   }
-  function sync() {
-    last = 0;
-    const running = visible && !document.hidden && !paused && !motion.matches && !lost;
-    host.dataset.motion = running ? 'running' : 'paused';
-    renderer.setAnimationLoop(running ? draw : null);
-    if (visible && !document.hidden) draw();
+  const reactor = new THREE.Group(); reactor.position.set(0, 2.16, .53); robot.add(reactor);
+  mesh(new THREE.CylinderGeometry(.245,.245,.12,48),reactor,[0,0,0],black).rotation.x=Math.PI/2;
+  ring(reactor,[0,0,.07],.21,.025,silver);
+  ring(reactor,[0,0,.095],.145,.022,neon);
+  mesh(new THREE.IcosahedronGeometry(.08,0),reactor,[0,0,.12],neon);
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;box(reactor,[Math.cos(a)*.18,Math.sin(a)*.18,.1],[.025,.025,.03],graphite,.003);}
+  rod(robot,[0,2.55,0],[0,2.92,0],.2,graphite);
+  for(let i=0;i<3;i++) ring(robot,[0,2.67+i*.075,0],.22,.025,silver).rotation.x=Math.PI/2;
+  const head=new THREE.Group();head.position.set(0,3.38,0);robot.add(head);
+  box(head,[0,0,0],[1.2,.97,.87],porcelain,.25);
+  box(head,[0,.35,-.03],[.68,.37,.88],silver,.12);
+  box(head,[0,.39,.425],[.07,.19,.027],graphite,.015);
+  box(head,[0,.035,.407],[1.055,.395,.19],graphite,.15);
+  box(head,[0,.04,.5],[.94,.24,.06],black,.1);
+  box(head,[0,.055,.54],[.74,.035,.026],neon,.014);
+  for(const s of [-1,1]){
+    const ear=mesh(new THREE.CylinderGeometry(.235,.235,.16,40),head,[s*.62,.025,-.02],graphite);ear.rotation.z=Math.PI/2;
+    const earRing=ring(head,[s*.716,.025,-.02],.177,.028,silver);earRing.rotation.y=Math.PI/2;
+    const earLight=ring(head,[s*.729,.025,-.02],.105,.014,neon);earLight.rotation.y=Math.PI/2;
+    box(head,[s*.3,-.3,.44],[.24,.12,.04],silver,.03).rotation.z=s*-.22;
+    box(head,[s*.22,.055,.558],[.14,.07,.028],neon,.02);
   }
-  function resize() { const { width, height } = host.getBoundingClientRect(); if (!width || !height) return; renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix(); draw(); }
-  const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(host);
-  const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }); observer.observe(host);
-  function move(e) { if (!pointer.matches) return; const rect = host.getBoundingClientRect(); pointerX = (e.clientX - rect.left) / rect.width - .5; pointerY = (e.clientY - rect.top) / rect.height - .5; }
-  function leave() { pointerX = pointerY = 0; }
-  function contextLost(e) { e.preventDefault(); lost = true; sync(); onLost(); }
-  function contextRestored() { lost = false; resize(); sync(); onReady(); }
-  host.addEventListener('pointermove', move); host.addEventListener('pointerleave', leave);
-  renderer.domElement.addEventListener('webglcontextlost', contextLost); renderer.domElement.addEventListener('webglcontextrestored', contextRestored);
-  motion.addEventListener('change', sync); document.addEventListener('visibilitychange', sync);
-  resize(); sync(); onReady();
+  box(head,[0,-.31,.42],[.12,.045,.04],graphite,.01);
+  // A small orbiting data object sits above the open palm.
+  const core=new THREE.Group();core.position.set(-1.57,2.5,.4);robot.add(core);
+  const gem=mesh(new THREE.IcosahedronGeometry(.22,0),core,[0,0,0],silver);
+  const wire = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(.33,0)),line);core.add(wire);
+  for(let i=0;i<2;i++){const orbit=ring(core,[0,0,0],.42+i*.09,.009,neon);orbit.rotation.set(.7+i, .3+i, .2);}
+  // Quiet orbital architecture gives the sculpture depth without covering the copy.
+  const orbitals = new THREE.Group();orbitals.position.set(0,2.3,-.8);scene.add(orbitals);
+  for(let i=0;i<3;i++){
+    const curve=new THREE.EllipseCurve(0,0,1.8+i*.18,1.8+i*.18,0,Math.PI*2,false,0);
+    const orbit=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(curve.getPoints(160)),line);
+    orbit.rotation.set(.3+i*.35,.55+i*.5,i*.28);orbitals.add(orbit);
+  }
+  const pedestal=mesh(new THREE.CylinderGeometry(1.35,1.48,.16,64),scene,[0,.39,0],graphite);
+  ring(scene,[0,.48,0],1.25,.016,neon).rotation.x=Math.PI/2;
+  ring(scene,[0,.5,0],.94,.01,silver).rotation.x=Math.PI/2;
+  const colors=Object.fromEntries(Object.entries({data:'#d2f78a',flow:'#81e1d4',ai:'#c1acff',edge:'#88caff'}).map(([k,v])=>[k,new THREE.Color(v)]));
+  let disposed=false,paused=false,visible=true,lost=false,time=0,last=0,targetX=0,targetY=0,lookX=0,lookY=0,layer='data';
+  const motion=matchMedia('(prefers-reduced-motion: reduce)'),pointer=matchMedia('(hover: hover) and (pointer: fine)');
+  function draw(now=0){
+    if(disposed||lost)return;
+    const responsive=!paused&&!motion.matches;
+    if(now&&responsive){if(last)time+=Math.min((now-last)/1000,.05);last=now;}
+    if(responsive){lookX+=(targetX-lookX)*.055;lookY+=(targetY-lookY)*.055;}
+    robot.position.y=Math.sin(time*.85)*.055;
+    robot.rotation.y=-.2+Math.sin(time*.3)*.06+lookX*.3;
+    head.rotation.y=lookX*.28;head.rotation.x=lookY*.14;
+    core.rotation.set(time*.24,time*.4,.15);core.position.y=2.5+Math.sin(time*1.2)*.06;
+    gem.rotation.y=-time*.7;orbitals.rotation.z=Math.sin(time*.12)*.1;
+    neon.color.lerp(colors[layer],responsive?.07:1);neon.emissive.copy(neon.color);
+    renderer.render(scene,camera);
+    host.dataset.frame=String(Math.round(time*1000));
+  }
+  function sync(){
+    last=0;const running=visible&&!document.hidden&&!paused&&!motion.matches&&!lost;
+    host.dataset.motion=running?'running':'paused';
+    renderer.setAnimationLoop(running?draw:null);
+    if(visible&&!document.hidden)draw();
+  }
+  function resize(){const {width,height}=host.getBoundingClientRect();if(!width||!height)return;renderer.setSize(width,height,false);camera.aspect=width/height;camera.position.z=camera.aspect<.85?10.4:9.2;camera.updateProjectionMatrix();draw();}
+  const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(host);
+  const observer=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;sync();});observer.observe(host);
+  function move(e){if(!pointer.matches)return;const r=host.getBoundingClientRect();targetX=(e.clientX-r.left)/r.width-.5;targetY=(e.clientY-r.top)/r.height-.5;}
+  function leave(){targetX=targetY=0;}
+  function contextLost(e){e.preventDefault();lost=true;sync();onLost();}
+  function contextRestored(){lost=false;resize();sync();onReady();}
+  host.addEventListener('pointermove',move);host.addEventListener('pointerleave',leave);
+  renderer.domElement.addEventListener('webglcontextlost',contextLost);renderer.domElement.addEventListener('webglcontextrestored',contextRestored);
+  motion.addEventListener('change',sync);document.addEventListener('visibilitychange',sync);
+  host.append(renderer.domElement);resize();sync();onReady();
   return {
-    setPaused(value) { paused = value; sync(); },
-    setLayer(value) { layer = colors[value] ? value : 'data'; draw(); },
-    dispose() {
-      disposed = true; renderer.setAnimationLoop(null); observer.disconnect(); resizeObserver.disconnect();
-      motion.removeEventListener('change', sync); document.removeEventListener('visibilitychange', sync);
-      host.removeEventListener('pointermove', move); host.removeEventListener('pointerleave', leave);
-      renderer.domElement.removeEventListener('webglcontextlost', contextLost); renderer.domElement.removeEventListener('webglcontextrestored', contextRestored);
-      const geometries = new Set(), materials = new Set();
-      scene.traverse(o => { if (o.geometry) geometries.add(o.geometry); if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => materials.add(m)); });
-      geometries.forEach(g => g.dispose()); materials.forEach(m => m.dispose()); renderer.dispose(); renderer.domElement.remove();
-    },
+    setPaused(value){paused=value;sync();},
+    setLayer(value){layer=colors[value]?value:'data';draw();},
+    dispose(){
+      disposed=true;renderer.setAnimationLoop(null);observer.disconnect();resizeObserver.disconnect();
+      motion.removeEventListener('change',sync);document.removeEventListener('visibilitychange',sync);
+      host.removeEventListener('pointermove',move);host.removeEventListener('pointerleave',leave);
+      renderer.domElement.removeEventListener('webglcontextlost',contextLost);renderer.domElement.removeEventListener('webglcontextrestored',contextRestored);
+      const geometries=new Set(),materials=new Set();
+      scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>materials.add(m));});
+      geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());environment.dispose();renderer.dispose();renderer.domElement.remove();
+    }
   };
 }

@@ -1,0 +1,112 @@
+/* Interaction effects use transforms and opacity; the document keeps native scrolling. */
+.reading-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:60;background:var(--lime);transform:scaleX(0);transform-origin:left;pointer-events:none;box-shadow:0 0 12px #d2f78a40}
+.experience-cursor{position:fixed;inset:0;z-index:90;pointer-events:none;opacity:0;transition:opacity .15s;--cursor-ink:var(--lime);--cursor-fill:#d2f78a}
+.experience-cursor.is-visible{opacity:1}
+.cursor-dot,.cursor-ring{position:absolute;left:0;top:0;pointer-events:none;will-change:transform}
+.cursor-dot::after{content:'';display:block;width:4px;height:4px;margin:-2px;border-radius:50%;background:var(--cursor-ink);transition:opacity .2s}
+.cursor-ring::before{content:'';position:absolute;inset:0;width:32px;height:32px;translate:-50% -50%;border:1px solid var(--cursor-ink);border-radius:50%;opacity:.65;transition:width .3s var(--motion-ease),height .3s var(--motion-ease),background .25s,opacity .2s,scale .2s}
+.cursor-label{position:absolute;left:0;top:0;translate:-50% -50%;color:#142016;text-align:center;font:8px/1.6 var(--mono);letter-spacing:.1em;width:70px;opacity:0;transition:opacity .2s}
+.experience-cursor[data-mode=link] .cursor-ring::before{width:48px;height:48px;background:#d2f78a12}
+.experience-cursor[data-mode=label] .cursor-ring::before{width:84px;height:84px;background:var(--cursor-fill);opacity:.96;border-color:transparent}
+.experience-cursor[data-mode=label] .cursor-label{opacity:1}
+.experience-cursor[data-mode=label] .cursor-dot::after{opacity:0}
+.experience-cursor.is-pressed .cursor-ring::before{scale:.8}
+.experience-cursor[data-theme=dark]{--cursor-ink:#263d23;--cursor-fill:#1a291d}
+.experience-cursor[data-theme=dark] .cursor-label{color:var(--lime)}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  html.cursor-active,html.cursor-active body,html.cursor-active a,html.cursor-active button,html.cursor-active summary,html.cursor-active [data-cursor]{cursor:none!important}
+  .effects-ready :is(.action,.header-cta,.contact-arrow,.showcase-controls button){translate:var(--magnet-x,0px) var(--magnet-y,0px);transition:translate .3s var(--motion-ease),transform .3s,background .25s,color .25s}
+}
+.action{position:relative;overflow:hidden;isolation:isolate}
+.action::before{content:'';position:absolute;z-index:-1;inset:-100% -50%;background:linear-gradient(115deg,transparent 35%,#ffffff45 49%,transparent 63%);translate:-70% 0;transition:translate .7s var(--motion-ease);pointer-events:none}
+.action:hover::before,.action:focus-visible::before{translate:70% 0}
+.desktop-nav a::before,.link-action::after{content:'';position:absolute;left:0;right:0;bottom:4px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .45s var(--motion-ease)}
+.link-action{position:relative}.link-action::after{right:38px;bottom:5px}
+.desktop-nav a:hover::before,.link-action:hover::after{transform:scaleX(1);transform-origin:left}
+.showcase-stage{position:relative;isolation:isolate;overflow:hidden}
+.project-transition{position:absolute;inset:0;z-index:6;pointer-events:none;visibility:hidden}
+.showcase-media{perspective:1000px}
+.project-depth{position:absolute;inset:0;transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));transition:transform .7s var(--motion-ease);will-change:auto}
+.showcase-media .northstar-composition{inset:12% 8% 20%}
+.showcase-media[data-pointer-active] .project-depth{transition-duration:.18s;will-change:transform}
+.showcase-media .showcase-browser{transition:transform .8s var(--motion-ease),box-shadow .8s}
+.showcase-media[data-pointer-active] .showcase-browser{box-shadow:-14px 40px 70px #14231845}
+.showcase-media:focus-visible{outline-offset:-5px;outline-color:var(--cover-ink)}
+.showcase-media-label,.showcase-view{z-index:2;pointer-events:none}
+.project-atmosphere{position:absolute;inset:0;pointer-events:none;overflow:hidden;color:var(--cover-ink)}
+.project-atmosphere>svg{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1;opacity:.23}
+.project-atmosphere .network-node{fill:currentColor;stroke:none}
+.atmosphere-studioNorth>svg{opacity:.3}.atmosphere-northstar>svg{opacity:.3}
+.project-sheen{position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse at var(--pointer-x,50%) var(--pointer-y,50%),#fff9,transparent 60%);mix-blend-mode:soft-light;transition:opacity .5s}
+.showcase-media[data-pointer-active] .project-sheen{opacity:1}
+.showcase-media::after{content:'';position:absolute;inset:0;pointer-events:none;border:1px solid #ffffff40;opacity:0;box-shadow:inset 0 0 60px #ffffff20;transition:opacity .5s}
+.showcase-media[data-pointer-active]::after{opacity:1}
+.showcase-browser::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 25%,#fff7 48%,transparent 72%);translate:-120% 0;transition:translate 1.1s var(--motion-ease)}
+.showcase-media:hover .showcase-browser::after{translate:120% 0}
+.project-tab-art img{transition:transform .65s var(--motion-ease),opacity .4s}
+.project-tab:hover .project-tab-art img,.project-tab[aria-selected=true] .project-tab-art img{transform:scale(1.14);opacity:1}
+.project-tab-indicator{transform-origin:left;transition:background .3s}
+.service-row{position:relative;isolation:isolate;overflow:hidden}
+.service-row::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(400px circle at var(--pointer-x,50%) var(--pointer-y,50%),#b6cf8555,transparent 65%);opacity:0;transition:opacity .5s}
+.service-row::after{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,#586e40,transparent);transform:translateX(-100%);transition:transform .9s var(--motion-ease)}
+.service-row[data-pointer-active]::before{opacity:1}.service-row:hover::after{transform:translateX(0)}
+.service-row:hover{padding-inline:0;background:transparent}
+.service-row h3{transition:transform .5s var(--motion-ease)}.service-row:hover h3{transform:translateX(7px)}
+.service-row svg{transition:transform .6s var(--motion-ease)}.service-row:hover svg{transform:rotate(-8deg) scale(1.12)}
+.service-row .tag{transition:background .3s,border-color .3s}.service-row:hover .tag{background:#fff4;border-color:#72845e55}
+.about-art{perspective:1000px}
+.about-art::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at var(--pointer-x,50%) var(--pointer-y,50%),#d2f78a28,transparent 60%);opacity:.6;transition:opacity .5s}
+.about-letter{translate:0 var(--about-shift,0px);transform:rotate(-10deg) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));transition:transform .5s var(--motion-ease);text-shadow:5px 10px 0 #10151355}
+.about-art[data-pointer-active]::after{opacity:1}
+.about-art::before{inset:8%;border-color:#d2f78a30;border-style:dashed;transform:rotate(-25deg) scaleY(.8);box-shadow:0 0 0 32px #d2f78a04,0 0 0 64px #d2f78a02}
+.process-tabs button{position:relative}
+.process-tabs button::after{content:'';position:absolute;top:-1px;left:0;right:0;height:2px;background:var(--lime);transform:scaleX(0);transform-origin:left;transition:transform .65s var(--motion-ease)}
+.process-tabs button[aria-selected=true]::after{transform:scaleX(1)}
+.diagram-core{position:relative}.diagram-core::after{content:'';position:absolute;inset:-12px;border:1px solid #d2f78a40;border-radius:28px;opacity:0}
+.diagram-branches>div{transition:border-color .4s,background .4s}
+.contact-section{isolation:isolate}
+.contact-section::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at var(--pointer-x,75%) var(--pointer-y,30%),#f5ffd78c,transparent 55%),repeating-linear-gradient(0deg,transparent,transparent 79px,#20351009 80px);opacity:.6}
+.contact-section::after{translate:0 var(--contact-shift,0px);box-shadow:0 0 0 60px #11141105,0 0 0 120px #11141104,0 0 0 180px #11141103}
+.contact-arrow{position:relative}.contact-arrow::after{content:'';position:absolute;inset:-9px;border:1px solid #11141135;border-radius:50%;scale:.85;opacity:0;transition:scale .6s var(--motion-ease),opacity .4s}
+.contact-arrow:hover::after{scale:1;opacity:1}
+.faq-item[open] summary{color:var(--lime)}
+.detail-dialog[open]{transform-origin:50% 60%}
+@keyframes section-type-in{from{opacity:0;clip-path:inset(0 0 100% 0);translate:0 26px}to{opacity:1;clip-path:inset(0);translate:0 0}}
+@keyframes effect-rise{from{opacity:0;translate:0 20px}to{opacity:1;translate:0 0}}
+@keyframes effect-trace{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes project-wipe{0%{visibility:visible;clip-path:inset(0 0 0 0)}100%{visibility:visible;clip-path:inset(0 0 0 100%)}}
+@keyframes project-wipe-back{0%{visibility:visible;clip-path:inset(0 0 0 0)}100%{visibility:visible;clip-path:inset(0 100% 0 0)}}
+@keyframes diagram-charge{0%{opacity:0;scale:.8}35%{opacity:.7}100%{opacity:0;scale:1.18}}
+@keyframes line-grow{from{scale:1 0}to{scale:1 1}}
+@keyframes branch-grow{from{scale:0 1}to{scale:1 1}}
+@keyframes detail-enter{from{opacity:0;translate:0 18px;scale:.98}to{opacity:1;translate:0 0;scale:1}}
+@media(prefers-reduced-motion:no-preference){
+  .effects-ready .section-heading.effect-entered h2{animation:section-type-in 1s var(--motion-ease) both}
+  .effects-ready .section-heading.effect-entered>p{animation:effect-rise .85s .15s var(--motion-ease) both}
+  .effects-ready .service-row.effect-entered>*,.effects-ready .faq-item.effect-entered{animation:effect-rise .8s var(--entry-delay,0ms) var(--motion-ease) both}
+  .effects-ready .service-row.effect-entered>h3{animation-delay:calc(var(--entry-delay,0ms) + 80ms)}
+  .effects-ready .service-row.effect-entered>div:last-child{animation-delay:calc(var(--entry-delay,0ms) + 150ms)}
+  .effects-ready .project-showcase.effect-entered .project-transition{animation:project-wipe .8s cubic-bezier(.76,0,.24,1) both}
+  .effects-ready .project-showcase.effect-entered [data-direction="-1"] .project-transition{animation-name:project-wipe-back}
+  .effects-ready .project-showcase.effect-entered .effect-trace{stroke-dasharray:1;animation:effect-trace 1.6s var(--trace-delay,0ms) cubic-bezier(.65,0,.35,1) both}
+  .effects-ready .project-tab[aria-selected=true] .project-tab-indicator{animation:branch-grow .6s var(--motion-ease)}
+  .effects-ready .process-panel.effect-entered .process-copy{animation:effect-rise .7s var(--motion-ease) both}
+  .effects-ready .process-panel.effect-entered .diagram-core{animation:effect-rise .7s var(--motion-ease) both}
+  .effects-ready .process-panel.effect-entered .diagram-core::after{animation:diagram-charge 1.5s .15s ease-out both}
+  .effects-ready .process-panel.effect-entered .diagram-stem{transform-origin:top;animation:line-grow .5s .2s var(--motion-ease) both}
+  .effects-ready .process-panel.effect-entered .diagram-branches::before{animation:branch-grow .5s .5s var(--motion-ease) both}
+  .effects-ready .process-panel.effect-entered .diagram-branches>div{animation:effect-rise .6s .6s var(--motion-ease) both}
+  .effects-ready .process-panel.effect-entered .diagram-branches>div:nth-child(2){animation-delay:.7s}
+  .effects-ready .process-panel.effect-entered .diagram-branches>div:nth-child(3){animation-delay:.8s}
+  .effects-ready .about-panel.effect-entered>div:last-child>*{animation:effect-rise .9s .15s var(--motion-ease) both}
+  .effects-ready .contact-section.effect-entered h2{animation:section-type-in 1.1s var(--motion-ease) both}
+  .faq-item[open]>p{animation:effect-rise .4s var(--motion-ease) both}
+  .detail-dialog[open]{animation:detail-enter .5s var(--motion-ease) both}
+  .detail-dialog .gallery img{animation:effect-rise .6s var(--motion-ease) both}
+}
+@media(hover:none),(pointer:coarse){.experience-cursor{display:none}.project-depth{transform:none}.showcase-media:hover .showcase-browser{transform:perspective(1200px) rotateY(-9deg) rotateX(5deg) rotateZ(-3deg)}.service-row:hover h3{transform:none}.service-row:hover svg{transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .experience-cursor{display:none!important}.project-transition{display:none}.project-depth,.about-letter{transform:none}.about-letter,.contact-section::after{translate:none}.effects-ready :is(.action,.header-cta,.contact-arrow,.showcase-controls button){translate:none}
+  .project-atmosphere .effect-trace{stroke-dasharray:none;stroke-dashoffset:0}
+}
+@media(forced-colors:active){.experience-cursor,.project-atmosphere,.project-sheen,.reading-progress{display:none}.showcase-media::after,.service-row::before,.contact-section::before{display:none}}
