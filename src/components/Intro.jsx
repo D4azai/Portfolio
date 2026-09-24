@@ -16,7 +16,7 @@ export default function Intro({ onClose, returnFocus }) {
     let disposed = false;
     const timers = [];
     const settled = () => { if (!disposed) setAssets(value => value + 1); };
-    const image = new Image(); image.src = '/assets/optimized/affiliate-640.webp';
+    const image = new Image(); image.src = '/assets/covers/affiliate-640.webp';
     const bounded = promise => Promise.race([promise, new Promise(resolve => timers.push(setTimeout(resolve, 4500)))]);
     bounded(document.fonts.ready).then(settled, settled);
     bounded(image.decode()).then(settled, settled);

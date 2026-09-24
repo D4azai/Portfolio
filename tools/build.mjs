@@ -12,7 +12,7 @@ const out = resolve(root, "dist");
 const modules = ["control/login.js", "control/dashboard.js"];
 const legacy = ["script.js", ...["navigation", "motion", "motion-utils", "pointer", "system-core", "image-manifest", "pillars", "entry", "contact", "analytics"].map(name => `js/${name}.js`)];
 for (const file of [...modules, ...legacy]) execFileSync(process.execPath, ["--check", resolve(root, file)]);
-for (const file of ["api/control.js", "server/app.js", "server/security.js", "server/supabase.js", "server/pages.js"]) execFileSync(process.execPath, ["--check", resolve(root, file)]);
+for (const file of ["api/chat.js", "server/chat.js", "api/control.js", "server/app.js", "server/security.js", "server/supabase.js", "server/pages.js"]) execFileSync(process.execPath, ["--check", resolve(root, file)]);
 const files = ["index.html", "privacy.html", "styles.css", "experience.css", "control/control.css", "robots.txt", "sitemap.xml", ...modules,
   "maroc-affiliate-01.png", "odoo-01-chantiers.png", "odoo-02-chantier-form.png", "odoo-03-material-request.png", "odoo-04-estimation.png", "odoo-05-boq.png"];
 await rm(out, { recursive: true, force: true });

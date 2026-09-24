@@ -7,11 +7,11 @@ export const team = [
 // Profile links. Leave a value empty to hide that link everywhere it is rendered.
 export const links = { linkedin: 'https://www.linkedin.com/in/your-favorite-engineer', github: '' };
 export const projects = [
-  { id: 'affiliate', category: 'Platforms', label: 'COMMERCE & LOGISTICS', status: 'Live product', cover: 'affiliate', tone: 'sage', headline: 'An entire operation.\nOne connected platform.', summary: 'From the first order to the final payout. A connected workspace for cash-on-delivery commerce.', ...cases.affiliate },
-  { id: 'studioNorth', category: 'Interfaces', label: 'FINANCE & PRODUCT DESIGN', status: 'Product interface', cover: 'invoices', tone: 'lavender', summary: 'Making financial complexity feel remarkably simple.', ...cases.studioNorth },
-  { id: 'erp', category: 'Platforms', label: 'ERP & CONSTRUCTION', status: 'User acceptance testing', cover: 'erp', tone: 'sand', summary: 'Giving every construction site a clearer operating picture.', ...cases.erp },
-  { id: 'crm', category: 'Platforms', label: 'CRM & SALES OPERATIONS', status: 'Sales workspace', cover: 'crm', tone: 'mint', summary: 'Relationships, pipeline, and follow-up. Finally connected.', ...cases.crm },
-  { id: 'northstar', category: 'Interfaces', label: 'BRAND & DIGITAL EXPERIENCE', status: 'Live website', cover: null, tone: 'copper', summary: 'A considered digital presence for a business-advisory brand.', ...cases.northstar },
+  { id: 'affiliate', coverAlt: 'Sage parcels connected by chrome delivery routes on sculptural stone platforms.', category: 'Platforms', label: 'COMMERCE & LOGISTICS', status: 'Live product', cover: 'affiliate', tone: 'sage', headline: 'An entire operation.\nOne connected platform.', summary: 'From the first order to the final payout. A connected workspace for cash-on-delivery commerce.', ...cases.affiliate },
+  { id: 'studioNorth', coverAlt: 'Lavender glass arches and silver coins in a sculptural finance still life.', category: 'Interfaces', label: 'FINANCE & PRODUCT DESIGN', status: 'Product interface', cover: 'invoices', tone: 'lavender', summary: 'Making financial complexity feel remarkably simple.', ...cases.studioNorth },
+  { id: 'erp', coverAlt: 'Sandstone architectural model with a brass construction crane.', category: 'Platforms', label: 'ERP & CONSTRUCTION', status: 'User acceptance testing', cover: 'erp', tone: 'sand', summary: 'Giving every construction site a clearer operating picture.', ...cases.erp },
+  { id: 'crm', coverAlt: 'Mint glass spheres connected into a sculptural relationship network.', category: 'Platforms', label: 'CRM & SALES OPERATIONS', status: 'Sales workspace', cover: 'crm', tone: 'mint', summary: 'Relationships, pipeline, and follow-up. Finally connected.', ...cases.crm },
+  { id: 'northstar', coverAlt: 'Copper compass star suspended above dark stone plinths.', category: 'Interfaces', label: 'BRAND & DIGITAL EXPERIENCE', status: 'Live website', cover: null, tone: 'copper', summary: 'A considered digital presence for a business-advisory brand.', ...cases.northstar },
 ];
 export const services = [
   { title: 'Products with purpose.', body: 'SaaS platforms, portals, and internal tools shaped around the people who use them. Clear interfaces backed by thoughtful architecture.', tags: ['Product engineering', 'SaaS', 'Web interfaces'], icon: 'grid' },

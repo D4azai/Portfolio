@@ -15,7 +15,9 @@
     "build": "node tools/build.mjs",
     "test:interactions": "node tools/verify-react.mjs",
     "test:security": "node --test tests/security.test.mjs",
-    "test:product": "node tools/verify-product.mjs"
+    "test:product": "node tools/verify-product.mjs",
+    "test:chat": "node --test tests/chat.test.mjs",
+    "test:companion": "npm run build && node tools/verify-companion.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",

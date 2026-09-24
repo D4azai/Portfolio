@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Arrow, SectionHeading, ProjectImage } from './UI.jsx';
+import { Arrow, SectionHeading } from './UI.jsx';
 import { projects } from '../data/portfolio.js';
 import ProjectAtmosphere from './ProjectAtmosphere.jsx';
 
@@ -9,7 +9,7 @@ function ProjectVisual({ project, onOpen }) {
     <ProjectAtmosphere id={project.id}/>
     <span className="showcase-media-label eyebrow">{project.label}<span aria-hidden="true">↗</span></span>
     <div className="project-depth">
-    {project.cover ? <div className="showcase-browser" data-showcase-reveal="image"><div className="browser-bar"><span/><span/><span/><p>{project.title.toLowerCase().replaceAll(' ', '.')} / workspace</p><span className="browser-lock">↗</span></div><ProjectImage name={project.cover} alt={`${project.title} — actual project interface`} className="browser-image"/></div> : <div className="northstar-composition" data-showcase-reveal="image"><span className="northstar-orbit"/><span className="eyebrow">INDEPENDENT PERSPECTIVE.</span><strong>NORTH<br/><em>STAR.</em></strong><span className="eyebrow">STRATEGY / GROWTH / DIGITAL</span></div>}
+    <div className="project-cover-photo" data-showcase-reveal="image"><img src={`/assets/covers/${project.id}-1280.webp`} srcSet={`/assets/covers/${project.id}-640.webp 640w, /assets/covers/${project.id}-1280.webp 1280w`} sizes="(max-width: 760px) 100vw, 55vw" width="1536" height="1024" loading="lazy" decoding="async" alt={project.coverAlt}/><span className="cover-photo-caption">{project.title}<small>CONCEPT COVER / {project.category.toUpperCase()}</small></span></div>
     </div>
     <span className="showcase-view"><span className="eyebrow">EXPLORE THE EXPERIENCE</span><span className="showcase-view-arrow"><Arrow/></span></span>
   </button>;
@@ -81,8 +81,8 @@ export default function Projects({ onOpen }) {
           <div className="showcase-actions" data-showcase-reveal><button className="link-action" data-case={project.id} onClick={e => onOpen(project, e.currentTarget)}>Inside the project <Arrow/></button>{project.live && <a className="showcase-live" href={project.live} target="_blank" rel="noopener noreferrer">Visit live ↗</a>}</div>
         </div>
       </article>)}</div>
-      <div className="showcase-rail" role="tablist" aria-label="Choose a project">{projects.map((project, i) => <button key={project.id} ref={node => { tabs.current[i] = node; }} className="project-tab" role="tab" id={`project-tab-${project.id}`} aria-controls={`project-panel-${project.id}`} aria-selected={active === i} tabIndex={active === i ? 0 : -1} onClick={() => select(i)} onKeyDown={e => keydown(e, i)}><span className={`project-tab-art tone-${project.tone}`} aria-hidden="true">{project.cover ? <img src={`/assets/optimized/${project.cover}-640.webp`} alt="" loading="lazy" width="80" height="58"/> : <span>✳</span>}</span><span className="project-tab-copy"><small>0{i + 1} / {project.category}</small><strong>{project.title}</strong></span><span className="project-tab-indicator" aria-hidden="true"/></button>)}</div>
+      <div className="showcase-rail" role="tablist" aria-label="Choose a project">{projects.map((project, i) => <button key={project.id} ref={node => { tabs.current[i] = node; }} className="project-tab" role="tab" id={`project-tab-${project.id}`} aria-controls={`project-panel-${project.id}`} aria-selected={active === i} tabIndex={active === i ? 0 : -1} onClick={() => select(i)} onKeyDown={e => keydown(e, i)}><span className={`project-tab-art tone-${project.tone}`} aria-hidden="true"><img src={`/assets/covers/${project.id}-640.webp`} alt="" loading="lazy" width="80" height="58"/></span><span className="project-tab-copy"><small>0{i + 1} / {project.category}</small><strong>{project.title}</strong></span><span className="project-tab-indicator" aria-hidden="true"/></button>)}</div>
     </div>
-    <noscript><div className="project-fallback-list">{projects.map(project => <article key={project.id}><h3>{project.title}</h3><p>{project.lede}</p>{project.cover && <ProjectImage name={project.cover} alt={`${project.title} interface`}/>}<p>{project.status}</p>{project.live && <a href={project.live}>Visit project ↗</a>}</article>)}</div></noscript>
+    <noscript><div className="project-fallback-list">{projects.map(project => <article key={project.id}><h3>{project.title}</h3><p>{project.lede}</p><img src={`/assets/covers/${project.id}-640.webp`} alt={project.coverAlt} width="640" height="427" loading="lazy"/><p>{project.status}</p>{project.live && <a href={project.live}>Visit project ↗</a>}</article>)}</div></noscript>
   </section>;
 }

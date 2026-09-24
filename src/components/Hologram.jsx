@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-export default function Hologram({ active = 'data', suspended = false, onSettled }) {
+export default function Hologram({ active = 'data', action = 0, phase = 'idle', suspended = false, onSettled }) {
   const host = useRef(null), engine = useRef(null), settled = useRef(onSettled);
   const [ready, setReady] = useState(false), [paused, setPaused] = useState(false), [reduced, setReduced] = useState(false);
   // A suspended stage (the hero behind the intro) keeps the illustration and only builds its WebGL scene once revealed.
@@ -27,7 +27,9 @@ export default function Hologram({ active = 'data', suspended = false, onSettled
   }, [started]);
   useEffect(() => { engine.current?.setPaused(paused || reduced || suspended); }, [paused, reduced, suspended, ready]);
   useEffect(() => { engine.current?.setLayer(active); }, [active, ready]);
-  return <div className={`hologram-stage ${ready ? 'hologram-ready' : ''}`} data-layer={active} data-paused={paused || reduced || suspended}>
+  useEffect(() => { if (action) engine.current?.perform(active); }, [action, ready]);
+  useEffect(() => { engine.current?.setPhase(phase); }, [phase, ready]);
+  return <div className={`hologram-stage ${ready ? 'hologram-ready' : ''}`} data-layer={active} data-phase={phase} data-action={action} data-paused={paused || reduced || suspended}>
     <div className="hologram-ambient" aria-hidden="true"/>
     <div className="hologram-stage-top"><span className="eyebrow"><span className="holo-dot"/> A—01 / THE SYSTEMS OPERATOR</span>{ready && !reduced && <button className="hologram-pause" aria-label={paused ? 'Resume character animation' : 'Pause character animation'} aria-pressed={paused} onClick={() => setPaused(!paused)}>{paused ? 'PLAY' : 'PAUSE'} <span aria-hidden="true">{paused ? '▷' : 'Ⅱ'}</span></button>}</div>
     <div className="hologram-viewport" ref={host} role="img" aria-label="A sculptural silver robot with a luminous visor, articulated armor, and a floating orbital core."><img className="hologram-fallback" src="/assets/operator.svg" width="600" height="640" alt=""/></div>

@@ -1,0 +1,102 @@
+import { chromium } from 'playwright';
+import AxeBuilder from '@axe-core/playwright';
+import assert from 'node:assert/strict';
+import { resolve } from 'node:path';
+import { previewServer } from '../server/local.js';
+import { createChat } from '../server/chat.js';
+
+const env = { OPENAI_API_KEY: 'test-only' }, received = [];
+const chat = createChat({ env, fetchImpl: async (url, init) => {
+  const body = JSON.parse(init.body); received.push(body);
+  await new Promise(done => setTimeout(done, 800));
+  return Response.json({ output: [{ type: 'message', content: [{ type: 'output_text', text: 'We build SaaS platforms and connected workflows. What do you have in mind? <script>window.injected=true</script>' }] }] });
+} });
+const server = previewServer({ root: resolve('dist'), chat });
+await new Promise(done => server.listen(0, '127.0.0.1', done));
+env.SITE_ORIGIN = `http://127.0.0.1:${server.address().port}`;
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
+try {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1100 } });
+  const page = await context.newPage();
+  const errors = []; page.on('pageerror', error => errors.push(error.message));
+  await page.addInitScript(() => {
+    window.SpeechSynthesisUtterance = class { constructor(text) { this.text = text; } };
+    Object.defineProperty(window, 'speechSynthesis', { value: { getVoices: () => [], speak: utterance => { window.testUtterance = utterance; utterance.onstart?.(); }, cancel: () => { window.testUtterance = null; } } });
+  });
+  await page.goto(env.SITE_ORIGIN + '/#home', { waitUntil: 'networkidle' });
+  await page.waitForSelector('.hero-art .hologram-ready');
+  for (const layer of ['data', 'flow', 'ai', 'edge']) {
+    const button = page.locator('.layer-button').filter({ hasText: new RegExp(layer, 'i') });
+    await button.click();
+    await page.waitForFunction(layer => document.querySelector('.hero-art .hologram-viewport').dataset.gesture === layer, layer);
+    const before = await page.locator('.hero-art .hologram-stage').getAttribute('data-action');
+    await button.click();
+    assert.equal(Number(await page.locator('.hero-art .hologram-stage').getAttribute('data-action')), Number(before) + 1);
+  }
+  console.log('PASS all four gestures and same-button replay');
+  await page.getByRole('button', { name: /Talk to A/ }).click();
+  assert.equal(await page.locator('#robot-question').evaluate(el => el === document.activeElement), true);
+  await page.getByRole('button', { name: 'Voice off', exact: true }).click();
+  await page.getByRole('button', { name: 'What can you build for me?' }).click();
+  await page.waitForFunction(() => document.querySelector('.hero-art .hologram-stage').dataset.phase === 'thinking');
+  await page.waitForFunction(() => document.querySelector('.hero-art .hologram-stage').dataset.phase === 'speaking');
+  assert.match(await page.locator('.chat-assistant').innerText(), /SaaS platforms/);
+  assert.equal(await page.evaluate(() => window.injected), undefined);
+  await page.getByRole('button', { name: 'Stop voice', exact: true }).click();
+  assert.equal(await page.locator('.hero-art .hologram-stage').getAttribute('data-phase'), 'idle');
+  await page.locator('#robot-question').fill('Tell me more about the workflows.');
+  await page.getByRole('button', { name: 'Send question', exact: true }).click();
+  await page.waitForFunction(() => document.querySelectorAll('.chat-assistant').length === 2);
+  assert.equal(received[1].input.length, 3);
+  await page.getByRole('button', { name: 'Voice on', exact: true }).click();
+  assert.equal(await page.evaluate(() => window.testUtterance), null);
+  console.log('PASS generated replies, conversation history, thinking/speech reactions and escaped output');
+  await page.getByRole('button', { name: 'Clear chat', exact: true }).click();
+  assert.equal(await page.locator('.chat-message').count(), 0);
+  await page.locator('#robot-question').fill('Cancel this question');
+  await page.getByRole('button', { name: 'Send question', exact: true }).click();
+  await page.getByRole('button', { name: 'Cancel reply', exact: true }).click();
+  await page.waitForFunction(() => !document.querySelector('#robot-question').disabled);
+  assert.equal(await page.locator('#robot-question').inputValue(), 'Cancel this question');
+  await page.route('**/api/chat', route => route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: 'Live chat is not connected yet.' }) }));
+  await page.getByRole('button', { name: 'Send question', exact: true }).click();
+  await page.getByRole('alert').waitFor();
+  assert.equal(await page.locator('#robot-question').inputValue(), 'Cancel this question');
+  assert.equal(await page.locator('.chat-message').count(), 0);
+  await page.screenshot({ path: 'artifacts/companion-chat-desktop.png' });
+  const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  assert.deepEqual(violations.map(v => ({ id: v.id, targets: v.nodes.map(n => n.target) })), []);
+  await page.locator('#robot-question').focus(); await page.keyboard.press('Escape');
+  assert.equal(await page.locator('#robot-conversation').count(), 0);
+  assert.equal(await page.locator('.chat-toggle').evaluate(el => el === document.activeElement), true);
+  console.log('PASS cancellation, recoverable errors, chat accessibility and focus');
+  await page.locator('#method').scrollIntoViewIfNeeded();
+  await page.getByRole('button', { name: 'Pause diagram animation', exact: true }).click();
+  assert.equal(await page.locator('.diagram-3d').getAttribute('data-paused'), 'true');
+  await page.getByRole('tab', { name: /Build/ }).click();
+  assert.equal(await page.locator('.diagram-3d').getAttribute('data-step'), '2');
+  await page.locator('.diagram-3d').screenshot({ path: 'artifacts/companion-diagram.png' });
+  await page.locator('#work').scrollIntoViewIfNeeded();
+  for (const tab of await page.locator('.project-tab').all()) {
+    await tab.click();
+    const cover = page.locator('.showcase-panel:not([hidden]) .project-cover-photo img');
+    await cover.scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => { const img = document.querySelector('.showcase-panel:not([hidden]) .project-cover-photo img'); return img?.complete && img.naturalWidth > 0; });
+    await cover.evaluate(img => img.decode());
+    assert.match(await cover.getAttribute('src'), /\/assets\/covers\//);
+  }
+  await page.locator('.project-tab').first().click();
+  await page.waitForTimeout(1300);
+  await page.locator('.showcase-panel:not([hidden])').screenshot({ path: 'artifacts/companion-cover.png' });
+  console.log('PASS spatial diagram controls and all five local cover photos');
+  await page.setViewportSize({ width: 375, height: 850 });
+  await page.locator('#home').scrollIntoViewIfNeeded();
+  await page.getByRole('button', { name: /Talk to A/ }).click();
+  await page.waitForTimeout(450);
+  await page.locator('.robot-chat').screenshot({ path: 'artifacts/companion-chat-mobile.png' });
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  assert.equal(await page.locator('.diagram-beacon').evaluate(el => getComputedStyle(el).animationName), 'none');
+  assert.deepEqual(errors, []);
+  console.log('PASS mobile chat, reduced motion and no runtime errors');
+} finally { await browser.close(); await new Promise(done => server.close(done)); }

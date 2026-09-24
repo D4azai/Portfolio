@@ -1,7 +1,7 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "functions": { "api/control.js": { "maxDuration": 30 } },
+  "functions": { "api/control.js": { "maxDuration": 30 }, "api/chat.js": { "maxDuration": 30 } },
   "rewrites": [
     { "source": "/admin", "destination": "/api/control?route=admin" },
     { "source": "/admin/", "destination": "/api/control?route=admin" },
