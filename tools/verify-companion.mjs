@@ -96,7 +96,7 @@ try {
   await page.locator('.robot-chat').screenshot({ path: 'artifacts/companion-chat-mobile.png' });
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  assert.equal(await page.locator('.diagram-beacon').evaluate(el => getComputedStyle(el).animationName), 'none');
+  assert.equal(await page.locator('.scene-surface').evaluate(el => getComputedStyle(el).transform), 'none');
   assert.deepEqual(errors, []);
   console.log('PASS mobile chat, reduced motion and no runtime errors');
 } finally { await browser.close(); await new Promise(done => server.close(done)); }

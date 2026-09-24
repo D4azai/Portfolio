@@ -92,7 +92,7 @@ See [ROBOT-GUIDE.md](ROBOT-GUIDE.md) for the interactive robot, 3D blueprint, ph
 
 ## Conversational robot
 
-Open **Talk to A?01** below the four robot controls. On desktop, the view expands to keep the robot beside the conversation. Questions are answered through the server using the [OpenAI Responses API](https://developers.openai.com/api/docs/guides/text), with the published portfolio data included as context. The robot reacts while waiting and while speaking. **Voice off/on** enables optional browser speech synthesis; it is off by default. **Stop voice**, **Cancel reply**, **Clear chat**, and Escape are available. Typing works without speech support. Voice selection and pronunciation depend on installed browser/device voices.
+Open **Talk to A-01** below the four robot controls. On desktop, the view expands to keep the robot beside the conversation. Questions are answered through the server using the [OpenAI Responses API](https://developers.openai.com/api/docs/guides/text), with the published portfolio data included as context. The robot reacts while waiting and while speaking. **Voice off/on** enables optional browser speech synthesis; it is off by default. **Stop voice**, **Cancel reply**, **Clear chat**, and Escape are available. Typing works without speech support. Voice selection and pronunciation depend on installed browser/device voices.
 
 For live answers, set these server environment values (in ignored `.env.local` for development, or the deployment environment):
 
