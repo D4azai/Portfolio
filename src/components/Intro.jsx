@@ -4,7 +4,7 @@ import { Arrow, Mark } from './UI.jsx';
 
 export default function Intro({ onClose, returnFocus }) {
   const dialog = useRef(null), enter = useRef(null), closing = useRef(false);
-  const [assets, setAssets] = useState(0), [sceneReady, setSceneReady] = useState(false), [leaving, setLeaving] = useState(false);
+  const [assets, setAssets] = useState(0), [sceneReady, setSceneReady] = useState(false), [leaving, setLeaving] = useState(false), [booting, setBooting] = useState(false);
   const progress = Math.round((assets + Number(sceneReady)) / 3 * 100);
   useEffect(() => {
     const element = dialog.current;
@@ -29,18 +29,20 @@ export default function Intro({ onClose, returnFocus }) {
   }, []);
   useEffect(() => {
     if (!leaving) return;
-    const timeout = setTimeout(onClose, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 550);
+    const timeout = setTimeout(onClose, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : (booting ? 2600 : 550));
     return () => clearTimeout(timeout);
-  }, [leaving, onClose]);
+  }, [booting, leaving, onClose]);
   function leave() { if (!closing.current) { closing.current = true; setLeaving(true); } }
-  return <dialog ref={dialog} className={`intro-dialog ${leaving ? 'intro-leaving' : ''}`} aria-labelledby="intro-title" aria-describedby="intro-description" onCancel={event => { event.preventDefault(); leave(); }}>
+  function enterPortfolio() { if (!closing.current) { setBooting(true); setLeaving(true); } }
+  return <dialog ref={dialog} className={`intro-dialog ${leaving ? 'intro-leaving' : ''} ${booting ? 'intro-booting' : ''}`} aria-labelledby="intro-title" aria-describedby="intro-description" onCancel={event => { event.preventDefault(); leave(); }}>
     <div className="intro-shell">
       <header className="intro-header"><span className="intro-brand"><Mark/> AYNKO<span>26</span></span><span className="eyebrow intro-edition">INDEPENDENT MIND / CONNECTED WORLD</span><button onClick={leave} className="intro-skip" aria-label="Skip intro">Skip intro <span aria-hidden="true">↗</span></button></header>
       <div className="intro-layout">
-        <div className="intro-copy"><p className="eyebrow"><span className="status-dot"/> A SMALL INTRODUCTION TO WHAT’S POSSIBLE</p><h2 id="intro-title">Good things<br/>begin with<br/><em>curiosity.</em></h2><p id="intro-description">Welcome to our corner of the internet.<br/>A place for thoughtful software and ambitious ideas.</p><button ref={enter} className="action action-lime intro-enter" onClick={leave}>Enter portfolio <Arrow/></button><p className="intro-stay">Take your time. Enter whenever you’re ready.</p></div>
+        <div className="intro-copy"><p className="eyebrow"><span className="status-dot"/> A SMALL INTRODUCTION TO WHAT’S POSSIBLE</p><h2 id="intro-title">Good things<br/>begin with<br/><em>curiosity.</em></h2><p id="intro-description">Welcome to our corner of the internet.<br/>A place for thoughtful software and ambitious ideas.</p><button ref={enter} className="action action-lime intro-enter" onClick={enterPortfolio}>Enter portfolio <Arrow/></button><p className="intro-stay">Take your time. Enter whenever you’re ready.</p></div>
         <div className="intro-robot"><Hologram onSettled={() => setSceneReady(true)}/></div>
-      </div>
-      <footer className="intro-footer"><div className="intro-loading"><div><span className="eyebrow" role="status">{progress === 100 ? 'YOUR EXPERIENCE IS READY' : 'PREPARING THE EXPERIENCE'}</span><span className="eyebrow">{String(progress).padStart(3, '0')} / 100</span></div><div className="intro-progress" role="progressbar" aria-label="Experience preparation" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><span style={{ width: `${progress}%` }}/></div></div><span className="eyebrow intro-credit">AYMANE CHELLAK & ZAKARIA BAK<br/><span>ENGINEERS. THINKERS. MAKERS.</span></span></footer>
     </div>
+    <footer className="intro-footer"><div className="intro-loading"><div><span className="eyebrow" role="status">{progress === 100 ? 'YOUR EXPERIENCE IS READY' : 'PREPARING THE EXPERIENCE'}</span><span className="eyebrow">{String(progress).padStart(3, '0')} / 100</span></div><div className="intro-progress" role="progressbar" aria-label="Experience preparation" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><span style={{ width: `${progress}%` }}/></div></div><span className="eyebrow intro-credit">AYMANE CHELLAK & ZAKARIA BAK<br/><span>ENGINEERS. THINKERS. MAKERS.</span></span></footer>
+    </div>
+    <div className="intro-boot-overlay" aria-hidden="true"><div className="intro-boot-universe"><span/><span/><span/></div><div className="intro-terminal"><div className="intro-terminal-bar"><span>AYNKO SYSTEM</span><span>PORTFOLIO.RUNTIME</span></div><p><b>&gt;</b> establishing connection <strong>done</strong></p><p><b>&gt;</b> loading visual system <strong>done</strong></p><p><b>&gt;</b> mounting selected work <strong>done</strong></p><p><b>&gt;</b> portfolio.status = ready <strong className="intro-terminal-cursor">_</strong></p></div></div>
   </dialog>;
 }

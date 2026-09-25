@@ -6,6 +6,11 @@ import ProjectAtmosphere from './ProjectAtmosphere.jsx';
 function ProjectVisual({ project, onOpen }) {
   return <button className={`project-media showcase-media tone-${project.tone}`} data-cursor="VIEW PROJECT" data-project-art={project.id} data-explore-case={project.id} onClick={e => onOpen(project, e.currentTarget)} aria-label={`Preview ${project.title}`}>
     <span className="showcase-media-grid" aria-hidden="true"/>
+    <span className="mac-window-bar" aria-hidden="true">
+      <span className="mac-window-controls"><i/><i/><i/></span>
+      <span className="mac-window-title">{project.title} / project view</span>
+      <span className="mac-window-spacer"/>
+    </span>
     <ProjectAtmosphere id={project.id}/>
     <span className="showcase-media-label eyebrow">{project.label}<span aria-hidden="true">↗</span></span>
     <div className="project-depth">

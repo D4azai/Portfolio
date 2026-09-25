@@ -123,7 +123,7 @@ export function createHologram(host, onReady, onLost) {
     orbit.rotation.set(.3+i*.35,.55+i*.5,i*.28);orbitals.add(orbit);
   }
   const pedestal=mesh(new THREE.CylinderGeometry(1.35,1.48,.16,64),scene,[0,.39,0],graphite);
-  ring(scene,[0,.48,0],1.25,.016,neon).rotation.x=Math.PI/2;
+  const pedestalLight = ring(scene,[0,.48,0],1.25,.016,neon); pedestalLight.rotation.x=Math.PI/2;
   ring(scene,[0,.5,0],.94,.01,silver).rotation.x=Math.PI/2;
   const scan = ring(scene, [0, 1.6, 0], 1.6, .009, neon); scan.rotation.x = Math.PI / 2; scan.visible = false;
   const sparks = new THREE.Group(); scene.add(sparks);
@@ -178,16 +178,20 @@ export function createHologram(host, onReady, onLost) {
     smooth(elbows[0].rotation, 'x', Math.sin(time * 1.1) * .025 + (action === 'ai' ? gesture * -.24 : 0));
     smooth(elbows[1].rotation, 'z', action === 'wave' ? gesture * (.45 + Math.sin(elapsed * 11) * .32) : action === 'flow' ? gesture * .35 : 0);
     smooth(elbows[1].rotation, 'x', talking ? -.18 + Math.sin(time * 2.3) * .1 : action === 'data' ? gesture * -.25 : 0);
-    coreSpeed += ((thinking ? 1.2 : .4) - coreSpeed) * blend; coreSpin += coreSpeed * dt;
-    sparkSpeed += ((layer === 'flow' ? .65 : .25) - sparkSpeed) * blend; sparkSpin += sparkSpeed * dt;
+    coreSpeed += ((thinking ? 1.2 : layer === 'ai' ? .85 : .4) - coreSpeed) * blend; coreSpin += coreSpeed * dt;
+    sparkSpeed += ((layer === 'flow' ? .95 : layer === 'edge' ? .5 : .25) - sparkSpeed) * blend; sparkSpin += sparkSpeed * dt;
     core.rotation.set(time*.24,coreSpin,.15);
     smooth(core.position, 'y', 2.5+Math.sin(time*1.2)*.06 + (action === 'ai' ? gesture * .3 : 0));
     smooth(core.scale, 'x', 1 + (action === 'ai' ? gesture * .45 : 0)); core.scale.y = core.scale.z = core.scale.x;
+    const launch = action === 'edge' ? gesture : 0;
+    smooth(pedestalLight.scale, 'x', 1 + launch * .28); pedestalLight.scale.y = pedestalLight.scale.z = pedestalLight.scale.x;
     voiceBars.forEach((bar, i) => smooth(bar.scale, 'y', talking ? 1 + Math.abs(Math.sin(time * 8 + i * 1.7)) * 3 : thinking ? 1 + Math.sin(time * 4 + i) * .4 : 1));
     scan.visible = action === 'data' && progress < 1 && !motion.matches;
     scan.position.y = .7 + progress * 3.2;
     sparks.children.forEach((spark, i) => { const angle = sparkSpin + i * Math.PI / 12; const r = 1.75 + Math.sin(i * 2.3) * .25; spark.position.set(Math.cos(angle) * r, 2.1 + Math.sin(angle * 2 + i) * 1.2, Math.sin(angle) * .7 - .5); });
-    gem.rotation.y=-time*.7;orbitals.rotation.z=Math.sin(time*.12)*.1;
+    gem.rotation.y=-time * (layer === 'flow' ? 1.4 : .7);
+    orbitals.rotation.z=Math.sin(time*.12)*.1;
+    orbitals.rotation.y += (layer === 'flow' ? 1.5 : .15) * dt;
     neon.color.lerp(colors[layer],responsive ? blend : 1);neon.emissive.copy(neon.color);
     neon.emissiveIntensity = .9 + (talking ? Math.sin(time * 10) * .18 : thinking ? Math.sin(time * 3) * .2 : gesture * .4);
     renderer.render(scene,camera);
