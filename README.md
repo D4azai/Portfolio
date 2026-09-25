@@ -17,9 +17,10 @@ Open http://127.0.0.1:4173. On Windows with PowerShell script restrictions, use 
 
 - **Six focused pages.** Home, Work, Expertise, Process, About, and Contact each have pre-rendered content, page metadata, and direct navigation. The home page gives a short introduction and selected project previews.
 - **Interactive system map.** On Expertise, switch between product and operations journeys, inspect nodes with a pointer or keyboard, and animate signal flow. The map illustrates workflows rather than claiming measured business results.
-- **Articulated robot.** Shoulder and elbow gestures, subtle idle movement, pointer tracking, and a “Say hello” wave bring the character to life. Each scene has a pause control and honors reduced motion.
-- **Ambient background.** A lightweight constellation responds gently to the pointer. Its pause preference persists between pages; animation stops in hidden tabs and follows reduced-motion settings.
-- **Four animated process scenes on About.** Understand, Architect, Build, and Evolve each have an independent eight-second 3D loop. Buttons switch directly to the selected scene, which plays silently while visible. There is no native player bar or timeline inside the animation. A small motion toggle, reduced-motion posters, and readable descriptions keep the section accessible.
+- **Articulated robot.** Shoulder and elbow gestures, subtle breathing and weight shifts, visor blinks, idle glances, pointer tracking, and a “Say hello” wave bring the character to life. Each scene has a pause control and honors reduced motion.
+- **Ambient background.** Broad drifting light and suspended grains respond gently to the pointer. Its pause preference persists between pages; animation stops in hidden tabs and follows reduced-motion settings. Buttons share tactile press feedback and highlighted hover states.
+- **Interactive studio desk on About.** Founder tabs reveal profile cards with shared studio skills and direct contact. Challenge cards connect a brief to an approach and related work. Layered papers float while visible, tilt with the pointer, and settle on hover or keyboard focus. Background pause also stops their idle motion.
+- **Live cinematic sculpture on Home.** An original Three.js installation uses reflective beveled rings, studio lighting, shadows, a luminous core, and restrained bloom. Expand its layers, drag or use arrow keys to rotate, reset the camera, or pause. It loads near the viewport, stops offscreen, respects reduced motion, and has a still rendered from the same scene as its fallback. Mobile devices use smaller rendering and shadow budgets.
 - **A practical feedback walkthrough.** The Process page’s Evolve stage follows an illustrative approval workflow from release to feedback to a clearer handoff. Select each stage or run the sequence; the animation respects pause and reduced-motion preferences.
 
 - **Visitor-controlled introduction.** The fullscreen loading intro appears on the first home visit in a session and stays open after preparation completes. Enter portfolio, Skip intro, or Escape dismisses it. Direct links skip the intro, and a footer action replays it.
@@ -28,7 +29,7 @@ Open http://127.0.0.1:4173. On Windows with PowerShell script restrictions, use 
 - **Considered motion.** Typography enters after dismissal. Sections reveal on scroll, and project changes animate with a short stagger. Reduced motion disables continuous motion and transitions. The renderer stops while offscreen, while the document is hidden, or while the hero is behind the intro.
 - **Contextual cursor.** A precise dot and softly following ring respond to links, with a “View project” label over previews. Main actions gently follow the pointer. Keyboard input, touch, text fields, dialogs, and reduced motion use native controls. The cursor loop stops when it settles.
 - **Project-specific visual effects.** Each preview combines pointer-driven perspective, a moving light, a glass reflection, and an original decorative motif: delivery routes, financial curves, construction plans, relationship diagrams, or celestial orbits. Directional transitions reveal the next project and stagger its copy. Fast selection changes cancel unfinished transitions.
-- **Effects shaped around each section.** Headings reveal through a mask; expertise rows have local lighting and responsive icons; process connections draw in sequence; the About monogram has depth; and the contact section uses soft lighting and concentric rings. A slim reading-progress line follows native scrolling. Decorative motifs are hidden from assistive technology and do not represent product data.
+- **Effects shaped around each section.** Headings reveal through a mask; expertise rows have local lighting and responsive icons; process connections draw in sequence; the About papers have depth; and the contact section uses soft lighting and concentric rings. A slim reading-progress line follows native scrolling. Decorative motifs are hidden from assistive technology and do not represent product data.
 - **Five project stories.** The showcase is visible immediately. Each project has an original editorial cover photograph and matching thumbnail, with real interface screenshots preserved inside the case study. Previous/next, project tabs, and Arrow/Home/End keyboard navigation work across desktop and touch layouts.
 - **Accessible fallbacks.** Native modal focus containment, Escape dismissal, restored focus, touch layouts, and a robot illustration when WebGL is unavailable. Without JavaScript, the intro stays closed and all five project summaries remain available.
 
@@ -70,7 +71,8 @@ Open http://127.0.0.1:4173. On Windows with PowerShell script restrictions, use 
 npm run build
 npm test
 npm run test:enhancements
-npm run test:process-film
+node tools/verify-about-studio.mjs
+node tools/verify-premium-motion.mjs
 ```
 
 The build compiles the public UI, validates the existing server modules, and stages production files in `dist/`. Tests use installed Microsoft Edge through Playwright against an isolated production preview. Screenshots, accessibility reports, and the test summary are saved under ignored `artifacts/`.

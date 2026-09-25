@@ -1,0 +1,106 @@
+/* Shared tactile controls and quiet depth, without changing native navigation. */
+:root{--surface-ease:cubic-bezier(.22,1,.36,1)}
+.site-header{box-shadow:0 8px 35px #00000012;border-bottom-color:#d2f78a18}
+.header-cta{background:linear-gradient(135deg,#d2f78a0c,#ffffff02);box-shadow:inset 0 1px #ffffff09}
+.action{box-shadow:inset 0 1px #ffffff35,0 4px 10px #00000012;transition:translate .3s var(--surface-ease),transform .3s var(--surface-ease),box-shadow .3s,background .3s,color .3s,scale .18s}
+.action-lime{background:linear-gradient(135deg,#e0fba9,#c6ec82)}
+.action-lime:hover{box-shadow:inset 0 1px #ffffff55,0 8px 28px #b5db7225}
+:is(.action,.header-cta,.contact-arrow,.showcase-controls button,.people-tabs button,.challenge-picker>button,.cinematic-controls button,.layer-button,.robot-greet,.hologram-pause,.system-lab-toolbar button,.filter-button,.process-tabs button){transition-timing-function:var(--surface-ease);-webkit-tap-highlight-color:#d2f78a20;touch-action:manipulation}
+:is(.action,.header-cta,.showcase-controls button,.people-tabs button,.challenge-picker>button,.cinematic-controls button,.layer-button,.robot-greet,.hologram-pause,.process-tabs button):active{scale:.975;filter:brightness(1.09)}
+:is(.people-tabs button,.challenge-picker>button,.cinematic-controls button,.layer-button,.robot-greet,.hologram-pause,.process-tabs button){transition:background .3s,color .3s,border-color .3s,box-shadow .3s,scale .18s,filter .18s}
+:is(.action,.profile-contact,.solution-project,.cinematic-controls button) svg{transition:transform .4s var(--surface-ease)}
+:is(.action,.profile-contact,.solution-project):hover svg{transform:translate(3px,-3px)}
+:is(.people-tabs button,.challenge-picker>button)[aria-selected=true],.challenge-picker>button[aria-pressed=true]{background:linear-gradient(100deg,#d2f78a12,#d2f78a03)}
+.people-tabs button[aria-selected=true] .person-tab-initials{background:#d2f78a13;border-color:#d2f78a65;box-shadow:0 0 20px #d2f78a08}
+.home-directory>div>a:hover{background:linear-gradient(90deg,#d2f78a09,transparent)}
+.page-next{position:relative;background:radial-gradient(ellipse at 85% 100%,#b4d8890b,transparent 60%)}
+/* The paper has mass: a slow float, a pointer tilt, then a soft settling motion. */
+.profile-desk,.challenge-result{perspective:1200px}
+.studio-profile{transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));transition:transform 1s var(--surface-ease),box-shadow 1s;transform-origin:50% 65%;animation:profile-float 9s ease-in-out infinite;animation-play-state:paused}
+.profile-desk[data-pointer-active] .studio-profile{transition-duration:.28s;box-shadow:12px 32px 65px #0004}
+.profile-underlay{transition:transform 1s var(--surface-ease);animation:underlay-float 11s ease-in-out infinite;animation-play-state:paused}
+.profile-desk[data-pointer-active] .profile-underlay{transform:rotate(-8deg) translate(-8px,7px)}
+.studio-profile::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 20%,#ffffff35 48%,transparent 72%);opacity:0;pointer-events:none;transition:opacity .6s;mix-blend-mode:soft-light}
+.profile-desk[data-pointer-active] .studio-profile::after{opacity:.75}
+.challenge-result-content{transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));transition:transform 1s var(--surface-ease);transform-style:preserve-3d}
+.challenge-result[data-pointer-active] .challenge-result-content{transition-duration:.4s}
+.brief-note{animation:studio-note-in .7s var(--surface-ease) both,note-float 8s 1s ease-in-out infinite;animation-play-state:running,paused;box-shadow:0 12px 22px #0002}
+.solution-sheet{animation:studio-card-in .8s var(--surface-ease) both,sheet-float 10s 1s ease-in-out infinite;animation-play-state:running,paused;box-shadow:0 22px 45px #0003,inset 0 1px #fff}
+.profile-desk.effect-visible :is(.studio-profile,.profile-underlay){animation-play-state:running}
+.challenge-result.effect-visible :is(.brief-note,.solution-sheet){animation-play-state:running,running}
+.profile-desk:focus-within .studio-profile,.challenge-result:focus-within :is(.brief-note,.solution-sheet){animation-play-state:paused}
+html[data-ambient-paused=true] .studio-about :is(.studio-profile,.profile-underlay),html[data-page-hidden=true] .studio-about :is(.studio-profile,.profile-underlay){animation-play-state:paused}
+html[data-ambient-paused=true] .studio-about :is(.brief-note,.solution-sheet),html[data-page-hidden=true] .studio-about :is(.brief-note,.solution-sheet){animation-play-state:running,paused}
+@keyframes profile-float{0%,100%{translate:0 0;rotate:-.6deg}50%{translate:0 -9px;rotate:.5deg}}
+@keyframes underlay-float{0%,100%{translate:0 0}50%{translate:-3px 5px}}
+@keyframes note-float{0%,100%{translate:0 0;rotate:0deg}50%{translate:-3px -6px;rotate:-1deg}}
+@keyframes sheet-float{0%,100%{translate:0 0;rotate:0deg}50%{translate:2px -4px;rotate:.5deg}}
+/* The homepage installation has a wide, cinematic frame and its own controls. */
+.cinematic-section{padding-top:95px;padding-bottom:20px}
+.cinematic-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:32px}
+.cinematic-heading h2{font-size:clamp(34px,4.1vw,59px);font-weight:500;line-height:1.1;letter-spacing:-.055em;margin-top:20px}
+.cinematic-heading h2 em{font:italic 1em var(--serif);color:var(--lime)}
+.cinematic-heading>p{font-size:12px;line-height:1.9;color:var(--muted);padding-bottom:4px}
+.cinematic-frame{position:relative;overflow:hidden;border:1px solid #d2f78a25;border-radius:16px;background:#101813;box-shadow:0 30px 70px #0002,inset 0 1px #ffffff0c;isolation:isolate}
+.cinematic-topline{display:flex;justify-content:space-between;position:absolute;top:26px;left:30px;right:30px;z-index:2;pointer-events:none;color:#c0cbb7}
+.cinematic-topline .eyebrow{font-size:9px}
+.cinematic-viewport{position:relative;width:100%;height:clamp(440px,43vw,600px);touch-action:pan-y;cursor:grab}
+.cinematic-viewport[data-dragging]{cursor:grabbing}
+.cinematic-viewport canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.2s}
+.cinematic-ready canvas{opacity:1}
+.cinematic-caption{position:absolute;bottom:94px;left:30px;right:30px;display:flex;justify-content:space-between;align-items:end;gap:24px;pointer-events:none;z-index:2}
+.cinematic-caption .eyebrow{font-size:9px;color:var(--lime)}
+.cinematic-caption p{font-size:20px;font-weight:500;letter-spacing:-.035em;margin-top:8px}
+.cinematic-drag-hint{font:9px var(--mono);color:#c0cbb7}
+.cinematic-controls{display:flex;gap:8px;align-items:center;position:relative;z-index:2;padding:15px 24px;background:#111b15;border-top:1px solid #d2f78a20;min-height:76px}
+.cinematic-controls button{min-height:43px;padding:10px 17px;display:flex;align-items:center;justify-content:center;gap:16px;border:1px solid #d2f78a30;border-radius:6px;font-size:11px;color:#d9e2d1;background:#ffffff03}
+.cinematic-controls button:first-child{background:var(--lime);color:#182113;border-color:var(--lime)}
+.cinematic-controls button:last-child{margin-left:auto}
+.cinematic-controls button:hover{background:#d2f78a15;border-color:#d2f78a65}
+.cinematic-controls button:first-child:hover{background:#e2ffb0}
+.cinematic-controls button>span{font-size:17px;line-height:1}
+.cinematic-afterword{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:18px}
+.cinematic-afterword>p{color:var(--muted);font-size:11px;line-height:1.8}
+.cinematic-afterword .link-action{font-size:11px}
+.cinematic-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,#41533980,transparent 65%);transition:opacity 1s}
+.cinematic-ready .cinematic-poster{opacity:0;pointer-events:none}
+@media(prefers-reduced-motion:no-preference){
+ .effects-ready :is(.home-section-heading,.home-directory,.page-next,.cinematic-section).effect-entered h2{animation:effect-rise .85s var(--surface-ease) both}
+}
+@media(max-width:760px){
+ .cinematic-section{padding-top:60px}.cinematic-heading{display:block;margin-bottom:24px}.cinematic-heading>p{margin-top:20px}.cinematic-viewport{height:460px}.cinematic-topline{top:20px;left:20px;right:20px}.cinematic-topline .eyebrow{font-size:8px}.cinematic-caption{left:20px;right:20px;bottom:142px}.cinematic-caption p{font-size:18px}.cinematic-drag-hint{display:none}.cinematic-controls{padding:14px;flex-wrap:wrap;gap:8px;min-height:122px}.cinematic-controls button{padding:10px 12px;gap:10px;font-size:10px}.cinematic-controls button:first-child{flex:1 1 100%}.cinematic-controls button:nth-child(n+2){flex:1}.cinematic-controls button:last-child{margin-left:0}.cinematic-afterword{display:block}.cinematic-afterword .link-action{margin-top:8px}.cinematic-frame{border-radius:12px}
+}
+@media(hover:none),(pointer:coarse){.studio-profile,.challenge-result-content{transform:none!important}}
+@media(prefers-reduced-motion:reduce){
+ .studio-about :is(.studio-profile,.profile-underlay,.brief-note,.solution-sheet){animation:none!important;translate:none;rotate:none}.studio-profile,.challenge-result-content{transform:none!important}.cinematic-viewport canvas,.cinematic-poster{transition:none}button:active,a:active{scale:1!important}.cinematic-drag-hint{display:none}
+}
+@media(forced-colors:active){.studio-profile::after{display:none}.cinematic-controls button{border:1px solid ButtonText}.cinematic-controls button[aria-pressed=true]{outline:2px solid Highlight}.cinematic-viewport{forced-color-adjust:none}}
+.profile-desk:hover :is(.studio-profile,.profile-underlay){animation-play-state:paused}
+.challenge-result:hover :is(.brief-note,.solution-sheet),.challenge-result:focus-within :is(.brief-note,.solution-sheet){animation-play-state:running,paused}
+.cinematic-viewport:focus-visible{outline-offset:-5px}
+/* Hero light responds to the selected discipline, while the typography stays still. */
+.hero-section{--hero-light:#b5d98a;isolation:isolate;background:radial-gradient(ellipse at 78% 40%,#41523235,transparent 62%)}
+.hero-section[data-hero-layer=flow]{--hero-light:#81e1d4}.hero-section[data-hero-layer=ai]{--hero-light:#c1acff}.hero-section[data-hero-layer=edge]{--hero-light:#88caff}
+.hero-atmosphere{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:-1;mask-image:linear-gradient(transparent,#000 15%,#000 80%,transparent)}
+.hero-atmosphere i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.13;background:var(--hero-light);transition:background 1.8s;animation:hero-light-drift 18s ease-in-out infinite alternate;animation-play-state:paused;will-change:transform}
+.hero-atmosphere i:first-child{width:45%;height:55%;right:0;top:8%}
+.hero-atmosphere i:nth-child(2){width:35%;height:35%;left:10%;top:35%;opacity:.06;animation-delay:-8s;animation-direction:alternate-reverse}
+.hero-atmosphere i:last-child{width:3%;height:85%;right:33%;top:-15%;filter:blur(30px);opacity:.18;transform:rotate(25deg);animation-name:hero-light-column;animation-duration:22s}
+.hero-grid{opacity:.3;mask-image:linear-gradient(90deg,transparent 40%,#000)}
+.hero-section:has(.hologram-viewport[data-motion=running]) .hero-atmosphere i{animation-play-state:running}
+.hero-section .hologram-ambient{inset:15% 2% 8%;background:radial-gradient(ellipse,var(--hero-light),transparent 68%);opacity:.1;transition:background 1.5s}
+.hero-art .hologram-stage{border:1px solid #d2f78a16;border-radius:120px 120px 18px 18px;background:radial-gradient(ellipse at 50% 25%,#e6f8ce09,transparent 65%);box-shadow:inset 0 1px #eefad810}
+.hero-art .hologram-stage-top{padding-top:22px;justify-content:space-between;margin-inline:24px}
+.hero-art .hologram-viewport{height:510px}
+.hero-art .hologram-stage-bottom{padding:8px 0;margin-inline:24px}
+.hero-art .robot-annotation{opacity:.65;font-size:8px}
+.hero-art .robot-greet{background:#1c281ccc;backdrop-filter:blur(12px);border-color:#d2f78a45;box-shadow:inset 0 1px #ffffff10}
+.hero-section .system-selector{margin-top:14px;background:linear-gradient(135deg,#1d291ccc,#111a14);border-color:#d2f78a22}
+.hero-explore{display:flex;align-items:center;gap:22px}.hero-explore>span{display:grid;place-items:center;width:30px;height:30px;border:1px solid #d2f78a40;border-radius:50%;color:var(--lime);transition:transform .3s}.hero-explore:hover>span{transform:translateY(4px)}
+@keyframes hero-light-drift{0%{transform:translate3d(-25px,-20px,0) scale(.9)}100%{transform:translate3d(35px,35px,0) scale(1.18)}}
+@keyframes hero-light-column{0%{transform:translateX(-40px) rotate(18deg)}100%{transform:translateX(65px) rotate(33deg)}}
+html[data-ambient-paused=true] .hero-atmosphere i,html[data-page-hidden=true] .hero-atmosphere i{animation-play-state:paused!important}
+@media(max-width:1023px){.hero-art .hologram-viewport{height:440px}.hero-art .hologram-stage{border-radius:70px 70px 16px 16px}.hero-art .hologram-stage-top{margin-inline:16px}.hero-art .hologram-stage-top .eyebrow{font-size:8px}}
+@media(max-width:760px){.hero-art .hologram-viewport{height:410px}.hero-atmosphere i:first-child{width:95%;height:40%;top:40%}.hero-atmosphere i:last-child{display:none}.hero-art .hologram-stage-bottom{margin-inline:15px}.hero-art .hologram-stage-bottom .eyebrow{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.hero-atmosphere i{animation:none!important;will-change:auto}.hero-atmosphere i,.hero-section .hologram-ambient{transition:none}}
+@media(forced-colors:active){.hero-atmosphere{display:none}}

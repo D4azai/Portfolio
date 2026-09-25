@@ -97,3 +97,7 @@ main:focus{outline:none}
 @import "./pages.css";
 @import "./refinements.css";
 @import "./process-film.css";
+
+@import './about-studio.css';
+
+@import './premium-motion.css';

@@ -7,7 +7,7 @@ export function createExperienceEffects(cursor, progress) {
   const label = cursor.querySelector('.cursor-label');
   const ring = cursor.querySelector('.cursor-ring');
   const dot = cursor.querySelector('.cursor-dot');
-  const observed = [...document.querySelectorAll('.section-heading,.service-row,.project-showcase,.process-panel,.about-panel,.faq-item,.contact-section')];
+  const observed = [...document.querySelectorAll('.section-heading,.service-row,.project-showcase,.process-panel,.about-panel,.faq-item,.contact-section,.profile-desk,.challenge-result,.cinematic-section,.home-section-heading,.home-directory,.page-next')];
   let raf = 0, scrollFrame = 0, shown = false, x = 0, y = 0, targetX = 0, targetY = 0;
   let field = null, fieldRect = null, magnetic = null, magneticRect = null;
   let mode = '', enabled = false, modal = false;
@@ -46,8 +46,8 @@ export function createExperienceEffects(cursor, progress) {
     if (mode !== nextMode || label.textContent !== nextLabel) {
       mode = nextMode; cursor.dataset.mode = mode; label.textContent = nextLabel;
     }
-    cursor.dataset.theme = target.closest('.light-section,.contact-section') ? 'dark' : 'light';
-    const nextField = target.closest('.showcase-media,.service-row,.about-art,.contact-section');
+    cursor.dataset.theme = target.closest('.light-section,.contact-section,.studio-profile,.solution-sheet,.brief-note') ? 'dark' : 'light';
+    const nextField = target.closest('.showcase-media,.service-row,.about-art,.contact-section,.profile-desk,.challenge-result');
     if (nextField !== field) {
       cleanField(); field = nextField; fieldRect = field?.getBoundingClientRect();
     }
@@ -103,7 +103,7 @@ export function createExperienceEffects(cursor, progress) {
     }
     updateScroll();
   }
-  function visibility() { if (document.hidden) hide(); else updateScroll(); }
+  function visibility() { root.dataset.pageHidden = String(document.hidden); if (document.hidden) hide(); else updateScroll(); }
   function keydown(event) { if (['Tab','Escape'].includes(event.key)) hide(); }
   function pressed() { cursor.classList.add('is-pressed'); }
   function released() { cursor.classList.remove('is-pressed'); }
@@ -118,7 +118,7 @@ export function createExperienceEffects(cursor, progress) {
   });
   const dialogs = new MutationObserver(syncModal);
   dialogs.observe(document.body, {subtree:true, attributes:true, attributeFilter:['open'], childList:true});
-  root.classList.add('effects-ready'); configure(); syncModal();
+  root.classList.add('effects-ready'); configure(); syncModal(); visibility();
   document.addEventListener('pointermove', move, {passive:true});
   document.addEventListener('pointerdown', pressed, {passive:true});
   document.addEventListener('pointerup', released, {passive:true});
@@ -132,7 +132,7 @@ export function createExperienceEffects(cursor, progress) {
   motion.addEventListener('change', configure); fine.addEventListener('change', configure); contrast.addEventListener('change', configure);
   return () => {
     hide(); cancelAnimationFrame(scrollFrame); observer.disconnect(); dialogs.disconnect();
-    root.classList.remove('effects-ready'); delete root.dataset.effects;
+    root.classList.remove('effects-ready'); delete root.dataset.effects; delete root.dataset.pageHidden;
     observed.forEach(element => { element.classList.remove('effect-entered','effect-visible'); element.style.removeProperty('--entry-delay'); });
     document.removeEventListener('pointermove', move); document.removeEventListener('pointerdown', pressed);
     document.removeEventListener('pointerup', released); document.removeEventListener('pointercancel', hide);

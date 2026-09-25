@@ -4,6 +4,10 @@ import React, { useEffect, useRef, useState } from 'react';
 export default function AmbientField() {
   const canvas = useRef(null), [paused, setPaused] = useState(false);
   useEffect(() => {
+    document.documentElement.dataset.ambientPaused = String(paused);
+    return () => { delete document.documentElement.dataset.ambientPaused; };
+  }, [paused]);
+  useEffect(() => {
     try { setPaused(localStorage.getItem('aynko:ambient-paused') === '1'); } catch {}
   }, []);
   useEffect(() => {
@@ -16,18 +20,19 @@ export default function AmbientField() {
     const points = Array.from({ length: 36 }, (_, i) => ({ x: ((i * 37 + 13) % 101) / 101, y: ((i * 61 + 7) % 103) / 103 }));
     function paint() {
       context.clearRect(0, 0, width, height);
-      const glow = context.createRadialGradient(pointer.x * width, pointer.y * height, 0, pointer.x * width, pointer.y * height, width * .6);
-      glow.addColorStop(0, 'rgba(130,177,111,.07)'); glow.addColorStop(1, 'rgba(130,177,111,0)');
-      context.fillStyle = glow; context.fillRect(0, 0, width, height);
-      const positions = points.slice(0, width < 600 ? 18 : 36).map((point, i) => ({ x: point.x * width + Math.sin(time * .12 + i) * 20, y: point.y * height + Math.cos(time * .1 + i) * 18 }));
+      // Broad moving light, with a few suspended grains, leaves the typography clear.
+      for (let i = 0; i < 3; i++) {
+        const x = (i === 0 ? pointer.x : .2 + i * .25 + Math.sin(time * .08 + i * 2) * .22) * width;
+        const y = (i === 0 ? pointer.y : .5 + Math.cos(time * .07 + i) * .4) * height;
+        const glow = context.createRadialGradient(x, y, 0, x, y, width * (i === 0 ? .55 : .48));
+        glow.addColorStop(0, i === 1 ? 'rgba(109,148,164,.055)' : 'rgba(146,183,106,.085)');
+        glow.addColorStop(1, 'rgba(130,177,111,0)');
+        context.fillStyle = glow; context.fillRect(0, 0, width, height);
+      }
+      const positions = points.slice(0, width < 600 ? 12 : 26).map((point, i) => ({ x: point.x * width + Math.sin(time * .12 + i) * 28, y: point.y * height + Math.cos(time * .1 + i) * 24 }));
       positions.forEach((point, i) => {
-        context.fillStyle = 'rgba(199,231,175,.3)'; context.beginPath(); context.arc(point.x, point.y, 1.2, 0, Math.PI * 2); context.fill();
-        positions.slice(i + 1).forEach(other => {
-          const distance = Math.hypot(point.x - other.x, point.y - other.y);
-          if (distance > 155) return;
-          context.strokeStyle = `rgba(177,211,158,${(1 - distance / 155) * .12})`;
-          context.beginPath(); context.moveTo(point.x, point.y); context.lineTo(other.x, other.y); context.stroke();
-        });
+        context.fillStyle = `rgba(199,231,175,${.12 + (Math.sin(time * .45 + i) + 1) * .065})`;
+        context.beginPath(); context.arc(point.x, point.y, i % 4 === 0 ? 1.3 : .7, 0, Math.PI * 2); context.fill();
       });
       element.dataset.frame = String(Math.round(time * 1000));
     }

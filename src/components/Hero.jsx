@@ -9,7 +9,8 @@ const actions = { data: 'Scan the data', flow: 'Conduct the flow', ai: 'Spark an
 export default function Hero({ onPillar, suspended }) {
   const [active, setActive] = useState('data');
   const [action, setAction] = useState(0), [phase, setPhase] = useState('idle');
-  return <section id="home" className="hero-section relative overflow-hidden">
+  return <section id="home" className="hero-section relative overflow-hidden" data-hero-layer={active}>
+    <div className="hero-atmosphere" aria-hidden="true"><i/><i/><i/></div>
     <div className="hero-grid" aria-hidden="true"/>
     <div className="page-wrap relative">
       <div className="hero-topline"><span className="eyebrow">AYNKO / AYMANE CHELLAK & ZAKARIA BAK</span><span className="eyebrow"><span className="status-dot"/> BASED IN MOROCCO. BUILDING EVERYWHERE.</span></div>
@@ -27,7 +28,7 @@ export default function Hero({ onPillar, suspended }) {
           <RobotChat onPhase={setPhase} suspended={suspended}/>
         </div>
       </div>
-      <div className="hero-bottom"><span className="eyebrow">DESIGNED WITH CARE. BUILT TO MATTER.</span><a href="/work" className="eyebrow">EXPLORE SELECTED WORK <span aria-hidden="true">↗</span></a></div>
+      <div className="hero-bottom"><span className="eyebrow">DESIGNED WITH CARE. BUILT TO MATTER.</span><a href="#cinematic-title" className="eyebrow hero-explore">STEP INSIDE OUR WORLD <span aria-hidden="true">↓</span></a></div>
     </div>
   </section>;
 }
