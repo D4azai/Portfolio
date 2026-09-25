@@ -18,6 +18,10 @@ function ProjectVisual({ project, onOpen }) {
 export default function Projects({ onOpen }) {
   const [active, setActive] = useState(0), [direction, setDirection] = useState(1);
   const stage = useRef(null), initialized = useRef(false), tabs = useRef([]);
+  useEffect(() => {
+    const index = projects.findIndex(project => project.id === location.hash.slice(1));
+    if (index >= 0) setActive(index);
+  }, []);
   function select(next, focus = false) {
     const index = (next + projects.length) % projects.length;
     if (index === active) return;
@@ -55,12 +59,12 @@ export default function Projects({ onOpen }) {
     const animations = [...elements].map((el, index) => {
       const isImage = el.dataset.showcaseReveal === 'image';
       return el.animate(isImage ? [
-        { opacity: .15, translate: `${direction * 65}px 22px`, scale: '.92', filter: 'blur(5px)' },
-        { opacity: 1, translate: '0 0', scale: '1', filter: 'blur(0)' },
+        { opacity: .15, translate: `${direction * 28}px 0`, scale: '.985' },
+        { opacity: 1, translate: '0 0', scale: '1' },
       ] : [
-        { opacity: 0, transform: 'translateY(26px)', clipPath: 'inset(0 0 100% 0)' },
-        { opacity: 1, transform: 'translateY(0)', clipPath: 'inset(0 0 0 0)' },
-      ], { duration: isImage ? 950 : 650, delay: isImage ? 90 : Math.min(index * 65, 300), easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
+        { opacity: 0, transform: 'translateY(14px)' },
+        { opacity: 1, transform: 'translateY(0)' },
+      ], { duration: isImage ? 600 : 450, delay: isImage ? 0 : Math.min(index * 40, 160), easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
     });
     const cancel = () => animations.forEach(animation => animation.cancel());
     const change = () => { if (preference.matches) cancel(); };
@@ -68,7 +72,7 @@ export default function Projects({ onOpen }) {
     return () => { cancel(); preference.removeEventListener('change', change); };
   }, [active]);
   return <section id="work" className="page-wrap section-space">
-    <SectionHeading number="01" label="Selected work" title={<>Different challenges.<br/><em>One thoughtful approach.</em></>}>Five projects. One belief: the best digital experiences make complex work feel simple. Take a closer look.</SectionHeading>
+    <SectionHeading heading="h1" number="01" label="Selected work" title={<>Different challenges.<br/><em>One thoughtful approach.</em></>}>Five projects. One belief: the best digital experiences make complex work feel simple. Take a closer look.</SectionHeading>
     <div className="project-showcase" data-reveal>
       <div className="showcase-toolbar"><span className="eyebrow flex items-center gap-3"><span className="status-dot"/>SELECTED COLLECTION / 2026</span><div className="showcase-controls"><span className="showcase-counter" aria-live="polite" aria-atomic="true"><strong>0{active + 1}</strong><span>/ 0{projects.length}</span></span><button className="showcase-prev" aria-label="Previous project" onClick={() => select(active - 1)}><Arrow diagonal={false}/></button><button aria-label="Next project" onClick={() => select(active + 1)}><Arrow diagonal={false}/></button></div></div>
       <div className="showcase-stage" data-direction={direction} ref={stage}><span key={active} className={`project-transition tone-${projects[active].tone}`} aria-hidden="true"/>{projects.map((project, i) => <article key={project.id} className="showcase-panel featured-project" id={`project-panel-${project.id}`} role="tabpanel" aria-labelledby={`project-tab-${project.id}`} hidden={active !== i} tabIndex={0}>

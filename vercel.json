@@ -1,17 +1,65 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "functions": { "api/control.js": { "maxDuration": 30 }, "api/chat.js": { "maxDuration": 30 } },
+  "functions": {
+    "api/control.js": {
+      "maxDuration": 30
+    },
+    "api/chat.js": {
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
-    { "source": "/admin", "destination": "/api/control?route=admin" },
-    { "source": "/admin/", "destination": "/api/control?route=admin" },
-    { "source": "/owner/login", "destination": "/api/control?route=login-page" }
+    {
+      "source": "/admin",
+      "destination": "/api/control?route=admin"
+    },
+    {
+      "source": "/admin/",
+      "destination": "/api/control?route=admin"
+    },
+    {
+      "source": "/owner/login",
+      "destination": "/api/control?route=login-page"
+    },
+    {
+      "source": "/work",
+      "destination": "/work/index.html"
+    },
+    {
+      "source": "/expertise",
+      "destination": "/expertise/index.html"
+    },
+    {
+      "source": "/process",
+      "destination": "/process/index.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact/index.html"
+    }
   ],
   "headers": [
-    { "source": "/(.*)", "headers": [
-      { "key": "X-Content-Type-Options", "value": "nosniff" },
-      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-      { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
-    ] }
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
   ]
 }

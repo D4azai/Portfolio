@@ -12,8 +12,8 @@ export function Icon({ type }) {
 export function Eyebrow({ children, light = false }) {
   return <p className={`eyebrow flex items-center gap-3 ${light ? 'text-ink/65' : 'text-muted'}`}><span className="h-1.5 w-1.5 rounded-full bg-current"/>{children}</p>;
 }
-export function SectionHeading({ number, label, title, children, light = false }) {
-  return <div className="section-heading mb-12 flex flex-col justify-between gap-8 md:mb-16 md:flex-row md:items-end" data-reveal><div><Eyebrow light={light}>{number} / {label}</Eyebrow><h2 className="section-title mt-5">{title}</h2></div>{children && <p className={`max-w-sm text-sm leading-7 ${light ? 'text-ink/65' : 'text-muted'}`}>{children}</p>}</div>;
+export function SectionHeading({ number, label, title, children, light = false, heading: Heading = 'h2' }) {
+  return <div className="section-heading mb-12 flex flex-col justify-between gap-8 md:mb-16 md:flex-row md:items-end" data-reveal><div><Eyebrow light={light}>{number} / {label}</Eyebrow><Heading className="section-title mt-5">{title}</Heading></div>{children && <p className={`max-w-sm text-sm leading-7 ${light ? 'text-ink/65' : 'text-muted'}`}>{children}</p>}</div>;
 }
 export function ProjectImage({ name, alt, className = '', eager = false }) {
   return <img src={`/assets/optimized/${name}-1280.webp`} srcSet={`/assets/optimized/${name}-640.webp 640w, /assets/optimized/${name}-1280.webp 1280w`} sizes="(max-width: 700px) 92vw, (max-width: 1100px) 80vw, 55vw" width="1280" height="900" alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" className={className} />;

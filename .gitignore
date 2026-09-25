@@ -8,3 +8,10 @@ dist/
 assets/app.js
 assets/app.css
 assets/react-*.js
+
+# Generated public pages
+/work/
+/expertise/
+/process/
+/about/
+/contact/

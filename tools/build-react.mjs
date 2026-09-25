@@ -3,6 +3,7 @@ import { readFile, writeFile, mkdir, readdir, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { pages } from '../src/data/pages.js';
 
 const root = resolve(import.meta.dirname, '..');
 export async function buildReact() {
@@ -16,7 +17,21 @@ export async function buildReact() {
   await build({ entryPoints: [resolve(root, 'src/render.jsx')], bundle: true, platform: 'node', format: 'esm', packages: 'external', outfile: serverEntry, jsx: 'automatic', logLevel: 'warning' });
   const { render } = await import(pathToFileURL(serverEntry).href + `?build=${Date.now()}`);
   const template = await readFile(resolve(root, 'src/document.html'), 'utf8');
-  await writeFile(resolve(root, 'index.html'), template.replace('<!--APP-->', render()));
+  for (const [key, page] of Object.entries(pages)) {
+    const directory = key === 'home' ? root : resolve(root, key);
+    await mkdir(directory, { recursive: true });
+    const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
+    const url = 'https://aynko.dev' + page.path;
+    const html = template.replace('<!--APP-->', render(key))
+      .replace(/<title>[^<]*<\/title>/, `<title>${escape(page.title)}</title>`)
+      .replace(/(<meta\s+name="description"\s+content=")[^"]*/, `$1${escape(page.description)}`)
+      .replace(/(<meta\s+property="og:title"\s+content=")[^"]*/, `$1${escape(page.title)}`)
+      .replace(/(<meta\s+property="og:description"\s+content=")[^"]*/, `$1${escape(page.description)}`)
+      .replace(/(<meta property="og:url" content=")[^"]*/, `$1${url}`)
+      .replace(/(<link rel="canonical" href=")[^"]*/, `$1${url}`);
+    await writeFile(resolve(directory, 'index.html'), html);
+  }
+  await writeFile(resolve(root, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...Object.values(pages).map(page => page.path), '/privacy.html'].map(path => `  <url><loc>https://aynko.dev${path}</loc></url>`).join('\n')}\n</urlset>\n`);
   console.log('React rendered to HTML; interactive components and Tailwind CSS compiled.');
 }
 if (process.argv[1] && resolve(process.argv[1]) === resolve(import.meta.filename)) await buildReact();

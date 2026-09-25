@@ -67,22 +67,6 @@
 .build-result{position:absolute;left:0;right:0;bottom:29px;display:flex;align-items:center;gap:9px;border:1px solid #c1acff24;background:#171c25;padding:11px;border-radius:5px;font-size:9px;line-height:1.5;color:#c5c1d4}
 .build-result>span:nth-child(2){flex:1}.build-result>strong{font:10px var(--mono);color:var(--scene-accent)}
 .build-result-dot{width:5px;height:5px;border-radius:50%;background:var(--scene-accent);flex-shrink:0}
-/* Evolve: a user-controlled orbital dial with three feedback stations. */
-.evolution-dial{position:absolute;width:232px;height:232px;max-width:80%;aspect-ratio:1;left:50%;top:50%;translate:-50% -53%;border-radius:50%;cursor:grab;touch-action:none;user-select:none;background:radial-gradient(circle,#88caff0a 0 38%,transparent 39%)}
-.evolution-dial:active{cursor:grabbing}
-.evolution-rings{position:absolute;inset:0;border:1px solid #88caff40;border-radius:50%;box-shadow:inset 0 0 30px #88caff06,0 0 0 17px #88caff04}
-.evolution-rings:before{content:'';position:absolute;inset:11px;border-radius:50%;border:1px dashed #88caff38;animation:evolution-rotate 45s linear infinite}
-.evolution-rings:after{content:'';position:absolute;inset:35px;border-radius:50%;border:1px solid #88caff22;transform:rotateX(35deg) rotateY(-15deg)}
-.evolution-hand{position:absolute;inset:0;border-radius:50%;transition:transform .3s ease;pointer-events:none}
-.evolution-field[data-dragging=true] .evolution-hand{transition:none}
-.evolution-hand:before{content:'';position:absolute;left:50%;top:0;width:1px;height:50%;background:linear-gradient(#88caffaa,transparent 75%)}
-.evolution-hand i{position:absolute;top:-6px;left:calc(50% - 6px);width:12px;height:12px;border-radius:50%;background:var(--scene-accent);border:3px solid #182d3b;box-shadow:0 0 0 1px #88caff88,0 0 22px #88caff77}
-.evolution-core{position:absolute;inset:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:50%;border:1px solid #88caff50;background:linear-gradient(140deg,#253b48,#142029);box-shadow:0 7px 0 #09141c,0 8px 0 #88caff22;pointer-events:none}
-.evolution-core small{font:7px var(--mono);letter-spacing:.12em;color:#9dbed7}.evolution-core strong{font-size:31px;font-weight:400;line-height:1.4;color:#daecf9}.evolution-core>span{font-size:9px;color:var(--scene-accent)}
-.evolution-stop{position:absolute;z-index:2;padding:9px 13px;min-width:87px;border:1px solid #88caff30;border-radius:5px;background:#172b37;box-shadow:0 5px 0 #08151e;font-size:10px;color:#d4e5ef;transition:border-color .2s,background .2s}
-.evolution-stop>span{display:block;font:7px var(--mono);color:#89adc8;margin-bottom:4px}
-.evolution-stop[aria-pressed=true],.evolution-stop:hover{border-color:var(--scene-accent);background:#264556}
-.stop-0{top:2%;left:50%;translate:-50% 0}.stop-1{top:67%;right:4%}.stop-2{top:67%;left:4%}
 @keyframes discovery-sweep{to{rotate:360deg}}@keyframes discovery-travel{to{stroke-dashoffset:-48}}@keyframes trace-signal{from{left:0}to{left:100%}}@keyframes build-breathe{50%{opacity:.4;scale:.88}}@keyframes evolution-rotate{to{rotate:360deg}}
 @media(max-width:1100px) and (min-width:761px){.diagram-playground{padding:20px}.diagram-controls{gap:8px}.diagram-controls>p{font-size:9px}.diagram-small-button{font-size:9px;padding:9px}.discovery-node{padding:12px 8px}.discovery-node strong{font-size:10px}.discovery-node>span{font-size:6px}}
 @media(max-width:760px){.diagram-playground{padding:22px;min-height:560px}.diagram-invitation{font-size:11px}.scene-surface{height:290px}.diagram-insight{min-height:88px}.diagram-controls>p{max-width:170px}.diagram-toolbar .eyebrow{letter-spacing:.04em}}

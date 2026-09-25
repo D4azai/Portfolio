@@ -21,5 +21,5 @@ for (const file of files) {
   await mkdir(resolve(out, file, ".."), { recursive: true });
   await writeFile(resolve(out, file), await readFile(resolve(root, file)));
 }
-for (const folder of ["assets", "Secondo project"]) await cp(resolve(root, folder), resolve(out, folder), { recursive: true });
+for (const folder of ["assets", "Secondo project", "work", "expertise", "process", "about", "contact"]) await cp(resolve(root, folder), resolve(out, folder), { recursive: true });
 console.log(`Validated ${modules.length} modules. Static production output: ${out}`);

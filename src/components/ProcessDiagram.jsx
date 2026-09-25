@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Mark } from './UI.jsx';
+import EvolutionCycle from './EvolutionCycle.jsx';
 
 const scenes = [
   ['UNDERSTAND THE WORK', 'Map the people, decisions, and constraints before choosing a solution.', 'discovery'],
@@ -95,41 +96,6 @@ function Build({ labels, running, reduced }) {
   </>;
 }
 
-function Evolution({ labels }) {
-  const [angle, setAngle] = useState(0), [cycle, setCycle] = useState(1), [dragging, setDragging] = useState(false);
-  const dial = useRef(null), pointer = useRef(null);
-  const selected = Math.floor(((angle + 60) % 360) / 120);
-  function rotate(event) {
-    const rect = dial.current.getBoundingClientRect();
-    const degrees = Math.atan2(event.clientY - rect.top - rect.height / 2, event.clientX - rect.left - rect.width / 2) * 180 / Math.PI + 90;
-    setAngle(Math.round((degrees + 360) % 360) % 360);
-  }
-  function start(event) {
-    if (event.button !== 0) return;
-    pointer.current = { id: event.pointerId, angle }; event.currentTarget.setPointerCapture(event.pointerId); setDragging(true); rotate(event);
-  }
-  function stop(event, cancel = false) {
-    if (!pointer.current) return;
-    if (cancel) setAngle(pointer.current.angle); pointer.current = null; setDragging(false);
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
-  }
-  return <>
-    <div className="evolution-field scene-surface" data-dragging={dragging}>
-      <div ref={dial} className="evolution-dial" role="slider" tabIndex={0} aria-label="Feedback orbit" aria-valuemin={0} aria-valuemax={359} aria-valuenow={angle} aria-valuetext={`${labels[selected]}, cycle ${cycle}`} aria-describedby="evolution-help" onPointerDown={start} onPointerMove={event => { if (pointer.current?.id === event.pointerId) rotate(event); }} onPointerUp={event => stop(event)} onPointerCancel={event => stop(event, true)} onLostPointerCapture={event => stop(event, true)} onKeyDown={event => {
-        const change = { ArrowRight: 10, ArrowUp: 10, ArrowLeft: -10, ArrowDown: -10, PageUp: 120, PageDown: -120 }[event.key];
-        if (change !== undefined || ['Home','End'].includes(event.key)) { event.preventDefault(); event.stopPropagation(); setAngle(value => event.key === 'Home' ? 0 : event.key === 'End' ? 359 : (value + change + 360) % 360); }
-      }}>
-        <div className="evolution-rings" aria-hidden="true"/><div className="evolution-hand" style={{ transform: `rotate(${angle}deg)` }} aria-hidden="true"><i/></div>
-        <div className="evolution-core" aria-hidden="true"><small>ITERATION</small><strong>{String(cycle).padStart(2,'0')}</strong><span>{labels[selected]}</span></div>
-      </div>
-      <div className="evolution-stops" role="group" aria-label="Explore the feedback loop">{labels.map((label, i) => <button key={label} className={`evolution-stop stop-${i}`} aria-pressed={selected === i} onClick={() => setAngle(i * 120)}><span>0{i + 1}</span>{label}</button>)}</div>
-      <span className="scene-corner">RELEASE → LEARN → REPEAT</span>
-    </div>
-    <div className="diagram-controls"><p id="evolution-help">Drag the dial, use arrow keys, or select a phase.</p><button className="diagram-small-button" onClick={() => { setCycle(value => value + 1); setAngle(0); }}>Next iteration ↗</button></div>
-    <Insight title={`${labels[selected]} / Cycle ${cycle}`}>{notes[3][selected]}</Insight>
-  </>;
-}
-
 export default function ProcessDiagram({ step, labels }) {
   const host = useRef(null);
   const [paused, setPaused] = useState(false), [visible, setVisible] = useState(false), [hidden, setHidden] = useState(false), [reduced, setReduced] = useState(false);
@@ -155,7 +121,7 @@ export default function ProcessDiagram({ step, labels }) {
     <p className="diagram-invitation">{hint}</p>
     <div className="diagram-experiment" key={step}>
       {step === 0 && <Discovery labels={labels}/>}{step === 1 && <Architecture labels={labels}/>}
-      {step === 2 && <Build labels={labels} running={running} reduced={reduced}/>}{step === 3 && <Evolution labels={labels}/>}
+      {step === 2 && <Build labels={labels} running={running} reduced={reduced}/>}{step === 3 && <EvolutionCycle labels={labels} running={running} reduced={reduced}/>}
     </div>
   </div>;
 }

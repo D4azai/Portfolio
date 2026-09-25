@@ -5,6 +5,11 @@ import ExperienceEffects from './components/ExperienceEffects.jsx';
 import Projects from './components/Projects.jsx';
 import ProcessDiagram from './components/ProcessDiagram.jsx';
 import DetailDialog from './components/DetailDialog.jsx';
+import HomeOverview from './components/HomeOverview.jsx';
+import ProcessScenes from './components/ProcessScenes.jsx';
+import AmbientField from './components/AmbientField.jsx';
+import SystemGraph from './components/SystemGraph.jsx';
+import { pages } from './data/pages.js';
 import { Arrow, Mark, Icon, Eyebrow, SectionHeading } from './components/UI.jsx';
 import { email, team, links, services, steps, questions } from './data/portfolio.js';
 
@@ -14,19 +19,15 @@ export function introSeen() {
   try { return sessionStorage.getItem(INTRO_KEY) === '1' || location.hash.length > 1; } catch { return false; }
 }
 
-function Header() {
-  const [active, setActive] = useState('home');
+function Header({ page }) {
   const menu = useRef(null);
   useEffect(() => {
-    const sections = [...document.querySelectorAll('main > section[id]')];
-    const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); }), { rootMargin: '-10% 0px -65% 0px' });
-    sections.forEach(e => observer.observe(e));
     const escape = e => { if (e.key === 'Escape' && menu.current?.open) { menu.current.open = false; menu.current.querySelector('summary').focus(); } };
     document.addEventListener('keydown', escape);
-    return () => { observer.disconnect(); document.removeEventListener('keydown', escape); };
+    return () => document.removeEventListener('keydown', escape);
   }, []);
-  const links = [['work','Work'],['expertise','Expertise'],['method','Process'],['about','About']];
-  return <header className="site-header"><div className="page-wrap flex h-full items-center justify-between gap-6"><a href="#home" className="brand flex items-center gap-2" aria-label="AYNKO home"><Mark className="text-lime"/><span className="text-lg font-extrabold tracking-wider">AYNKO<span className="text-lime" aria-hidden="true">•</span></span></a><nav className="desktop-nav items-center gap-8" aria-label="Primary navigation">{links.map(([id,label]) => <a key={id} href={`#${id}`} aria-current={active === id ? 'location' : undefined}>{label}</a>)}</nav><a href="#contact" className="header-cta hidden items-center gap-4 sm:flex">Let’s build something <Arrow className="h-4 w-4"/></a><details className="mobile-nav" ref={menu}><summary aria-label="Toggle navigation"><span/><span/></summary><nav aria-label="Mobile navigation">{[...links, ['contact','Let’s talk']].map(([id,label]) => <a href={`#${id}`} key={id} onClick={() => { menu.current.open = false; }}>{label}<Arrow/></a>)}</nav></details></div></header>;
+  const links = ['work','expertise','process','about'];
+  return <header className="site-header"><div className="page-wrap flex h-full items-center justify-between gap-6"><a href="/" className="brand flex items-center gap-2" aria-label="AYNKO home"><Mark className="text-lime"/><span className="text-lg font-extrabold tracking-wider">AYNKO<span className="text-lime" aria-hidden="true">•</span></span></a><nav className="desktop-nav items-center gap-8" aria-label="Primary navigation">{links.map(id => <a key={id} href={pages[id].path} aria-current={page === id ? 'page' : undefined}>{pages[id].label}</a>)}</nav><a href="/contact" aria-current={page === 'contact' ? 'page' : undefined} className="header-cta hidden items-center gap-4 sm:flex">Let’s build something <Arrow className="h-4 w-4"/></a><details className="mobile-nav" ref={menu}><summary aria-label="Toggle navigation"><span/><span/></summary><nav aria-label="Mobile navigation">{['home',...links,'contact'].map(id => <a href={pages[id].path} aria-current={page === id ? 'page' : undefined} key={id} onClick={() => { menu.current.open = false; }}>{pages[id].label}<Arrow/></a>)}</nav></details></div></header>;
 }
 
 // Public profiles. Entries without a URL in data/portfolio.js are simply not rendered.
@@ -37,19 +38,32 @@ function Profiles({ className = '' }) {
 }
 
 function Expertise() {
-  return <section id="expertise" className="light-section section-space"><div className="page-wrap"><SectionHeading number="02" label="What we bring" light title={<>Good design.<br/>Serious <em>engineering.</em></>}>The interface is the beginning. We build the systems underneath it, and connect the details that make it all work.</SectionHeading><div className="service-list">{services.map((s,i) => <article key={s.title} className="service-row grid gap-6 border-t border-ink/15 py-9 md:grid-cols-[.2fr_1fr_1fr] md:gap-12" data-reveal><div className="flex items-center justify-between gap-4 md:block"><span className="eyebrow">0{i+1}</span><div className="mt-0 md:mt-7"><Icon type={s.icon}/></div></div><h3 className="text-3xl font-semibold tracking-[-.05em] lg:text-4xl">{s.title}</h3><div><p className="text-sm leading-7 text-ink/70">{s.body}</p><div className="mt-5 flex flex-wrap gap-2">{s.tags.map(t => <span key={t} className="tag">{t}</span>)}</div></div></article>)}</div><div className="mt-8 flex flex-wrap items-center justify-between gap-6 border-t border-ink/15 pt-8"><p className="text-sm text-ink/65">Two people who see the whole picture.</p><a href="#contact" className="link-action">Find the right starting point <Arrow/></a></div></div></section>;
+  return <section id="expertise" className="light-section section-space"><div className="page-wrap"><SectionHeading heading="h1" number="02" label="What we bring" light title={<>Good design.<br/>Serious <em>engineering.</em></>}>The interface is the beginning. We build the systems underneath it, and connect the details that make it all work.</SectionHeading><div className="service-list">{services.map((s,i) => <article key={s.title} className="service-row grid gap-6 border-t border-ink/15 py-9 md:grid-cols-[.2fr_1fr_1fr] md:gap-12" data-reveal><div className="flex items-center justify-between gap-4 md:block"><span className="eyebrow">0{i+1}</span><div className="mt-0 md:mt-7"><Icon type={s.icon}/></div></div><h3 className="text-3xl font-semibold tracking-[-.05em] lg:text-4xl">{s.title}</h3><div><p className="text-sm leading-7 text-ink/70">{s.body}</p><div className="mt-5 flex flex-wrap gap-2">{s.tags.map(t => <span key={t} className="tag">{t}</span>)}</div></div></article>)}</div><div className="mt-8 flex flex-wrap items-center justify-between gap-6 border-t border-ink/15 pt-8"><p className="text-sm text-ink/65">Two people who see the whole picture.</p><a href="/contact" className="link-action">Find the right starting point <Arrow/></a></div></div></section>;
 }
 
 function Process() {
-  const [step, setStep] = useState(0);
+  const stepFromHash = () => {
+    const match = typeof window !== 'undefined' ? /^#step-([0-3])$/.exec(window.location.hash) : null;
+    return match ? Number(match[1]) : 0;
+  };
+  const [step, setStep] = useState(stepFromHash);
   const current = steps[step];
+  useEffect(() => {
+    const syncHash = () => setStep(stepFromHash());
+    window.addEventListener('hashchange', syncHash);
+    return () => window.removeEventListener('hashchange', syncHash);
+  }, []);
+  function selectStep(index) {
+    setStep(index);
+    history.replaceState(null, '', `/process#step-${index}`);
+  }
   function navigate(event, index) {
     if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
     event.preventDefault();
     const next = event.key === 'Home' ? 0 : event.key === 'End' ? 3 : (index + (event.key === 'ArrowRight' ? 1 : 3)) % 4;
-    setStep(next); document.getElementById(`step-${next}`).focus();
+    selectStep(next); document.getElementById(`step-${next}`).focus();
   }
-  return <section id="method" className="page-wrap section-space"><SectionHeading number="03" label="The working process" title={<>Clarity at<br/><em>every step.</em></>}>From the first conversation to the release, the process stays close to the people and the problem.</SectionHeading><div className="process-tabs grid grid-cols-4" role="tablist" aria-label="Working process">{steps.map((s,i) => <button id={`step-${i}`} key={s.title} role="tab" aria-selected={step === i} aria-controls="process-panel" tabIndex={step === i ? 0 : -1} onClick={() => setStep(i)} onKeyDown={e => navigate(e,i)}><span className="eyebrow">0{i+1}</span><span>{s.title}</span></button>)}</div><div id="process-panel" role="tabpanel" aria-labelledby={`step-${step}`} tabIndex="0" className="process-panel mt-5 grid overflow-hidden rounded-2xl border border-line md:grid-cols-2"><div key={step} className="process-copy p-7 md:p-12"><p className="eyebrow text-lime">STEP 0{step+1} / {current.title}</p><h3 className="mt-7 max-w-sm text-3xl leading-tight tracking-tight md:text-4xl">{current.subtitle}</h3><p className="mt-5 text-sm leading-7 text-muted">{current.description}</p><p className="mt-7 border-t border-line pt-5 text-xs leading-6"><span className="eyebrow mb-2 block text-muted">WHAT YOU LEAVE WITH</span>{current.output}</p></div><ProcessDiagram step={step} labels={current.diagram}/></div><noscript><div className="mt-8 grid gap-6">{steps.slice(1).map(s => <article key={s.title}><h3>{s.title}</h3><p>{s.description}</p></article>)}</div></noscript></section>;
+  return <section id="method" className="page-wrap section-space"><SectionHeading heading="h1" number="03" label="The working process" title={<>Clarity at<br/><em>every step.</em></>}>From the first conversation to the release, the process stays close to the people and the problem.</SectionHeading><div className="process-tabs grid grid-cols-4" role="tablist" aria-label="Working process">{steps.map((s,i) => <button id={`step-${i}`} key={s.title} role="tab" aria-selected={step === i} aria-controls="process-panel" tabIndex={step === i ? 0 : -1} onClick={() => selectStep(i)} onKeyDown={e => navigate(e,i)}><span className="eyebrow">0{i+1}</span><span>{s.title}</span></button>)}</div><div id="process-panel" role="tabpanel" aria-labelledby={`step-${step}`} tabIndex="0" className="process-panel mt-5 grid overflow-hidden rounded-2xl border border-line md:grid-cols-2"><div key={step} className="process-copy p-7 md:p-12"><p className="eyebrow text-lime">STEP 0{step+1} / {current.title}</p><h3 className="mt-7 max-w-sm text-3xl leading-tight tracking-tight md:text-4xl">{current.subtitle}</h3><p className="mt-5 text-sm leading-7 text-muted">{current.description}</p><p className="mt-7 border-t border-line pt-5 text-xs leading-6"><span className="eyebrow mb-2 block text-muted">WHAT YOU LEAVE WITH</span>{current.output}</p></div><ProcessDiagram step={step} labels={current.diagram}/></div><noscript><div className="mt-8 grid gap-6">{steps.slice(1).map(s => <article key={s.title}><h3>{s.title}</h3><p>{s.description}</p></article>)}</div></noscript></section>;
 }
 
 function About() {
@@ -65,12 +79,12 @@ function Contact() {
 }
 
 function Footer({ onReplay, replayRef }) {
-  return <footer className="page-wrap py-9"><div className="flex flex-wrap items-center justify-between gap-6"><a href="#home" className="flex items-center gap-2 text-lg font-bold tracking-widest" aria-label="AYNKO home"><Mark className="text-lime"/>AYNKO</a><p className="text-xs text-muted">Thoughtful software. Real-world impact.</p><a href="#home" className="link-action text-xs">Back to top ↑</a></div><div className="footer-contacts mt-8 grid gap-6 border-t border-line pt-6 sm:grid-cols-2 md:grid-cols-3">{team.map(person => <div key={person.email}><p className="text-sm font-semibold">{person.name}</p><p className="mt-1 text-xs text-muted">{person.role}</p><a className="footer-link" href={`mailto:${person.email}`}>{person.email}</a></div>)}<div><p className="text-sm font-semibold">Elsewhere</p><Profiles className="mt-2"/></div></div><div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 text-[11px] text-muted"><p>© 2026 AYNKO / Aymane Chellak & Zakaria Bak</p><div className="flex flex-wrap gap-5"><a href="/privacy.html" className="underline underline-offset-4">Privacy</a><button type="button" data-analytics-toggle aria-pressed="false">Anonymous analytics: off</button></div></div><button ref={replayRef} className="replay-intro" onClick={onReplay}>Replay the introduction <span aria-hidden="true">↗</span></button><p id="analytics-note" role="status" className="mt-3 text-[11px] text-muted">Optional measurement. No tracking until you opt in.</p></footer>;
+  return <footer className="page-wrap py-9"><div className="flex flex-wrap items-center justify-between gap-6"><a href="/" className="flex items-center gap-2 text-lg font-bold tracking-widest" aria-label="AYNKO home"><Mark className="text-lime"/>AYNKO</a><nav className="footer-navigation" aria-label="Footer navigation">{Object.entries(pages).filter(([key]) => key !== 'home').map(([key, item]) => <a key={key} href={item.path}>{item.label}</a>)}</nav><a href="#main" className="link-action text-xs">Back to top ↑</a></div><div className="footer-contacts mt-8 grid gap-6 border-t border-line pt-6 sm:grid-cols-2 md:grid-cols-3">{team.map(person => <div key={person.email}><p className="text-sm font-semibold">{person.name}</p><p className="mt-1 text-xs text-muted">{person.role}</p><a className="footer-link" href={`mailto:${person.email}`}>{person.email}</a></div>)}<div><p className="text-sm font-semibold">Elsewhere</p><Profiles className="mt-2"/></div></div><div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 text-[11px] text-muted"><p>© 2026 AYNKO / Aymane Chellak & Zakaria Bak</p><div className="flex flex-wrap gap-5"><a href="/privacy.html" className="underline underline-offset-4">Privacy</a><button type="button" data-analytics-toggle aria-pressed="false">Anonymous analytics: off</button></div></div><button ref={replayRef} className="replay-intro" onClick={onReplay}>Replay the introduction <span aria-hidden="true">↗</span></button><p id="analytics-note" role="status" className="mt-3 text-[11px] text-muted">Optional measurement. No tracking until you opt in.</p></footer>;
 }
 
-export default function App() {
+export default function App({ page = 'home' }) {
   const [detail, setDetail] = useState(null);
-  const [intro, setIntro] = useState(true);
+  const [intro, setIntro] = useState(page === 'home');
   const replayRef = useRef(null), returnFocus = useRef(null);
   useEffect(() => {
     document.documentElement.classList.add('react-ready');
@@ -79,7 +93,8 @@ export default function App() {
     document.querySelectorAll('[data-reveal]').forEach(e => observer.observe(e));
     const art = document.querySelector('.hero-art');
     const artObserver = new IntersectionObserver(([e]) => art.classList.toggle('art-visible', e.isIntersecting));
-    artObserver.observe(art);
+    if (art) artObserver.observe(art);
+    if (page !== 'home' || introSeen()) document.documentElement.classList.add('experience-entered');
     // The existing secure enquiry API and consent layer initialize after hydration.
     import('../js/contact.js').catch(() => {});
     import('../js/analytics.js').catch(() => {});
@@ -89,5 +104,14 @@ export default function App() {
   const replayIntro = () => { document.documentElement.classList.remove('intro-seen'); returnFocus.current = replayRef.current; setIntro(true); };
   const openCase = (item, trigger) => setDetail({ item, trigger });
   const openPillar = (pillar, trigger) => setDetail({ pillar, trigger });
-  return <><a className="skip-link" href="#main">Skip to content</a><Header/><main id="main" tabIndex="-1"><Hero onPillar={openPillar} suspended={intro}/><div className="practice-strip border-y border-line" aria-label="Practice areas"><div className="page-wrap flex flex-wrap items-center justify-between gap-5 py-6">{['PRODUCT ENGINEERING','SYSTEMS ARCHITECTURE','THOUGHTFUL INTERFACES','HUMAN-CENTERED AUTOMATION'].map(t => <span key={t} className="eyebrow flex items-center gap-4"><span className="text-lime" aria-hidden="true">✳</span>{t}</span>)}</div></div><Projects onOpen={openCase}/><Expertise/><Process/><About/><FAQ/><Contact/></main><Footer replayRef={replayRef} onReplay={replayIntro}/>{intro && <Intro onClose={closeIntro} returnFocus={returnFocus}/>}<DetailDialog detail={detail} onClose={() => setDetail(null)} onPillar={openPillar}/><ExperienceEffects/></>;
+  return <><a className="skip-link" href="#main">Skip to content</a><Header page={page}/><main id="main" tabIndex="-1" className={`route-main route-${page}`}>
+    {page !== 'home' && <div className="page-wrap page-breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>{pages[page].label}</span><span className="breadcrumb-note">THOUGHTFUL SOFTWARE. REAL-WORLD IMPACT.</span></div>}
+    {page === 'home' && <><Hero onPillar={openPillar} suspended={intro}/><div className="practice-strip border-y border-line"><div className="page-wrap flex flex-wrap items-center justify-between gap-5 py-6">{['PRODUCT ENGINEERING','SYSTEMS ARCHITECTURE','THOUGHTFUL INTERFACES','HUMAN-CENTERED AUTOMATION'].map(t => <span key={t} className="eyebrow flex items-center gap-4"><span className="text-lime" aria-hidden="true">✳</span>{t}</span>)}</div></div><HomeOverview/></>}
+    {page === 'work' && <Projects onOpen={openCase}/>}
+    {page === 'expertise' && <><Expertise/><SystemGraph/></>}
+    {page === 'process' && <Process/>}
+    {page === 'about' && <><div className="page-wrap route-introduction"><Eyebrow>Independent minds. Shared intention.</Eyebrow><h1>Small team.<br/><em>Whole-system thinking.</em></h1><p>We connect design, engineering, and the people who use what we build.</p></div><ProcessScenes/><About/></>}
+    {page === 'contact' && <><h1 className="sr-only">Start a conversation with AYNKO</h1><Contact/><FAQ/></>}
+    {page !== 'contact' && <section className="page-wrap page-next"><div><Eyebrow>Have something in mind?</Eyebrow><h2>Let’s make it <em>work.</em></h2></div><a href="/contact" className="action action-lime">Start a conversation <Arrow/></a></section>}
+  </main><Footer replayRef={replayRef} onReplay={replayIntro}/><AmbientField/>{intro && <Intro onClose={closeIntro} returnFocus={returnFocus}/>}<DetailDialog detail={detail} onClose={() => setDetail(null)} onPillar={openPillar}/><ExperienceEffects/></>;
 }

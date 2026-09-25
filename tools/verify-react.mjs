@@ -59,9 +59,9 @@ try {
     assert.ok(await page.locator('html').evaluate(e => e.classList.contains('experience-entered')));
     assert.equal(await page.evaluate(() => document.body.style.overflow), '');
     await page.waitForSelector('.hero-art .hologram-ready');
-    assert.ok(await page.locator('a[href="mailto:Zakariasurface@outlook.com"]').count() >= 2);
+    assert.ok(await page.locator('a[href="mailto:Zakariasurface@outlook.com"]').count() >= 1);
     assert.ok(await page.locator('footer a[href^="https://www.linkedin.com/"]').count());
-    assert.equal(await page.locator('.project-showcase').isVisible(), true);
+    assert.equal(await page.locator('.home-project').count(), 2);
   });
   await check('Cursor follows mouse, reacts to links, attracts buttons and yields to keyboard', async () => {
     const button = page.locator('.hero-actions .action');
@@ -95,7 +95,7 @@ try {
     await page.locator(host).hover({position:{x:35,y:80}});
     await page.waitForTimeout(250);
     assert.notDeepEqual(await page.locator('.hero-art canvas').screenshot(), before);
-    await page.locator('#contact').evaluate(e => e.scrollIntoView({behavior:'instant'}));
+    await page.locator('footer').evaluate(e => e.scrollIntoView({behavior:'instant'}));
     await page.waitForFunction(() => document.querySelector('.hero-art .hologram-viewport').dataset.motion === 'paused');
     await page.locator('#home').evaluate(e => e.scrollIntoView({behavior:'instant'}));
   });
@@ -111,6 +111,7 @@ try {
     }
   });
   await check('Projects are visible immediately; selector, keyboard, cases and galleries work', async () => {
+    await page.goto(base + '/work', {waitUntil:'networkidle'});
     await page.locator('#work').evaluate(e => e.scrollIntoView({behavior:'instant'}));
     await page.locator('.project-showcase').waitFor({state:'visible'});
     const tabs = page.getByRole('tablist', {name:'Choose a project'});
@@ -170,6 +171,7 @@ try {
     await page.locator('#project-tab-affiliate').click();
   });
   await check('Process tabs support arrows, Home and End', async () => {
+    await page.goto(base + '/process', {waitUntil:'networkidle'});
     await page.locator('#step-0').focus(); await page.keyboard.press('ArrowRight');
     assert.equal(await page.locator('#step-1').getAttribute('aria-selected'), 'true');
     assert.match(await page.locator('#process-panel').innerText(), /blueprint/);
@@ -179,15 +181,16 @@ try {
   await check('Eight responsive widths fit; desktop and mobile pass automated WCAG checks', async () => {
     for (const width of [320,375,430,768,1024,1280,1440,1920]) {
       await page.setViewportSize({width,height:1000});
-      for (const id of ['home','work','expertise','method','about','faq','contact']) {
-        await page.locator('#' + id).evaluate(e => e.scrollIntoView({behavior:'instant'}));
+      for (const id of ['home','work','expertise','process','about','contact']) {
+        await page.goto(base + (id === 'home' ? '/' : '/' + id), {waitUntil:'networkidle'});
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Overflow: ' + width + '/' + id);
+        assert.equal(await page.locator('h1').count(), 1);
+        if ([375,1440].includes(width)) await audit(id + '-' + width);
       }
-      if ([375,1440].includes(width)) await audit('page-' + width);
     }
     await page.setViewportSize({width:1440,height:1000});
-    for (const id of ['work','expertise','method','about','contact']) {
-      await page.locator('#' + id).evaluate(e => e.scrollIntoView({behavior:'instant'}));
+    for (const id of ['work','expertise','process','about','contact']) {
+      await page.goto(base + '/' + id, {waitUntil:'networkidle'});
       await page.waitForTimeout(800);
       await page.screenshot({path:'artifacts/react-' + id + '.png'});
     }
@@ -208,7 +211,9 @@ try {
     assert.equal(await page.locator('.mobile-nav').evaluate(e => e.open), false);
     await page.locator('.mobile-nav summary').click();
     await page.getByRole('navigation', {name:'Mobile navigation'}).getByText('About').click();
+    await page.waitForURL(base + '/about');
     assert.equal(await page.locator('.mobile-nav').evaluate(e => e.open), false);
+    await page.goto(base + '/contact', {waitUntil:'networkidle'});
     await page.locator('.faq-item summary').first().click();
     assert.equal(await page.locator('.faq-item').first().evaluate(e => e.open), true);
     await page.locator('[data-contact]').click();
@@ -241,10 +246,11 @@ try {
       await enter(p);
       await p.emulateMedia({reducedMotion:'no-preference'});
       await p.waitForFunction(() => document.querySelector('.hero-art .hologram-viewport').dataset.motion === 'running');
-      await p.locator('#work').evaluate(e => e.scrollIntoView({behavior:'instant'}));
-      await p.locator('#project-tab-crm').click();
       await p.emulateMedia({reducedMotion:'reduce'});
       await p.waitForFunction(() => document.querySelector('.hero-art .hologram-viewport').dataset.motion === 'paused');
+      await p.goto(base + '/work', {waitUntil:'networkidle'});
+      await p.locator('#project-tab-crm').click();
+      await p.emulateMedia({reducedMotion:'reduce'});
       await p.waitForTimeout(100);
       assert.equal(await p.locator('html').getAttribute('data-effects'), 'reduced');
       assert.equal(await p.evaluate(() => document.getAnimations().filter(a => a.playState === 'running').length), 0);
@@ -257,6 +263,7 @@ try {
     const p = await touch.newPage();
     try {
       await p.goto(base,{waitUntil:'networkidle'}); await enter(p);
+      await p.goto(base + '/work',{waitUntil:'networkidle'});
       await p.locator('.showcase-toolbar').scrollIntoViewIfNeeded();
       for(let i=0;i<4;i++) await p.getByRole('button',{name:'Next project',exact:true}).tap();
       await p.waitForTimeout(1200);
@@ -291,7 +298,7 @@ try {
     const plain = await browser.newContext({javaScriptEnabled:false,viewport:{width:375,height:812}});
     const p = await plain.newPage();
     try {
-      await p.goto(base);
+      await p.goto(base + '/work');
       assert.ok(await p.locator('h1').isVisible());
       assert.equal(await p.locator('.project-fallback-list article').count(),5);
       assert.ok(await p.locator('.project-fallback-list').isVisible());

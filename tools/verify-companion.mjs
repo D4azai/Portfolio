@@ -70,12 +70,14 @@ try {
   assert.equal(await page.locator('#robot-conversation').count(), 0);
   assert.equal(await page.locator('.chat-toggle').evaluate(el => el === document.activeElement), true);
   console.log('PASS cancellation, recoverable errors, chat accessibility and focus');
+  await page.goto(env.SITE_ORIGIN + '/process', { waitUntil: 'networkidle' });
   await page.locator('#method').scrollIntoViewIfNeeded();
   await page.getByRole('button', { name: 'Pause diagram animation', exact: true }).click();
   assert.equal(await page.locator('.diagram-3d').getAttribute('data-paused'), 'true');
   await page.getByRole('tab', { name: /Build/ }).click();
   assert.equal(await page.locator('.diagram-3d').getAttribute('data-step'), '2');
   await page.locator('.diagram-3d').screenshot({ path: 'artifacts/companion-diagram.png' });
+  await page.goto(env.SITE_ORIGIN + '/work', { waitUntil: 'networkidle' });
   await page.locator('#work').scrollIntoViewIfNeeded();
   for (const tab of await page.locator('.project-tab').all()) {
     await tab.click();
@@ -90,12 +92,14 @@ try {
   await page.locator('.showcase-panel:not([hidden])').screenshot({ path: 'artifacts/companion-cover.png' });
   console.log('PASS spatial diagram controls and all five local cover photos');
   await page.setViewportSize({ width: 375, height: 850 });
+  await page.goto(env.SITE_ORIGIN + '/#home', { waitUntil: 'networkidle' });
   await page.locator('#home').scrollIntoViewIfNeeded();
   await page.getByRole('button', { name: /Talk to A/ }).click();
   await page.waitForTimeout(450);
   await page.locator('.robot-chat').screenshot({ path: 'artifacts/companion-chat-mobile.png' });
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
   await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(env.SITE_ORIGIN + '/process', { waitUntil: 'networkidle' });
   assert.equal(await page.locator('.scene-surface').evaluate(el => getComputedStyle(el).transform), 'none');
   assert.deepEqual(errors, []);
   console.log('PASS mobile chat, reduced motion and no runtime errors');

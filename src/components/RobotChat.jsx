@@ -99,7 +99,7 @@ export default function RobotChat({ onPhase, suspended }) {
         {messages.map((message, i) => <div key={i} className={`chat-message chat-${message.role}`}><span>{message.role === 'user' ? 'YOU' : 'A–01'}</span><p>{message.content}</p></div>)}
         {busy && <p className="chat-thinking">Connecting the dots<span aria-hidden="true">…</span></p>}
       </div>
-      {available === false && <p className="chat-notice">Live AI is currently unavailable. You can still explore the robot’s four actions, or <a href="#contact" onClick={close}>contact the team</a>.</p>}
+      {available === false && <p className="chat-notice">Live AI is currently unavailable. You can still explore the robot’s four actions, or <a href="/contact" onClick={close}>contact the team</a>.</p>}
       {!messages.length && <div className="chat-suggestions">{suggestions.map(text => <button key={text} disabled={busy} onClick={() => send(text)}>{text}<span aria-hidden="true">↗</span></button>)}</div>}
       {error && <p className="chat-error" role="alert">{error}</p>}
       <form className="chat-form" onSubmit={e => { e.preventDefault(); send(); }}>

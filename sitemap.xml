@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://aynko.dev/</loc></url></urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://aynko.dev/</loc></url>
+  <url><loc>https://aynko.dev/work</loc></url>
+  <url><loc>https://aynko.dev/expertise</loc></url>
+  <url><loc>https://aynko.dev/process</loc></url>
+  <url><loc>https://aynko.dev/about</loc></url>
+  <url><loc>https://aynko.dev/contact</loc></url>
+  <url><loc>https://aynko.dev/privacy.html</loc></url>
+</urlset>
