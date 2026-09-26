@@ -6,7 +6,7 @@ import RobotChat from './RobotChat.jsx';
 
 const actions = { data: 'Scan the data', flow: 'Conduct the flow', ai: 'Spark an idea', edge: 'Launch the system' };
 
-export default function Hero({ onPillar, suspended }) {
+export default function Hero({ onPillar, suspended, prewarm, onSettled }) {
   const [active, setActive] = useState('data');
   const [action, setAction] = useState(0), [phase, setPhase] = useState('idle');
   return <section id="home" className="hero-section relative overflow-hidden" data-hero-layer={active}>
@@ -23,7 +23,7 @@ export default function Hero({ onPillar, suspended }) {
           <div className="hero-signature"><span className="signature-stroke" aria-hidden="true">A.</span><div><p>Aymane Chellak & Zakaria Bak</p><span>Two minds. From first idea to final detail.</span></div></div>
         </div>
         <div className="system-field hero-art">
-          <Hologram active={active} action={action} phase={phase} suspended={suspended} interactive/>
+          <Hologram active={active} action={action} phase={phase} suspended={suspended} prewarm={prewarm} onSettled={onSettled} interactive/>
           <div className="system-selector"><div className="grid grid-cols-4" role="group" aria-label="Explore system layers">{Object.entries(pillars).map(([key, p]) => <button key={key} className="layer-button" aria-pressed={key === active} title={actions[key]} onClick={() => { setActive(key); setAction(value => value + 1); }}><span>{p.number}</span>{p.label}<small>{actions[key]}</small><span className="layer-indicator"/></button>)}</div><div className="layer-description"><p aria-live="polite">{action ? actions[active] + ' / Click again to replay' : 'Choose a layer. See it come alive.'}</p><button data-pillar={active} onClick={e => onPillar(active, e.currentTarget)}>Explore <Arrow className="h-4 w-4"/></button></div></div>
           <RobotChat onPhase={setPhase} suspended={suspended}/>
         </div>

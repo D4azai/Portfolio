@@ -104,3 +104,12 @@ html[data-ambient-paused=true] .hero-atmosphere i,html[data-page-hidden=true] .h
 @media(max-width:760px){.hero-art .hologram-viewport{height:410px}.hero-atmosphere i:first-child{width:95%;height:40%;top:40%}.hero-atmosphere i:last-child{display:none}.hero-art .hologram-stage-bottom{margin-inline:15px}.hero-art .hologram-stage-bottom .eyebrow{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.hero-atmosphere i{animation:none!important;will-change:auto}.hero-atmosphere i,.hero-section .hologram-ambient{transition:none}}
 @media(forced-colors:active){.hero-atmosphere{display:none}}
+
+/* Standby is a quiet, unlit state until the entry sequence completes. */
+.hologram-stage[data-power=off] .hologram-ambient{opacity:0}
+.hologram-stage[data-power=off] .holo-dot{background:#657060;box-shadow:none}
+.hologram-stage[data-power=off] .hologram-fallback{filter:grayscale(1) brightness(.45);transform:translateY(8px) rotate(3deg)}
+.hologram-stage[data-power=off] .robot-annotation{opacity:.25}
+
+/* Returning visits show the normal poster before hydration, without a standby flash. */
+html.intro-seen .hero-art .hologram-stage[data-power=off] .hologram-fallback{filter:none;transform:none}

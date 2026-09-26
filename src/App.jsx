@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Hero from './components/Hero.jsx';
 import Intro from './components/Intro.jsx';
 import ExperienceEffects from './components/ExperienceEffects.jsx';
@@ -16,7 +16,8 @@ import { email, team, links, services, steps, questions } from './data/portfolio
 const INTRO_KEY = 'aynko:intro-seen';
 // The intro plays once per session. Deep links go straight to their section.
 export function introSeen() {
-  try { return sessionStorage.getItem(INTRO_KEY) === '1' || location.hash.length > 1; } catch { return false; }
+  const hasDeepLink = location.hash.length > 1;
+  try { return hasDeepLink || sessionStorage.getItem(INTRO_KEY) === '1'; } catch { return hasDeepLink; }
 }
 
 function Header({ page }) {
@@ -81,6 +82,10 @@ function Footer({ onReplay, replayRef }) {
 export default function App({ page = 'home' }) {
   const [detail, setDetail] = useState(null);
   const [intro, setIntro] = useState(page === 'home');
+  const [prewarm, setPrewarm] = useState(false), [heroSettled, setHeroSettled] = useState(false), [revealing, setRevealing] = useState(false);
+  const prepareHero = useCallback(() => setPrewarm(true), []);
+  const settleHero = useCallback(() => setHeroSettled(true), []);
+  const revealHero = useCallback(() => { setRevealing(true); document.documentElement.classList.add('experience-entered'); }, []);
   const replayRef = useRef(null), returnFocus = useRef(null);
   useEffect(() => {
     document.documentElement.classList.add('react-ready');
@@ -96,18 +101,18 @@ export default function App({ page = 'home' }) {
     import('../js/analytics.js').catch(() => {});
     return () => { observer.disconnect(); artObserver.disconnect(); };
   }, []);
-  const closeIntro = () => { try { sessionStorage.setItem(INTRO_KEY, '1'); } catch {} setIntro(false); };
-  const replayIntro = () => { document.documentElement.classList.remove('intro-seen'); returnFocus.current = replayRef.current; setIntro(true); };
+  const closeIntro = useCallback(() => { try { sessionStorage.setItem(INTRO_KEY, '1'); } catch {} setIntro(false); setRevealing(false); }, []);
+  const replayIntro = () => { document.documentElement.classList.remove('intro-seen', 'experience-entered'); setRevealing(false); returnFocus.current = replayRef.current; setIntro(true); };
   const openCase = (item, trigger) => setDetail({ item, trigger });
   const openPillar = (pillar, trigger) => setDetail({ pillar, trigger });
   return <><a className="skip-link" href="#main">Skip to content</a><Header page={page}/><main id="main" tabIndex="-1" className={`route-main route-${page}`}>
     {page !== 'home' && <div className="page-wrap page-breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>{pages[page].label}</span><span className="breadcrumb-note">THOUGHTFUL SOFTWARE. REAL-WORLD IMPACT.</span></div>}
-    {page === 'home' && <><Hero onPillar={openPillar} suspended={intro}/><div className="practice-strip border-y border-line"><div className="page-wrap flex flex-wrap items-center justify-between gap-5 py-6">{['PRODUCT ENGINEERING','SYSTEMS ARCHITECTURE','THOUGHTFUL INTERFACES','HUMAN-CENTERED AUTOMATION'].map(t => <span key={t} className="eyebrow flex items-center gap-4"><span className="text-lime" aria-hidden="true">✳</span>{t}</span>)}</div></div><HomeOverview/></>}
+    {page === 'home' && <><Hero onPillar={openPillar} suspended={intro && !revealing} prewarm={prewarm} onSettled={settleHero}/><div className="practice-strip border-y border-line"><div className="page-wrap flex flex-wrap items-center justify-between gap-5 py-6">{['PRODUCT ENGINEERING','SYSTEMS ARCHITECTURE','THOUGHTFUL INTERFACES','HUMAN-CENTERED AUTOMATION'].map(t => <span key={t} className="eyebrow flex items-center gap-4"><span className="text-lime" aria-hidden="true">✳</span>{t}</span>)}</div></div><HomeOverview/></>}
     {page === 'work' && <Projects onOpen={openCase}/>}
     {page === 'expertise' && <><Expertise/><SystemGraph/></>}
     {page === 'process' && <Process/>}
     {page === 'about' && <><div className="page-wrap route-introduction"><Eyebrow>Independent minds. Shared intention.</Eyebrow><h1>Small team.<br/><em>Whole-system thinking.</em></h1><p>We connect design, engineering, and the people who use what we build.</p></div><AboutStudio/></>}
     {page === 'contact' && <><h1 className="sr-only">Start a conversation with AYNKO</h1><Contact/><FAQ/></>}
     {page !== 'contact' && <section className="page-wrap page-next"><div><Eyebrow>Have something in mind?</Eyebrow><h2>Let’s make it <em>work.</em></h2></div><a href="/contact" className="action action-lime">Start a conversation <Arrow/></a></section>}
-  </main><Footer replayRef={replayRef} onReplay={replayIntro}/><AmbientField/>{intro && <Intro onClose={closeIntro} returnFocus={returnFocus}/>}<DetailDialog detail={detail} onClose={() => setDetail(null)} onPillar={openPillar}/><ExperienceEffects/></>;
+  </main><Footer replayRef={replayRef} onReplay={replayIntro}/><AmbientField/>{intro && <Intro onClose={closeIntro} onPrepared={prepareHero} heroSettled={heroSettled} onReveal={revealHero} returnFocus={returnFocus}/>}<DetailDialog detail={detail} onClose={() => setDetail(null)} onPillar={openPillar}/><ExperienceEffects/></>;
 }

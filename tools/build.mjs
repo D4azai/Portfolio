@@ -9,7 +9,7 @@ await buildReact();
 const root = resolve(import.meta.dirname, "..");
 const out = resolve(root, "dist");
 // The React bundle includes everything under js/; only the owner console still ships as separate modules.
-const modules = ["control/login.js", "control/dashboard.js"];
+const modules = ["control/login.js", "control/dashboard.js", "js/entry-state.js"];
 const legacy = ["script.js", ...["navigation", "motion", "motion-utils", "pointer", "system-core", "image-manifest", "pillars", "entry", "contact", "analytics"].map(name => `js/${name}.js`)];
 for (const file of [...modules, ...legacy]) execFileSync(process.execPath, ["--check", resolve(root, file)]);
 for (const file of ["api/chat.js", "server/chat.js", "api/control.js", "server/app.js", "server/security.js", "server/supabase.js", "server/pages.js"]) execFileSync(process.execPath, ["--check", resolve(root, file)]);

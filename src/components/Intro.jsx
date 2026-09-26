@@ -2,11 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import Hologram from './Hologram.jsx';
 import { Arrow, Mark } from './UI.jsx';
 
-export default function Intro({ onClose, returnFocus }) {
+export default function Intro({ onClose, onPrepared, heroSettled, onReveal, returnFocus }) {
   const dialog = useRef(null), enter = useRef(null), closing = useRef(false);
   const [assets, setAssets] = useState(0), [sceneReady, setSceneReady] = useState(false), [leaving, setLeaving] = useState(false), [booting, setBooting] = useState(false);
+  const [terminalDone, setTerminalDone] = useState(false), [revealing, setRevealing] = useState(false);
   const progress = Math.round((assets + Number(sceneReady)) / 3 * 100);
   useEffect(() => {
+    if (document.documentElement.classList.contains('intro-seen')) return;
     const element = dialog.current;
     const previous = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -28,18 +30,39 @@ export default function Intro({ onClose, returnFocus }) {
     };
   }, []);
   useEffect(() => {
+    if (!sceneReady) return;
+    // Let the intro paint before preparing the second, stationary scene.
+    const timer = setTimeout(onPrepared, 120);
+    return () => clearTimeout(timer);
+  }, [sceneReady, onPrepared]);
+  useEffect(() => {
     if (!leaving) return;
-    const timeout = setTimeout(onClose, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : (booting ? 2600 : 550));
-    return () => clearTimeout(timeout);
-  }, [booting, leaving, onClose]);
+    onPrepared();
+    const delay = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : booting ? 2350 : 0;
+    const timer = setTimeout(() => setTerminalDone(true), delay);
+    return () => clearTimeout(timer);
+  }, [booting, leaving, onPrepared]);
+  useEffect(() => {
+    if (!terminalDone || !heroSettled) return;
+    setRevealing(true); onReveal();
+    const timer = setTimeout(onClose, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 700);
+    return () => clearTimeout(timer);
+  }, [terminalDone, heroSettled, onReveal, onClose]);
   function leave() { if (!closing.current) { closing.current = true; setLeaving(true); } }
-  function enterPortfolio() { if (!closing.current) { setBooting(true); setLeaving(true); } }
-  return <dialog ref={dialog} className={`intro-dialog ${leaving ? 'intro-leaving' : ''} ${booting ? 'intro-booting' : ''}`} aria-labelledby="intro-title" aria-describedby="intro-description" onCancel={event => { event.preventDefault(); leave(); }}>
+  function enterPortfolio() { if (!closing.current) { closing.current = true; setBooting(true); setLeaving(true); } }
+  function containFocus(event) {
+    if (event.key !== 'Tab') return;
+    const controls = [...dialog.current.querySelectorAll('button:not(:disabled), a[href], [tabindex="0"]')].filter(element => element.getClientRects().length);
+    const first = controls[0], last = controls.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+  }
+  return <dialog ref={dialog} className={`intro-dialog ${leaving ? 'intro-leaving' : ''} ${booting ? 'intro-booting' : ''} ${revealing ? 'intro-revealing' : ''}`} aria-labelledby="intro-title" aria-describedby="intro-description" onKeyDown={containFocus} onCancel={event => { event.preventDefault(); leave(); }}>
     <div className="intro-shell">
       <header className="intro-header"><span className="intro-brand"><Mark/> AYNKO<span>26</span></span><span className="eyebrow intro-edition">INDEPENDENT MIND / CONNECTED WORLD</span><button onClick={leave} className="intro-skip" aria-label="Skip intro">Skip intro <span aria-hidden="true">↗</span></button></header>
       <div className="intro-layout">
         <div className="intro-copy"><p className="eyebrow"><span className="status-dot"/> A SMALL INTRODUCTION TO WHAT’S POSSIBLE</p><h2 id="intro-title">Good things<br/>begin with<br/><em>curiosity.</em></h2><p id="intro-description">Welcome to our corner of the internet.<br/>A place for thoughtful software and ambitious ideas.</p><button ref={enter} className="action action-lime intro-enter" onClick={enterPortfolio}>Enter portfolio <Arrow/></button><p className="intro-stay">Take your time. Enter whenever you’re ready.</p></div>
-        <div className="intro-robot"><Hologram onSettled={() => setSceneReady(true)}/></div>
+        <div className="intro-robot"><Hologram powered={false} onSettled={() => setSceneReady(true)}/></div>
     </div>
     <footer className="intro-footer"><div className="intro-loading"><div><span className="eyebrow" role="status">{progress === 100 ? 'YOUR EXPERIENCE IS READY' : 'PREPARING THE EXPERIENCE'}</span><span className="eyebrow">{String(progress).padStart(3, '0')} / 100</span></div><div className="intro-progress" role="progressbar" aria-label="Experience preparation" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><span style={{ width: `${progress}%` }}/></div></div><span className="eyebrow intro-credit">AYMANE CHELLAK & ZAKARIA BAK<br/><span>ENGINEERS. THINKERS. MAKERS.</span></span></footer>
     </div>

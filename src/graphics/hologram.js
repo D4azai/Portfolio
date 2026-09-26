@@ -4,7 +4,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 // Original procedural sculpture. No remote models, textures, or tracking requests.
-export function createHologram(host, onReady, onLost) {
+export function createHologram(host, onReady, onLost, { powered: initialPower = true } = {}) {
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
   renderer.setClearColor(0x000000, 0);
@@ -151,14 +151,30 @@ export function createHologram(host, onReady, onLost) {
   let disposed=false,paused=false,visible=true,lost=false,time=0,last=0,targetX=0,targetY=0,lookX=0,lookY=0,layer='data';
   let actionStart = -10, action = 'data', phase = 'idle';
   let coreSpin = 0, sparkSpin = 0, coreSpeed = .4, sparkSpeed = .25;
+  let powered = initialPower, power = initialPower ? 1 : 0;
   const motion=matchMedia('(prefers-reduced-motion: reduce)'),pointer=matchMedia('(hover: hover) and (pointer: fine)');
   function draw(now=0){
     if(disposed||lost)return;
-    const responsive=!paused&&!motion.matches;
+    const responsive=powered&&!paused&&!motion.matches;
     const dt = now && responsive ? (last ? Math.min((now-last)/1000,.05) : 1/60) : 0;
     if(now&&responsive){time+=dt;last=now;}
     const blend = 1 - Math.exp(-10 * dt), follow = 1 - Math.exp(-5 * dt);
-    const smooth = (object, key, target) => { object[key] += (target - object[key]) * blend; };
+    power = motion.matches ? Number(powered) : Math.min(Number(powered), power + dt / 1.6);
+    const awake = power * power * (3 - 2 * power);
+    const resting = (object, key) => {
+      if (object === head.rotation && key === 'x') return .5;
+      if (object === robot.rotation && key === 'x') return .12;
+      if (object === robot.rotation && key === 'y') return -.2;
+      if (object === robot.position && key === 'y') return -.12;
+      if (object === arms[0].rotation && key === 'z') return .4;
+      if (object === elbows[0].rotation && key === 'x') return .35;
+      return 0;
+    };
+    const smooth = (object, key, target) => {
+      const pose = object === robot.position || object === robot.rotation || object === head.rotation || arms.some(arm => object === arm.rotation) || elbows.some(elbow => object === elbow.rotation);
+      if (pose) target = THREE.MathUtils.lerp(resting(object, key), target, awake);
+      object[key] += (target - object[key]) * (!responsive ? 1 : blend);
+    };
     if(responsive){lookX+=(targetX-lookX)*follow;lookY+=(targetY-lookY)*follow;}
     const elapsed = Math.max(0, time - actionStart), progress = Math.min(1, elapsed / 3.2);
     const pulse = Math.sin(progress * Math.PI) ** 2, gesture = motion.matches ? 0 : pulse;
@@ -203,15 +219,27 @@ export function createHologram(host, onReady, onLost) {
     orbitals.rotation.y += (layer === 'flow' ? 1.5 : .15) * dt;
     neon.color.lerp(colors[layer],responsive ? blend : 1);neon.emissive.copy(neon.color);
     neon.emissiveIntensity = .65 + (talking ? Math.sin(time * 10) * .12 : thinking ? Math.sin(time * 3) * .15 : gesture * .3);
+    neon.color.copy(colors[layer]).multiplyScalar(.08 + awake * .92);
+    neon.emissiveIntensity *= awake;
+    pearl.emissiveIntensity = .42 * awake;
+    eyes.forEach(eye => { eye.visible = awake > .35; });
+    visorLight.visible = awake > .35;
+    voiceBars.forEach(bar => { bar.visible = awake > .65; });
+    core.visible = awake > .8;
+    sparks.visible = awake > .95;
+    scan.visible = scan.visible && awake === 1;
     camera.position.x += (lookX * .12 - camera.position.x) * follow;
     camera.lookAt(0, 2.15, 0);
     renderer.render(scene,camera);
     host.dataset.frame=String(Math.round(time*1000));
     host.dataset.gesture = progress < 1 ? action : 'idle';
     host.dataset.drawCalls = String(renderer.info.render.calls);
+    host.dataset.power = !powered ? 'off' : power < 1 ? 'waking' : 'on';
+    host.dataset.wakeProgress = power.toFixed(3);
+    host.dataset.headTilt = head.rotation.x.toFixed(3);
   }
   function sync(){
-    last=0;const running=visible&&!document.hidden&&!paused&&!motion.matches&&!lost;
+    last=0;const running=powered&&visible&&!document.hidden&&!paused&&!motion.matches&&!lost;
     host.dataset.motion=running?'running':'paused';
     renderer.setAnimationLoop(running?draw:null);
     if(visible&&!document.hidden)draw();
@@ -230,6 +258,7 @@ export function createHologram(host, onReady, onLost) {
   host.append(renderer.domElement);resize();sync();onReady();
   return {
     setPaused(value){paused=value;sync();},
+    setPowered(value){if(powered === value)return;powered=value;if(!value){power=0;targetX=targetY=lookX=lookY=0;}sync();},
     setLayer(value){layer=colors[value]?value:'data';draw();},
     perform(value){action=colors[value] || value === 'wave' ? value : 'data';actionStart=time;draw();},
     setPhase(value){phase=value;draw();},

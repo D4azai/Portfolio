@@ -13,7 +13,7 @@ export function createCinematic(host, onReady, onLost) {
   const compact = innerWidth < 700 || matchMedia('(pointer: coarse)').matches;
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, compact ? 1.25 : 1.5));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.1;
+  renderer.toneMappingExposure = .86;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.domElement.setAttribute('aria-hidden', 'true');
@@ -23,27 +23,27 @@ export function createCinematic(host, onReady, onLost) {
   const camera = new THREE.PerspectiveCamera(34, 1, .1, 70);
   const pmrem = new THREE.PMREMGenerator(renderer), room = new RoomEnvironment();
   const environment = pmrem.fromScene(room, .035);
-  scene.environment = environment.texture; scene.environmentIntensity = .85;
+  scene.environment = environment.texture; scene.environmentIntensity = .62;
   room.dispose(); pmrem.dispose();
-  scene.add(new THREE.HemisphereLight('#dce5d4', '#101d19', 1.2));
-  const key = new THREE.SpotLight('#eef6dc', 90, 30, .48, .8, 1.5);
+  scene.add(new THREE.HemisphereLight('#e8e4d8', '#080e0b', .38));
+  const key = new THREE.SpotLight('#fff1d9', 65, 30, .48, .8, 1.5);
   key.position.set(-3.5, 7, 4); key.target.position.set(0, 1.8, 0); key.castShadow = true;
   const shadowSize = compact ? 512 : 1024;
   key.shadow.mapSize.set(shadowSize, shadowSize); key.shadow.bias = -.0003; key.shadow.normalBias = .035;
   scene.add(key, key.target);
-  const rim = new THREE.DirectionalLight('#c5ed99', 2.6); rim.position.set(3, 4, -4); scene.add(rim);
-  const fill = new THREE.DirectionalLight('#9cb9db', 1.3); fill.position.set(-4, 2, -1); scene.add(fill);
-  const coreLight = new THREE.PointLight('#d2f78a', 4, 5, 2); coreLight.position.set(0, 2.25, .3); scene.add(coreLight);
+  const rim = new THREE.DirectionalLight('#d8e3c9', 1.8); rim.position.set(3, 4, -4); scene.add(rim);
+  const fill = new THREE.DirectionalLight('#b9ccd5', .65); fill.position.set(-4, 2, -1); scene.add(fill);
+  const coreLight = new THREE.PointLight('#e5edcb', 1.5, 4, 2); coreLight.position.set(0, 2.25, .3); scene.add(coreLight);
   const silver = new THREE.MeshPhysicalMaterial({ color: '#aab9b3', metalness: 1, roughness: .22, clearcoat: .7, clearcoatRoughness: .17 });
   const sage = new THREE.MeshPhysicalMaterial({ color: '#8caa78', metalness: .72, roughness: .26, clearcoat: 1 });
   const dark = new THREE.MeshStandardMaterial({ color: '#15241d', metalness: .65, roughness: .32 });
-  const pearl = new THREE.MeshPhysicalMaterial({ color: '#e4f9bd', metalness: .18, roughness: .16, clearcoat: 1, emissive: '#accd72', emissiveIntensity: .42 });
+  const pearl = new THREE.MeshPhysicalMaterial({ color: '#eee9d5', metalness: .25, roughness: .25, clearcoat: 1, emissive: '#cdd8aa', emissiveIntensity: .16 });
   const lightMaterial = new THREE.MeshStandardMaterial({ color: '#d3ef9e', emissive: '#c8f58a', emissiveIntensity: 2.4 });
   const add = (geometry, material, parent = scene) => {
     const object = new THREE.Mesh(geometry, material); object.castShadow = true; object.receiveShadow = true; parent.add(object); return object;
   };
   const stone = new THREE.MeshStandardMaterial({ color: '#101b13', roughness: .85, metalness: .08, envMapIntensity: .35 });
-  const trim = new THREE.MeshStandardMaterial({ color: '#33482d', roughness: .5, metalness: .65 });
+  const trim = new THREE.MeshStandardMaterial({ color: '#66634b', roughness: .4, metalness: .8 });
   const architecturalLight = new THREE.MeshStandardMaterial({ color: '#c4dc9d', emissive: '#a5bf7d', emissiveIntensity: .8 });
   const floor = add(new THREE.PlaneGeometry(100, 100), new THREE.MeshStandardMaterial({ color: '#0c140f', roughness: .75, metalness: .12, envMapIntensity: .4 }));
   floor.rotation.x = -Math.PI / 2; floor.castShadow = false;
@@ -71,7 +71,7 @@ export function createCinematic(host, onReady, onLost) {
   const satelliteStand = add(new THREE.CylinderGeometry(.65, .7, .9, 64), stone, gallery); satelliteStand.position.set(3.65, .45, -1.6);
   const satellite = add(new THREE.SphereGeometry(.44, 32, 24), sage, gallery); satellite.position.set(3.65, 1.34, -1.6);
   const satelliteRing = add(new THREE.TorusGeometry(.58, .028, 12, 80), silver, gallery); satelliteRing.position.copy(satellite.position); satelliteRing.rotation.set(.9, .4, -.4);
-  const galleryWash = new THREE.SpotLight('#c8e5a3', 35, 15, .8, 1, 1.5);
+  const galleryWash = new THREE.SpotLight('#e4ddc4', 12, 15, .8, 1, 1.5);
   galleryWash.position.set(-4, 4, 0); galleryWash.target.position.set(0, 2, -4); scene.add(galleryWash, galleryWash.target);
   const floorMarkers = [0, 1, 2].map(i => {
     const marker = add(new THREE.SphereGeometry(.03, 12, 8), architecturalLight, gallery); marker.castShadow = false; return marker;
@@ -132,9 +132,9 @@ export function createCinematic(host, onReady, onLost) {
     expansion += ((expanded ? 1 : 0) - expansion) * blend;
     orbit += (orbitTarget - orbit) * blend;
     const angle = orbit + Math.sin(time * .12) * .13;
-    const distance = width / height < 1 ? 12.8 : 8.5;
-    camera.position.set(Math.sin(angle) * distance, 4 + Math.sin(time * .19) * .12, Math.cos(angle) * distance);
-    camera.lookAt(0, 1.65, 0);
+    const distance = width / height < 1 ? 13.8 : 10.2;
+    camera.position.set(Math.sin(angle) * distance, 3.25 + Math.sin(time * .19) * .08, Math.cos(angle) * distance);
+    camera.lookAt(0, 1.75, 0);
     sculpture.position.y = 2.15 + Math.sin(time * .65) * .065;
     sculpture.rotation.y = Math.sin(time * .18) * .18;
     rings[0].rotation.set(.28 + expansion * .2, -.48, -.35 + Math.sin(time * .25) * .04);
